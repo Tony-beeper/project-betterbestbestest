@@ -1,9 +1,13 @@
 const express = require("express");
+require("dotenv").config();
+
 const WebSocket = require("ws");
 const ShareDB = require("sharedb");
 const WebSocketJSONStream = require("@teamwork/websocket-json-stream");
 const http = require("http");
-var richText = require("rich-text");
+const richText = require("rich-text");
+const mongoose = require("mongoose");
+const { MongoClient, ServerApiVersion } = require("mongodb");
 
 ShareDB.types.register(richText.type);
 var backend = new ShareDB({ presence: true });
@@ -27,8 +31,6 @@ function createDoc(callback) {
 function startServer() {
   // Create a web server to serve files and listen to WebSocket connections
   const app = express();
-  // app.use(express.static("static"));
-  // app.use(express.static("node_modules/quill/dist"));
   const server = http.createServer(app);
 
   // Connect any incoming WebSocket connection to ShareDB
@@ -37,6 +39,19 @@ function startServer() {
     const stream = new WebSocketJSONStream(ws);
     backend.listen(stream);
   });
+
+  // Mongoose connnection
+  mongoose
+    .connect(process.env.MONGO_CONN_STR, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+    .then((res) => {
+      console.log("connect successfully to mongo");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
   const PORT = process.env.PORT || 8080;
 
