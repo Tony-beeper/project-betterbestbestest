@@ -19,40 +19,39 @@ const connection = new sharedb.Connection(socket);
 const doc = connection.get(collection, id);
 
 function CodeEditor() {
-    const [pageContent, setPageContent] = useState({});
+  const [pageContent, setPageContent] = useState({});
 
-    useEffect(() => {
-        doc.subscribe((error) => {
-            doc.on("op", function (op, source) {
-                if (source) return;
-                console.log(op);
-                setPageContent(op);
-            });
-        });
-    }, []);
-    const handleChange = (content, delta, source, editor) => {
-        console.log(delta);
-        doc.submitOp(delta);
-    };
-    hljs.registerLanguage("javascript", javascript);
-    hljs.registerLanguage("python", python);
+  useEffect(() => {
+    doc.subscribe((error) => {
+      doc.on("op", function (op, source) {
+        if (source) return;
+        console.log(op);
+        setPageContent(op);
+      });
+    });
+  }, []);
+  const handleChange = (content, delta, source, editor) => {
+    console.log(editor.getContents());
+    doc.submitOp(editor.getContents());
+  };
+  hljs.registerLanguage("javascript", javascript);
+  hljs.registerLanguage("python", python);
 
-    const modules = {
-        syntax: {
-            highlight: (text) =>
-                hljs.highlight(text, { language: "python" }).value,
-        },
-        toolbar: [["code-block"]],
-    };
-    return (
-        <div>
-            <ReactQuill
-                modules={modules}
-                onChange={handleChange}
-                value={pageContent}
-            />
-        </div>
-    );
+  const modules = {
+    syntax: {
+      highlight: (text) => hljs.highlight(text, { language: "python" }).value,
+    },
+    toolbar: [["code-block"]],
+  };
+  return (
+    <div>
+      <ReactQuill
+        modules={modules}
+        onChange={handleChange}
+        value={pageContent}
+      />
+    </div>
+  );
 }
 
 export default CodeEditor;
