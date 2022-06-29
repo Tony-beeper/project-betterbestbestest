@@ -1,4 +1,5 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 require("dotenv").config();
 
 const WebSocket = require("ws");
@@ -7,10 +8,13 @@ const WebSocketJSONStream = require("@teamwork/websocket-json-stream");
 const http = require("http");
 const richText = require("rich-text");
 const mongoose = require("mongoose");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const sharedbMongo = require("sharedb-mongo");
 
+const roomRoutes = require("./routes/room");
+
+const db = sharedbMongo(process.env.MONGO_CONN_STR);
 ShareDB.types.register(richText.type);
-var backend = new ShareDB({ presence: true });
+var backend = new ShareDB({ db });
 createDoc(startServer);
 
 // Create initial document then fire callback
@@ -32,6 +36,12 @@ function startServer() {
   // Create a web server to serve files and listen to WebSocket connections
   const app = express();
   const server = http.createServer(app);
+
+  // body parser
+  app.use(bodyParser.json());
+
+  // app routes
+  app.use("/api/room", roomRoutes);
 
   // Connect any incoming WebSocket connection to ShareDB
   const wss = new WebSocket.Server({ server: server });
