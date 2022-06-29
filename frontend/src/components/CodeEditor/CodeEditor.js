@@ -31,6 +31,7 @@ function CodeEditor() {
     });
   }, []);
   const handleChange = (content, delta, source, editor) => {
+    if (source !== "user") return;
     console.log(editor.getContents());
     doc.submitOp(editor.getContents());
   };
