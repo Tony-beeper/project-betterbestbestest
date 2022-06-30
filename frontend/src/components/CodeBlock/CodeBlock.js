@@ -2,7 +2,7 @@ import hljs from "highlight.js";
 import python from "highlight.js/lib/languages/python";
 import "highlight.js/styles/monokai-sublime.css";
 import ReactQuill, { Quill } from "react-quill";
-import "react-quill/dist/quill.snow.css"; // ES6
+import "react-quill/dist/quill.snow.css";
 
 import { useEffect, useState, useRef } from "react";
 
