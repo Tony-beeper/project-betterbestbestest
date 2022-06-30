@@ -17,6 +17,7 @@ createDoc(startServer);
 function createDoc(callback) {
   const connection = backend.connect();
   const doc = connection.get("code", "richtext");
+  const doc2 = connection.get("code", "id2");
   doc.fetch((err) => {
     if (err) throw err;
     if (doc.type === null) {
@@ -25,6 +26,14 @@ function createDoc(callback) {
       return;
     }
     callback();
+  });
+  doc2.fetch((err) => {
+    if (err) throw err;
+    if (doc2.type === null) {
+      // insert dummy element to initilize shardb
+      doc2.create([{ insert: "Hi!" }], "rich-text");
+      return;
+    }
   });
 }
 

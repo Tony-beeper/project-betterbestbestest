@@ -1,11 +1,11 @@
-import CodeEditor from "./components/CodeEditor/CodeEditor";
+import NoteBook from "./components/Notebook/Notebook";
 
 function App() {
-    return (
-        <div className="App">
-            <CodeEditor />
-        </div>
-    );
+  return (
+    <div className="App">
+      <NoteBook />
+    </div>
+  );
 }
 
 export default App;
