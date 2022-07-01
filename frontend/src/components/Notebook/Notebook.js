@@ -3,6 +3,7 @@ import sharedb from "sharedb/lib/client";
 import richText from "rich-text";
 import CodeBlock from "../CodeBlock/CodeBlock";
 import TextBlock from "../TextBlock/TextBlock";
+import "./Notebook.css";
 
 sharedb.types.register(richText.type);
 const socket = new ReconnectingWebSocket("ws://localhost:8080");
@@ -14,10 +15,12 @@ function NoteBook() {
   const doc1 = connection.get(collection, id);
   const doc2 = connection.get("code", "id2");
   return (
-    <div>
+    <div className="notebook-container">
       <h1>NoteBook</h1>
-      <CodeBlock doc={doc1} />
-      <TextBlock doc={doc2} />
+      <div className="notebook-body">
+        <CodeBlock doc={doc1} />
+        <TextBlock doc={doc2} />
+      </div>
     </div>
   );
 }

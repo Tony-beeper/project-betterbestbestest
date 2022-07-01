@@ -1,6 +1,7 @@
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useEffect, useState } from "react";
+import "./TextBlock.css";
 
 function TextBlock(props) {
   const doc = props.doc;
@@ -22,7 +23,7 @@ function TextBlock(props) {
   };
   const modules = {};
   return (
-    <div>
+    <div className="text-block">
       <ReactQuill
         modules={modules}
         onChange={handleChange}

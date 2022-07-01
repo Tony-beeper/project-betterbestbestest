@@ -1,8 +1,9 @@
 import NoteBook from "./components/Notebook/Notebook";
+import "./App.css";
 
 function App() {
   return (
-    <div className="App">
+    <div className="app">
       <NoteBook />
     </div>
   );
