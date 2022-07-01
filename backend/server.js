@@ -20,9 +20,10 @@ createDoc(startServer);
 // Create initial document then fire callback
 function createDoc(callback) {
   const connection = backend.connect();
-  const doc = connection.get("code", "richtext");
+  const doc = connection.get("code", "rich-text");
   doc.fetch((err) => {
     if (err) throw err;
+    console.log(doc.type);
     if (doc.type === null) {
       // insert dummy element to initilize shardb
       doc.create([{ insert: "Hi!" }], "rich-text", callback);
@@ -39,6 +40,10 @@ function startServer() {
 
   // body parser
   app.use(bodyParser.json());
+  app.use(function (req, res, next) {
+    console.log("HTTP request", req.method, req.url, req.body);
+    next();
+  });
 
   // app routes
   app.use("/api/room", roomRoutes);
