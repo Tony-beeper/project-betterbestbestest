@@ -17,6 +17,9 @@ ShareDB.types.register(richText.type);
 var backend = new ShareDB({ db });
 createDoc(startServer);
 
+const cookie = require("cookie");
+const session = require("express-session");
+
 // Create initial document then fire callback
 function createDoc(callback) {
   const connection = backend.connect();
@@ -39,9 +42,26 @@ function startServer() {
   const server = http.createServer(app);
 
   // body parser
+  app.use(
+    session({
+      secret: "please change this secret",
+      resave: false,
+      saveUninitialized: true,
+      cookie: {
+        secure: true,
+        sameSite: true,
+        httpOnly: true,
+      },
+    })
+  );
   app.use(bodyParser.json());
   app.use(function (req, res, next) {
-    console.log("HTTP request", req.method, req.url, req.body);
+    req.username = req.session.username ? req.session.username : "test";
+    console.log("HTTP request", req.username, req.method, req.url, req.body);
+    next();
+  });
+  app.use(function (req, res, next) {
+    if (!req.username) return res.status(401).json({ err: "access denied" });
     next();
   });
 
