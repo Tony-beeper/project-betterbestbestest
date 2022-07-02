@@ -1,5 +1,10 @@
+const dotenv = require("dotenv");
+const userRoute = require("./routes/user.js");
 const express = require("express");
-require("dotenv").config();
+const bodyParser = require("body-parser");
+const chalk = require("chalk");
+
+const session = require("express-session");
 
 const WebSocket = require("ws");
 const ShareDB = require("sharedb");
@@ -8,9 +13,11 @@ const http = require("http");
 const richText = require("rich-text");
 const mongoose = require("mongoose");
 const { MongoClient, ServerApiVersion } = require("mongodb");
+const backend = new ShareDB({ presence: true });
+const bcrypt = require("bcrypt");
 
+dotenv.config();
 ShareDB.types.register(richText.type);
-var backend = new ShareDB({ presence: true });
 createDoc(startServer);
 
 // Create initial document then fire callback
@@ -47,14 +54,56 @@ function startServer() {
       useUnifiedTopology: true,
     })
     .then((res) => {
-      console.log("connect successfully to mongo");
+      console.log("Connected successfully to mongo");
     })
     .catch((err) => {
       console.log(err);
     });
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: true,
+      cookie: {
+        secure: true,
+        sameSite: true,
+        httpOnly: true,
+      },
+    })
+  );
+
+  // app.use(function (req, res, next) {
+  //   req.username = req.session.username ? req.session.username : "";
+  //   res.setHeader(
+  //     "Set-Cookie",
+  //     cookie.serialize("username", req.username, {
+  //       path: "/",
+  //       maxAge: 120 * 60 * 24 * 7, // 1 week in number of seconds
+  //     })
+  //   );
+  //   console.log("HTTP request", req.username, req.method, req.url, req.body);
+  //   next();
+  // });
+
+  app.use(function (req, res, next) {
+    req.username = req.session.username ? req.session.username : "test";
+    console.log("HTTP request", req.username, req.method, req.url, req.body);
+    next();
+  });
+
+  app.use(function (req, res, next) {
+    if (!req.username) return res.status(401).json({ err: "access denied" });
+    next();
+  });
+
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.json());
+
+  app.use("/api/user", userRoute);
 
   const PORT = process.env.PORT || 8080;
 
-  server.listen(8080);
-  console.log("Listening on http://localhost:" + PORT);
+  server.listen(PORT, () => {
+    console.log(chalk.whiteBright(`Listening at http://localhost:${PORT}`));
+  });
 }
