@@ -21,7 +21,7 @@ const RoomSchema = new mongoose.Schema({
     type: Array,
     required: true,
   },
-  roomId: {
+  room_number: {
     type: String,
     required: true,
   },

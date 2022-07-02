@@ -40,7 +40,7 @@ router.post(
           comment_sharedbID: commentId,
           code_sharedbID: codeId,
           members: [roomOwner],
-          roomId: generateId(9),
+          room_number: generateId(9),
         });
         await newRoom.save();
         return res.json({ newRoom });
@@ -56,6 +56,9 @@ router.delete(
     .notEmpty()
     .trim()
     .escape()
+    .custom((roomId) => {
+      ObjectId.isValid(roomId);
+    })
     .withMessage({ err: "wrong or missing roomOwner" }),
   async (req, res) => {
     const err = validationResult(req);
@@ -75,15 +78,7 @@ router.delete(
     await deleteDoc(`${room.Owner}_comment`, room.comment_sharedbID);
     await deleteDoc(`${room.Owner}_code`, room.code_sharedbID);
     await Room.deleteOne({ _id: ObjectId(roomId) });
-    return res.json({
-      join_code: room.join_code,
-      Owner: room.Owner,
-      comment_sharedbID: room.comment_sharedbID,
-      code_sharedbID: room.code_sharedbID,
-      members: room.members,
-      roomId: room.roomId,
-      _id: room._id,
-    });
+    return res.json(room.toObject());
     // deleteDoc(`${room.Owner}_comment`, room.comment_sharedbID, (err) => {
     //   if (err) return res.status(500).json({ err: err });
     //   deleteDoc(`${room.Owner}_code`, room.code_sharedbID, async (err) => {
@@ -102,6 +97,9 @@ router.get(
     .notEmpty()
     .trim()
     .escape()
+    .custom((roomId) => {
+      ObjectId.isValid(roomId);
+    })
     .withMessage({ err: "missing or wrong roomId" }),
   async (req, res) => {
     const err = validationResult(req);
@@ -111,15 +109,7 @@ router.get(
     var roomId = req.params.roomId;
     const room = await Room.findOne({ _id: ObjectId(roomId) });
     if (!room) return res.status(400).json({ err: "room does not exist" });
-    return res.json({
-      _id: room._id,
-      join_code: room.join_code,
-      Owner: room.Owner,
-      comment_sharedbID: room.comment_sharedbID,
-      code_sharedbID: room.code_sharedbID,
-      members: room.members,
-      roomId: room.roomId,
-    });
+    return res.json(room.toObject());
   }
 );
 
@@ -132,7 +122,7 @@ router.patch(
     .trim()
     .escape()
     .withMessage({ err: "wrong or missing joinCode" }),
-  body("roomId")
+  body("roomNumber")
     .notEmpty()
     .isLength({ max: 9 })
     .trim()
@@ -143,9 +133,9 @@ router.patch(
     if (!err.isEmpty()) {
       return res.status(400).json(err);
     }
-    var roomId = req.body.roomId;
+    var roomNumber = req.body.roomNumber;
     var joinCode = req.body.joinCode;
-    const room = await Room.findOne({ roomId: roomId });
+    const room = await Room.findOne({ room_number: roomNumber });
     console.log(room);
     if (!room || room.join_code !== joinCode) {
       return res.status(400).json({ err: "wrong roomId or join code" });
@@ -155,19 +145,11 @@ router.patch(
     }
     room.members.push(req.username);
     const update_room = await Room.findOneAndUpdate(
-      { roomId: roomId },
+      { room_number: roomNumber },
       { members: room.members },
       { new: true }
     );
-    return res.json({
-      _id: update_room._id,
-      join_code: update_room.join_code,
-      Owner: update_room.Owner,
-      comment_sharedbID: update_room.comment_sharedbID,
-      code_sharedbID: update_room.code_sharedbID,
-      members: update_room.members,
-      roomId: update_room.roomId,
-    });
+    return res.json(update_room.toObject());
   }
 );
 

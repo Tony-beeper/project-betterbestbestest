@@ -66,7 +66,7 @@ function startServer() {
   });
 
   // app routes
-  app.use("/api/room", roomRoutes);
+  app.use("/api/rooms", roomRoutes);
 
   // Connect any incoming WebSocket connection to ShareDB
   const wss = new WebSocket.Server({ server: server });
