@@ -1,6 +1,10 @@
+const dotenv = require("dotenv");
+const userRoute = require("./routes/user.js");
 const express = require("express");
 const bodyParser = require("body-parser");
-require("dotenv").config();
+const chalk = require("chalk");
+
+const session = require("express-session");
 
 const WebSocket = require("ws");
 const ShareDB = require("sharedb");
@@ -8,6 +12,9 @@ const WebSocketJSONStream = require("@teamwork/websocket-json-stream");
 const http = require("http");
 const richText = require("rich-text");
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+
+dotenv.config();
 const sharedbMongo = require("sharedb-mongo");
 const cors = require("cors");
 
@@ -17,6 +24,8 @@ const db = sharedbMongo(process.env.MONGO_CONN_STR);
 ShareDB.types.register(richText.type);
 var backend = new ShareDB({ db });
 createDoc(startServer);
+
+const cookie = require("cookie");
 
 // Create initial document then fire callback
 function createDoc(callback) {
@@ -41,9 +50,26 @@ function startServer() {
   app.use(cors());
 
   // body parser
+  app.use(
+    session({
+      secret: "please change this secret",
+      resave: false,
+      saveUninitialized: true,
+      cookie: {
+        secure: true,
+        sameSite: true,
+        httpOnly: true,
+      },
+    })
+  );
   app.use(bodyParser.json());
   app.use(function (req, res, next) {
-    console.log("HTTP request", req.method, req.url, req.body);
+    req.username = req.session.username ? req.session.username : "test";
+    console.log("HTTP request", req.username, req.method, req.url, req.body);
+    next();
+  });
+  app.use(function (req, res, next) {
+    if (!req.username) return res.status(401).json({ err: "access denied" });
     next();
   });
 
@@ -64,14 +90,56 @@ function startServer() {
       useUnifiedTopology: true,
     })
     .then((res) => {
-      console.log("connect successfully to mongo");
+      console.log("Connected successfully to mongo");
     })
     .catch((err) => {
       console.log(err);
     });
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: true,
+      cookie: {
+        secure: true,
+        sameSite: true,
+        httpOnly: true,
+      },
+    })
+  );
+
+  // app.use(function (req, res, next) {
+  //   req.username = req.session.username ? req.session.username : "";
+  //   res.setHeader(
+  //     "Set-Cookie",
+  //     cookie.serialize("username", req.username, {
+  //       path: "/",
+  //       maxAge: 120 * 60 * 24 * 7, // 1 week in number of seconds
+  //     })
+  //   );
+  //   console.log("HTTP request", req.username, req.method, req.url, req.body);
+  //   next();
+  // });
+
+  app.use(function (req, res, next) {
+    req.username = req.session.username ? req.session.username : "test";
+    console.log("HTTP request", req.username, req.method, req.url, req.body);
+    next();
+  });
+
+  app.use(function (req, res, next) {
+    if (!req.username) return res.status(401).json({ err: "access denied" });
+    next();
+  });
+
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.json());
+
+  app.use("/api/user", userRoute);
 
   const PORT = process.env.PORT || 8080;
 
-  server.listen(8080);
-  console.log("Listening on http://localhost:" + PORT);
+  server.listen(PORT, () => {
+    console.log(chalk.whiteBright(`Listening at http://localhost:${PORT}`));
+  });
 }

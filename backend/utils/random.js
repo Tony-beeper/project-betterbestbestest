@@ -9,7 +9,18 @@ const generateString = function (length) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
 
-  return result;
+  return result.trim();
 };
 
-module.exports = generateString;
+const id_arr = "0123456789";
+const generateId = function (length) {
+  let result = " ";
+  const charactersLength = id_arr.length;
+  for (let i = 0; i < length; i++) {
+    result += id_arr.charAt(Math.floor(Math.random() * charactersLength));
+  }
+
+  return result.trim();
+};
+
+module.exports = { generateString, generateId };
