@@ -11,12 +11,16 @@
   "license": "ISC",
   "dependencies": {
     "@teamwork/websocket-json-stream": "^2.0.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "express-validator": "^6.14.2",
     "mongodb": "^4.7.0",
     "mongoose": "^6.4.1",
     "rich-text": "^4.1.0",
     "sharedb": "^3.0.0",
+    "sharedb-mongo": "^2.0.0",
+    "uuid": "^8.3.2",
     "ws": "^8.8.0"
   },
   "devDependencies": {

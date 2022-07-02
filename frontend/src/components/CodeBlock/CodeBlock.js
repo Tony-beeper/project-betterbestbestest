@@ -6,16 +6,20 @@ import "react-quill/dist/quill.snow.css";
 import "./CodeBlock.css";
 
 import { useEffect, useState, useRef } from "react";
+import roomsAPI from "../../api/rooms";
 
 function CodeBlock(props) {
   const doc = props.doc;
   const [blockContent, setBlockContent] = useState({});
-  let quillRef = null;
   let reactQuillRef = useRef(null);
+
+  let quillRef = null;
+
   hljs.registerLanguage("python", python);
 
   useEffect(() => {
     attachQuillRefs();
+
     doc.subscribe((error) => {
       doc.on("op", function (op, source) {
         if (source) return;
