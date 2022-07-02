@@ -6,7 +6,6 @@ const chalk = require("chalk");
 
 const session = require("express-session");
 
-
 const WebSocket = require("ws");
 const ShareDB = require("sharedb");
 const WebSocketJSONStream = require("@teamwork/websocket-json-stream");
@@ -26,7 +25,6 @@ var backend = new ShareDB({ db });
 createDoc(startServer);
 
 const cookie = require("cookie");
-const session = require("express-session");
 
 // Create initial document then fire callback
 function createDoc(callback) {
