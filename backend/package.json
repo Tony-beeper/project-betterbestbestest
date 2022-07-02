@@ -15,11 +15,14 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-session": "^1.17.3",
-    "http-status-codes": "^2.2.0",
+
+    "express-validator": "^6.14.2",
     "mongodb": "^4.7.0",
     "mongoose": "^6.4.1",
     "rich-text": "^4.1.0",
     "sharedb": "^3.0.0",
+    "sharedb-mongo": "^2.0.0",
+    "uuid": "^8.3.2",
     "ws": "^8.8.0"
   },
   "devDependencies": {
