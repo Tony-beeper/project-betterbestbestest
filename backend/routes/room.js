@@ -102,6 +102,7 @@ router.get(
     .notEmpty()
     .trim()
     .escape()
+    .custom((roomId) => ObjectId.isValid(roomId))
     .withMessage({ err: "missing or invalid roomId" }),
   async (req, res) => {
     const err = validationResult(req);
@@ -109,7 +110,7 @@ router.get(
       return res.status(400).json(err);
     }
     var roomId = req.params.roomId;
-    const room = await Room.findOne({ roomId: roomId });
+    const room = await Room.findOne({ _id: ObjectId(roomId) });
     if (!room) return res.status(400).json({ err: "room does not exist" });
     return res.json(room.toObject());
   }

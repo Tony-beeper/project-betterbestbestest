@@ -16,7 +16,7 @@ function NoteBook() {
   const [textBlockDoc, setTextBlockDoc] = useState(null);
   useEffect(() => {
     // hardcoded sharedb connection
-    const testRoomId = "165668775";
+    const testRoomId = "62c06afc2261e5a9d8806395";
     const testRoomName = "colintestDONTDELETE";
     roomsAPI.getRoom(testRoomId).then((data) => {
       setCodeBlockDoc(
