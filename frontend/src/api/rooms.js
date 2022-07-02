@@ -5,8 +5,14 @@ const createRoom = async (username) => {
   return data.data;
 };
 
+const getRoom = async (roomId) => {
+  const data = await axios.get(backendURL + "/" + roomId);
+  return data.data;
+};
+
 const roomsAPI = {
   createRoom,
+  getRoom,
 };
 
 export default roomsAPI;

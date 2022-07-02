@@ -102,24 +102,16 @@ router.get(
     .notEmpty()
     .trim()
     .escape()
-    .withMessage({ err: "missing or wrong roomId" }),
+    .withMessage({ err: "missing or invalid roomId" }),
   async (req, res) => {
     const err = validationResult(req);
     if (!err.isEmpty()) {
       return res.status(400).json(err);
     }
     var roomId = req.params.roomId;
-    const room = await Room.findOne({ _id: ObjectId(roomId) });
+    const room = await Room.findOne({ roomId: roomId });
     if (!room) return res.status(400).json({ err: "room does not exist" });
-    return res.json({
-      _id: room._id,
-      join_code: room.join_code,
-      Owner: room.Owner,
-      comment_sharedbID: room.comment_sharedbID,
-      code_sharedbID: room.code_sharedbID,
-      members: room.members,
-      roomId: room.roomId,
-    });
+    return res.json(room.toObject());
   }
 );
 

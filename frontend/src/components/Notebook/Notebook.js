@@ -10,28 +10,29 @@ import roomsAPI from "../../api/rooms";
 sharedb.types.register(richText.type);
 const socket = new ReconnectingWebSocket("ws://localhost:8080");
 const connection = new sharedb.Connection(socket);
-const collection = "code";
-const id = "richtext";
 
 function NoteBook() {
   const [codeBlockDoc, setCodeBlockDoc] = useState(null);
-  const doc2 = connection.get("code", "id2");
+  const [textBlockDoc, setTextBlockDoc] = useState(null);
   useEffect(() => {
-    const dummyName = "dummy" + Math.floor(Math.random() * 10000);
-    // roomsAPI.createRoom(dummyName).then((data) => {
-    //   console.log(data);
-    //   setCodeBlockDoc(
-    //     connection.get(dummyName + "_code", data.newRoom.code_sharedbID)
-    //   );
-    // });
+    // hardcoded sharedb connection
+    const testRoomId = "165668775";
+    const testRoomName = "colintestDONTDELETE";
+    roomsAPI.getRoom(testRoomId).then((data) => {
+      setCodeBlockDoc(
+        connection.get(testRoomName + "_code", data.code_sharedbID)
+      );
+      setTextBlockDoc(
+        connection.get(testRoomName + "_comment", data.comment_sharedbID)
+      );
+    });
   }, []);
   return (
     <div className="notebook-container">
       <h1>NoteBook</h1>
       <div className="notebook-body">
         {codeBlockDoc && <CodeBlock doc={codeBlockDoc} />}
-
-        <TextBlock doc={doc2} />
+        {textBlockDoc && <TextBlock doc={textBlockDoc} />}
       </div>
     </div>
   );

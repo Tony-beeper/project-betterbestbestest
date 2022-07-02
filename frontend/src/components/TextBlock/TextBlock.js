@@ -1,33 +1,48 @@
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useEffect, useState } from "react";
 import "./TextBlock.css";
+import { useEffect, useRef } from "react";
 
 function TextBlock(props) {
   const doc = props.doc;
-  const [blockContent, setBlockContent] = useState({});
+  let reactQuillRef = useRef(null);
+  let quillRef = null;
 
   useEffect(() => {
     doc.subscribe((error) => {
+      console.log(doc);
+      attachQuillRefs();
+      // set initial content
+      quillRef.setContents(doc.data);
       doc.on("op", function (op, source) {
         if (source) return;
         console.log(op);
-        setBlockContent(op);
+        // update quill with new op
+        quillRef.updateContents(op);
       });
     });
   }, []);
+  const attachQuillRefs = () => {
+    if (
+      !reactQuillRef.current ||
+      typeof reactQuillRef.current.getEditor !== "function"
+    )
+      return;
+    // init quill ref
+    quillRef = reactQuillRef.current.getEditor();
+    console.log(quillRef);
+  };
   const handleChange = (content, delta, source, editor) => {
     if (source !== "user") return;
-    console.log(editor.getContents());
-    doc.submitOp(editor.getContents());
+    doc.submitOp(delta);
   };
   const modules = {};
   return (
     <div className="text-block">
       <ReactQuill
+        ref={reactQuillRef}
         modules={modules}
         onChange={handleChange}
-        value={blockContent}
       />
     </div>
   );
