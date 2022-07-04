@@ -1,7 +1,7 @@
 import hljs from "highlight.js";
 import python from "highlight.js/lib/languages/python";
 import "highlight.js/styles/monokai-sublime.css";
-import ReactQuill, { Quill } from "react-quill";
+import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./CodeBlock.css";
 
