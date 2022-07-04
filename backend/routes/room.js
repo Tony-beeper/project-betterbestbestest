@@ -42,8 +42,8 @@ router.post(
           members: [roomOwner],
           room_number: generateId(9),
         });
-        await newRoom.save();
-        return res.json({ newRoom });
+        const room = await newRoom.save();
+        return res.json(room.toObject());
       });
     });
   }
@@ -56,9 +56,7 @@ router.delete(
     .notEmpty()
     .trim()
     .escape()
-    .custom((roomId) => {
-      ObjectId.isValid(roomId);
-    })
+    .custom((roomId) => ObjectId.isValid(roomId))
     .withMessage({ err: "wrong or missing roomOwner" }),
   async (req, res) => {
     const err = validationResult(req);
@@ -71,10 +69,10 @@ router.delete(
       return res.status(400).json({ err: "room does not exist" });
     }
     console.log(room);
-    if (room.roomOwner !== req.username)
-      return res
-        .status(403)
-        .json({ err: "you are not allowed to delete the room" });
+    // if (room.roomOwner !== req.username)
+    //   return res
+    //     .status(403)
+    //     .json({ err: "you are not allowed to delete the room" });
     await deleteDoc(`${room.Owner}_comment`, room.comment_sharedbID);
     await deleteDoc(`${room.Owner}_code`, room.code_sharedbID);
     await Room.deleteOne({ _id: ObjectId(roomId) });
@@ -97,16 +95,14 @@ router.get(
     .notEmpty()
     .trim()
     .escape()
-    .custom((roomId) => {
-      ObjectId.isValid(roomId);
-    })
+    .custom((roomId) => ObjectId.isValid(roomId))
     .withMessage({ err: "missing or wrong roomId" }),
   async (req, res) => {
     const err = validationResult(req);
     if (!err.isEmpty()) {
       return res.status(400).json(err);
     }
-    var roomId = req.params.roomId;
+    const roomId = req.params.roomId;
     const room = await Room.findOne({ _id: ObjectId(roomId) });
     if (!room) return res.status(400).json({ err: "room does not exist" });
     return res.json(room.toObject());
@@ -127,7 +123,7 @@ router.patch(
     .isLength({ max: 9 })
     .trim()
     .escape()
-    .withMessage({ err: "wrong or missing roomId" }),
+    .withMessage({ err: "wrong or missing room number" }),
   async (req, res) => {
     const err = validationResult(req);
     if (!err.isEmpty()) {
@@ -143,9 +139,41 @@ router.patch(
     if (room.members.length >= MAX_MEMBERS) {
       res.status(400).json({ err: "room already full" });
     }
+    if (room.members.includes(req.username)) {
+      res.status(400).json({ err: "already joined" });
+    }
     room.members.push(req.username);
     const update_room = await Room.findOneAndUpdate(
       { room_number: roomNumber },
+      { members: room.members },
+      { new: true }
+    );
+    return res.json(update_room.toObject());
+  }
+);
+
+// endpoint for leave a room
+router.patch(
+  "/leave/",
+  body("roomId")
+    .notEmpty()
+    .trim()
+    .escape()
+    .custom((roomId) => ObjectId.isValid(roomId))
+    .withMessage({ err: "wrong or missing roomId" }),
+  async (req, res) => {
+    const err = validationResult(req);
+    if (!err.isEmpty()) {
+      return res.status(400).json(err);
+    }
+    var roomId = req.body.roomId;
+    const room = await Room.findOne({ _id: roomId });
+    if (!room) return res.status(400).json({ err: "room does not exist" });
+    if (!room.members.includes(req.username))
+      return res.status(403).json({ err: "you need to join first" });
+    room.members.pop(req.username);
+    const update_room = await Room.findOneAndUpdate(
+      { _id: roomId },
       { members: room.members },
       { new: true }
     );

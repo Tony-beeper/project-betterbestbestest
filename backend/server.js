@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 require("dotenv").config();
+const cors = require("cors");
 
 const WebSocket = require("ws");
 const ShareDB = require("sharedb");
@@ -54,6 +55,7 @@ function startServer() {
       },
     })
   );
+  app.use(cors());
   app.use(bodyParser.json());
   app.use(function (req, res, next) {
     req.username = req.session.username ? req.session.username : "test";
