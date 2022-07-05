@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Button,
   TextField,
@@ -12,11 +12,10 @@ import {
   ThemeProvider,
 } from "@material-ui/core";
 import { makeStyles, createTheme } from "@material-ui/core/styles";
-import { NoteAddRounded, GroupAdd } from "@material-ui/icons";
+import { ExpandMoreRounded } from "@material-ui/icons";
 
 import roomAPI from "../../api/room";
 import handleError from "../../utils/errhandling";
-import SimpleCard from "../../components/notebookCard";
 
 const useStyles = makeStyles({
   root: {
@@ -30,6 +29,9 @@ const useStyles = makeStyles({
     border: 0,
     color: "white",
     borderRadius: 3,
+  },
+  textField: {
+    marginBottom: 10,
   },
   input: {
     color: "white",
@@ -48,8 +50,24 @@ const Room = () => {
   const classes = useStyles();
   const nevigate = useNavigate();
 
-  const [roomNumber, setRoomNumber] = useState(null);
-  const [joinCode, setJoinCode] = useState(null);
+  const [roomName, setRoomName] = useState("");
+  const [roomNumber, setRoomNumber] = useState("");
+  const [joinCode, setJoinCode] = useState("");
+
+  const handleCreateRoom = (e) => {
+    e.preventDefault();
+
+    roomAPI
+      .createRoom("test_user", roomName)
+      .then((data) => {
+        console.log(data);
+        nevigate(`${data._id}`);
+      })
+      .catch(({ response }) => {
+        handleError(response);
+        setRoomName("");
+      });
+  };
 
   const handleJoin = (e) => {
     e.preventDefault();
@@ -67,26 +85,16 @@ const Room = () => {
       });
   };
 
+  const handleRoomNameChange = (e) => {
+    setRoomName(e.target.value);
+  };
+
   const handleRoomNumberChange = (e) => {
     setRoomNumber(e.target.value);
   };
 
   const handleJoinCodeChange = (e) => {
     setJoinCode(e.target.value);
-  };
-
-  const handleCreateRoom = (e) => {
-    e.preventDefault();
-
-    roomAPI
-      .createRoom("test_user")
-      .then((data) => {
-        console.log(data);
-        nevigate(`${data._id}`);
-      })
-      .catch(({ response }) => {
-        handleError(response);
-      });
   };
 
   return (
@@ -98,32 +106,48 @@ const Room = () => {
           </Typography>
           <Accordion className={classes.background_blue}>
             <AccordionSummary
-              expandIcon={<NoteAddRounded style={{ color: "#1565c0" }} />}
+              expandIcon={<ExpandMoreRounded style={{ color: "#1565c0" }} />}
+              aria-controls="panel2a-content"
+              id="panel2a-header"
             >
               <Typography variant="h6">Create a Room</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleCreateRoom}
-                type="button"
-                margin="normal"
-              >
-                create room
-              </Button>
+              <Box component="form" onSubmit={handleCreateRoom}>
+                <TextField
+                  InputProps={{
+                    className: classes.input,
+                  }}
+                  className={classes.textField}
+                  required
+                  color="secondary"
+                  value={roomName}
+                  fullWidth
+                  onChange={handleRoomNameChange}
+                  variant="standard"
+                  label="room name"
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  margin="normal"
+                >
+                  CREATE
+                </Button>
+              </Box>
             </AccordionDetails>
           </Accordion>
           <Accordion className={classes.background_blue}>
             <AccordionSummary
-              expandIcon={<GroupAdd style={{ color: "#1565c0" }} />}
+              expandIcon={<ExpandMoreRounded style={{ color: "#1565c0" }} />}
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
               <Typography variant="h6">Join a Room</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Box component="form" onSubmit={handleJoin} sx={{ mt: 1 }}>
+              <Box component="form" onSubmit={handleJoin}>
                 <TextField
                   InputProps={{
                     className: classes.input,
@@ -162,7 +186,6 @@ const Room = () => {
             </AccordionDetails>
           </Accordion>
         </ThemeProvider>
-        <SimpleCard />
       </div>
     </Container>
   );

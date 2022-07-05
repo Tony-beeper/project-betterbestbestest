@@ -2,13 +2,21 @@ import axios from "axios";
 
 const backendURL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:8080" + "/api/rooms";
-const createRoom = async (username) => {
-  const data = await axios.post(backendURL, { username: username });
+const createRoom = async (username, roomName) => {
+  const data = await axios.post(backendURL, {
+    username: username,
+    roomName: roomName,
+  });
   return data.data;
 };
 
 const getRoom = async (roomId) => {
   const data = await axios.get(backendURL + "/" + roomId);
+  return data.data;
+};
+
+const getRooms = async (username) => {
+  const data = await axios.get(`${backendURL}/all/${username}`);
   return data.data;
 };
 
@@ -30,6 +38,7 @@ const roomsAPI = {
   getRoom,
   joinRoom,
   deleteRoom,
+  getRooms,
 };
 
 export default roomsAPI;

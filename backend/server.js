@@ -27,7 +27,6 @@ function createDoc(callback) {
   const doc = connection.get("code", "rich-text");
   doc.fetch((err) => {
     if (err) throw err;
-    console.log(doc.type);
     if (doc.type === null) {
       // insert dummy element to initilize shardb
       doc.create([{ insert: "Hi!" }], "rich-text", callback);

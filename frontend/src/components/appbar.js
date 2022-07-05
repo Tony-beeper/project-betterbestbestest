@@ -5,6 +5,7 @@ import {
   Button,
   IconButton,
 } from "@material-ui/core";
+import { useNavigate } from "react-router-dom";
 import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Bar = () => {
+  const nevigate = useNavigate();
   const classes = useStyles();
 
   return (
@@ -35,7 +37,13 @@ const Bar = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
+          <Typography
+            variant="h6"
+            className={classes.title}
+            onClick={(e) => {
+              nevigate("room");
+            }}
+          >
             CodeT
           </Typography>
           <Button color="inherit">Login</Button>

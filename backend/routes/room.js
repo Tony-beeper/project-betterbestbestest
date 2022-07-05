@@ -6,6 +6,7 @@ const { createDoc, deleteDoc, test } = require("../models/sharedb");
 const { v4 } = require("uuid");
 const { ObjectId } = require("mongodb");
 const MAX_MEMBERS = 3;
+const MAX_ROOM_PER_USER = 1;
 
 // router = "/api/room"
 const router = express.Router();
@@ -18,29 +19,41 @@ router.post(
     .trim()
     .escape()
     .withMessage({ err: "wrong or missing roomOwner" }),
+  body("roomName")
+    .notEmpty()
+    .trim()
+    .escape()
+    .withMessage({ err: "wrong or missing roomName" }),
   async (req, res) => {
     const err = validationResult(req);
     if (!err.isEmpty()) {
       return res.status(400).json(err);
     }
-    var roomOwner = req.body.username;
-    const room = await Room.findOne({ Owner: roomOwner });
-    if (room) {
-      return res.status(400).json({ err: "user already have a room" });
+    const roomOwner = req.body.username;
+    const roomName = req.body.roomName;
+    const rooms = await Room.find({ owner: roomOwner });
+    if (rooms.length >= MAX_ROOM_PER_USER) {
+      return res
+        .status(400)
+        .json({ err: "exceed number of rooms allowed per user" });
     }
-    var commentId = v4();
-    var codeId = v4();
-    createDoc(`${roomOwner}_comment`, commentId, function (err) {
+    const commentId = v4();
+    const codeId = v4();
+    const _id = ObjectId();
+    createDoc(`${_id}_comment`, commentId, function (err) {
       if (err) return res.status(400).json({ err: err });
-      createDoc(`${roomOwner}_code`, codeId, async function (err) {
+      createDoc(`${_id}_code`, codeId, async function (err) {
         if (err) return res.status(400).json({ err: err });
         const newRoom = new Room({
-          join_code: generateString(6),
-          Owner: roomOwner,
-          comment_sharedbID: commentId,
-          code_sharedbID: codeId,
+          joinCode: generateString(6),
+          owner: roomOwner,
+          commentSharedbID: commentId,
+          codeSharedbID: codeId,
           members: [roomOwner],
-          room_number: generateId(9),
+          roomNumber: generateId(9),
+          name: roomName,
+          date: new Date().toISOString().split("T")[0],
+          _id: _id,
         });
         const room = await newRoom.save();
         return res.json(room.toObject());
@@ -63,7 +76,7 @@ router.delete(
     if (!err.isEmpty()) {
       return res.status(400).json(err);
     }
-    var roomId = req.params.roomId;
+    const roomId = req.params.roomId;
     const room = await Room.findOne({ _id: ObjectId(roomId) });
     if (!room) {
       return res.status(400).json({ err: "room does not exist" });
@@ -73,8 +86,8 @@ router.delete(
     //   return res
     //     .status(403)
     //     .json({ err: "you are not allowed to delete the room" });
-    await deleteDoc(`${room.Owner}_comment`, room.comment_sharedbID);
-    await deleteDoc(`${room.Owner}_code`, room.code_sharedbID);
+    await deleteDoc(`${room._id}_comment`, room.commentSharedbID);
+    await deleteDoc(`${room._id}_code`, room.codeSharedbID);
     await Room.deleteOne({ _id: ObjectId(roomId) });
     return res.json(room.toObject());
     // deleteDoc(`${room.Owner}_comment`, room.comment_sharedbID, (err) => {
@@ -85,6 +98,32 @@ router.delete(
     //     return res.json(room);
     //   });
     // });
+  }
+);
+
+// endpoint for get all rooms for a user
+router.get(
+  "/all/:username/",
+  param("username")
+    .notEmpty()
+    .trim()
+    .escape()
+    .withMessage({ err: "missing or wrong username" }),
+  async (req, res) => {
+    const err = validationResult(req);
+    if (!err.isEmpty()) {
+      return res.status(400).json(err);
+    }
+
+    const username = req.params.username;
+    const rooms = await Room.find({
+      $and: [{ members: { $all: [username] } }, { owner: { $ne: username } }],
+    });
+    const myRooms = await Room.find({ owner: username });
+    return res.json({
+      rooms: rooms.map((room) => room.toObject()),
+      myRooms: myRooms.map((myRoom) => myRoom.toObject()),
+    });
   }
 );
 
@@ -129,11 +168,11 @@ router.patch(
     if (!err.isEmpty()) {
       return res.status(400).json(err);
     }
-    var roomNumber = req.body.roomNumber;
-    var joinCode = req.body.joinCode;
-    const room = await Room.findOne({ room_number: roomNumber });
+    const roomNumber = req.body.roomNumber;
+    const joinCode = req.body.joinCode;
+    const room = await Room.findOne({ roomNumber: roomNumber });
     console.log(room);
-    if (!room || room.join_code !== joinCode) {
+    if (!room || room.joinCode !== joinCode) {
       return res.status(400).json({ err: "wrong roomId or join code" });
     }
     if (room.members.length >= MAX_MEMBERS) {
@@ -144,7 +183,7 @@ router.patch(
     }
     room.members.push(req.username);
     const update_room = await Room.findOneAndUpdate(
-      { room_number: roomNumber },
+      { roomNumber: roomNumber },
       { members: room.members },
       { new: true }
     );
@@ -166,7 +205,7 @@ router.patch(
     if (!err.isEmpty()) {
       return res.status(400).json(err);
     }
-    var roomId = req.body.roomId;
+    const roomId = req.body.roomId;
     const room = await Room.findOne({ _id: roomId });
     if (!room) return res.status(400).json({ err: "room does not exist" });
     if (!room.members.includes(req.username))
