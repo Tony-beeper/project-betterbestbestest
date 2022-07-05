@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import roomsAPI from "../../api/rooms";
 
 sharedb.types.register(richText.type);
-const socket = new ReconnectingWebSocket("ws://localhost:8080");
+const socket = new ReconnectingWebSocket(process.env.REACT_APP_WS_URL);
 const connection = new sharedb.Connection(socket);
 
 function NoteBook() {
