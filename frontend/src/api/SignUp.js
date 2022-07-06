@@ -1,5 +1,5 @@
 import axios from "axios";
-
+// axios.defaults.withCredentials = true;
 const backendURL = process.env.REACT_APP_BACKEND_URL + "/api/user/";
 
 const signup = async (username, password) => {
@@ -22,6 +22,7 @@ const signup = async (username, password) => {
       username: username,
       password: password, // This is the body part
     },
+    // withCredentials: true,
   });
 
   //   res.data.data; // '{"answer":42}'
@@ -46,6 +47,8 @@ const login = async (username, password) => {
       username: username,
       password: password, // This is the body part
     },
+    withCredentials: true,
+    // withCredentials: true,
   });
 
   //   res.data.data; // '{"answer":42}'
@@ -53,7 +56,7 @@ const login = async (username, password) => {
   console.log("res.data");
 
   console.log(res);
-  //   return res.data;
+  // return res;
 };
 
 const userAPI = {

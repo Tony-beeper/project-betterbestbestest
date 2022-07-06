@@ -44,8 +44,9 @@ const Bar = () => {
     /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
     "$1"
   );
-  // const username = "";
-  // console.log(username);
+  console.log("username");
+
+  console.log(username);
   return (
     <div className={classes.root}>
       {username ? (

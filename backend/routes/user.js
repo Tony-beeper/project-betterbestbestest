@@ -62,15 +62,12 @@ router.post("/login", async (req, res) => {
         req.session.username = username;
 
         return res
-          .setHeader(
-            "Set-Cookie",
-            cookie.serialize("abc", "jashdkjasdjkas", {
-              path: "/",
-              maxAge: 60 * 60 * 24 * 7,
-            })
-          )
+          .cookie("username", username, {
+            path: "/",
+            maxAge: 60 * 60 * 24 * 7,
+          })
           .status(StatusCodes.SUCCESS)
-          .json(createTextMessage("Login Success"));
+          .send("Login Success");
       } else {
         console.log("wrong pw");
 
@@ -94,14 +91,22 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/signout/", function (req, res, next) {
-  res.setHeader(
-    "Set-Cookie",
-    cookie.serialize("username", "", {
+  // res.setHeader(
+  //   "Set-Cookie",
+  //   cookie.serialize("username", "", {
+  //     path: "/",
+  //     maxAge: 60 * 60 * 24 * 7, // 1 week in number of seconds
+  //   })
+  // );
+  // return res;
+  req.session.username = "";
+  return res
+    .cookie("username", "", {
       path: "/",
-      maxAge: 60 * 60 * 24 * 7, // 1 week in number of seconds
+      maxAge: 60 * 60 * 24 * 7,
     })
-  );
-  return res;
+    .status(StatusCodes.SUCCESS)
+    .send("Cleared Cookie");
 });
 
 module.exports = router;

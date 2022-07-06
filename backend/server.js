@@ -4,7 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const chalk = require("chalk");
 const cors = require("cors");
-
+const cookieParser = require("cookie-parser");
 const session = require("express-session");
 
 const WebSocket = require("ws");
@@ -14,7 +14,6 @@ const http = require("http");
 const richText = require("rich-text");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-
 dotenv.config();
 const sharedbMongo = require("sharedb-mongo");
 
@@ -45,18 +44,18 @@ function startServer() {
   // Create a web server to serve files and listen to WebSocket connections
   const app = express();
   const server = http.createServer(app);
-
+  // app.use(express.json());
   // body parser
+  const corConfig = { origin: true, credentials: true };
   app.use(
     cors({
-      origin: "*",
-    })
-  );
-  app.use(
-    cors({
+      origin: true,
+      credentials: true,
       methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
     })
   );
+  app.options("*", cors(corConfig));
+
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
 

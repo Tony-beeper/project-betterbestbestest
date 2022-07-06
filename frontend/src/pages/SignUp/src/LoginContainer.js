@@ -3,9 +3,11 @@ import LoginForm from "./LoginForm.js";
 import userAPI from "../../../api/SignUp";
 import validateSignUpForm from "./validate";
 import errorHandler from "./utils/errhandling";
+import { useNavigate } from "react-router-dom";
+// import history from "./History";
 
 // const FormValidators = require("./validate");
-// const validateSignUpForm = FormValidators.validateSignUpForm;
+// const validateSignUpForm = FormValidators.validYateSignUpForm;
 const zxcvbn = require("zxcvbn");
 // password strength estimator
 
@@ -31,7 +33,6 @@ class LoginContainer extends Component {
     this.validateForm = this.validateForm.bind(this);
     this.pwHandleChange = this.pwHandleChange.bind(this);
   }
-
   handleChange(event) {
     const field = event.target.name;
     const user = this.state.user;
@@ -69,11 +70,12 @@ class LoginContainer extends Component {
 
   submitSignup(e) {
     e.preventDefault();
-    console.log("submitSignup called");
     userAPI
       .login(this.state.user.username, this.state.user.password)
       .then((data) => {
         console.log(data);
+        // useNavigate("/");
+
         // nevigate(`${data._id}`);
       })
       .catch(({ response }) => {

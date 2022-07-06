@@ -15,13 +15,14 @@ import "react-toastify/dist/ReactToastify.css";
 import Bar from "./components/appbar";
 import SignUp from "./pages/SignUp/SignUp";
 import Login from "./pages/SignUp/Login";
+import history from "./pages/SignUp/src/History";
 
 // import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 // import SignUpContainer from "./pages/SignUp/src/SignUpContainer";
 
 function App() {
   return (
-    <Router>
+    <Router history={history}>
       <ToastContainer theme="colored" />
       <Bar />
       <Routes>
