@@ -26,10 +26,12 @@ function NoteBook() {
   }, []);
   return (
     <div className="notebook-container">
-      <h1>NoteBook</h1>
       <div className="notebook-body">
-        {codeBlockDoc && <CodeBlock doc={codeBlockDoc} />}
-        {textBlockDoc && <TextBlock doc={textBlockDoc} />}
+        <h1>NoteBook</h1>
+        <div className="notebook-content">
+          {codeBlockDoc && <CodeBlock doc={codeBlockDoc} />}
+          {textBlockDoc && <TextBlock doc={textBlockDoc} />}
+        </div>
       </div>
     </div>
   );
