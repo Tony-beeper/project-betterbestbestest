@@ -52,7 +52,8 @@ router.post(
           members: [roomOwner],
           roomNumber: generateId(9),
           name: roomName,
-          date: new Date().toISOString().split("T")[0],
+          date: new Date(),
+          // new Date().toISOString().split("T")[0]
           _id: _id,
         });
         const room = await newRoom.save();

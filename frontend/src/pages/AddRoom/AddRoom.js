@@ -58,10 +58,10 @@ const Room = () => {
     e.preventDefault();
 
     roomAPI
-      .createRoom("test_user", roomName)
+      .createRoom("test", roomName)
       .then((data) => {
         console.log(data);
-        nevigate(`${data._id}`);
+        nevigate(`../room/${data._id}`, { replace: true });
       })
       .catch(({ response }) => {
         handleError(response);
@@ -76,7 +76,7 @@ const Room = () => {
       .joinRoom(roomNumber, joinCode)
       .then((data) => {
         console.log(data);
-        nevigate(`${data._id}`);
+        nevigate(`../room/${data._id}`, { replace: true });
       })
       .catch(({ response }) => {
         setRoomNumber("");

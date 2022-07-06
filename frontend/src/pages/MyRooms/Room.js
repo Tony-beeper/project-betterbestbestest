@@ -35,6 +35,22 @@ const Room = () => {
       });
   }, []);
 
+  const deleteMyRoom = (roomId) => {
+    setMyRooms(
+      myRooms.filter((value, index, array) => {
+        return value._id !== roomId;
+      })
+    );
+  };
+
+  const leaveRoom = (roomId) => {
+    setMyRooms(
+      myRooms.filter((value, index, array) => {
+        return value._id !== roomId;
+      })
+    );
+  };
+
   return (
     <Container maxWidth="lg">
       <div className={classes.header}>
@@ -61,12 +77,22 @@ const Room = () => {
       <Grid container spacing={7}>
         {myRooms.map((myRoom, idx) => (
           <Grid item key={`myRoom_${idx}`}>
-            <NotebookCard room={myRoom} isMine={true} />
+            <NotebookCard
+              room={myRoom}
+              isMine={true}
+              leaveRoom={leaveRoom}
+              deleteMyRoom={deleteMyRoom}
+            />
           </Grid>
         ))}
         {rooms.map((room, idx) => (
           <Grid item key={`room_${idx}`}>
-            <NotebookCard room={room} isMine={false} />
+            <NotebookCard
+              room={room}
+              isMine={false}
+              leaveRoom={leaveRoom}
+              deleteMyRoom={deleteMyRoom}
+            />
           </Grid>
         ))}
       </Grid>

@@ -75,21 +75,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NotebookCard = ({ room, isMine }) => {
+const NotebookCard = ({ room, isMine, leaveRoom, deleteMyRoom }) => {
   const classes = useStyles();
   const nevigate = useNavigate();
 
   const [open, setOpen] = useState(false);
 
-  const handleDelete = () => {
+  const handleDelete = (e) => {
+    e.preventDefault();
     roomsAPI
       .deleteRoom(room._id)
       .then((data) => {
-        nevigate("room");
-        handleClose();
+        deleteMyRoom(data._id);
       })
       .catch(({ response }) => {
         handleError(response);
+      })
+      .finally(() => {
+        handleClose();
+      });
+  };
+
+  const handleLeave = (e) => {
+    e.preventDefault();
+    roomsAPI
+      .leaveRoom(room._id)
+      .then((data) => {
+        leaveRoom(data._id);
+      })
+      .catch(({ response }) => {
+        handleError(response);
+      })
+      .finally(() => {
         handleClose();
       });
   };
@@ -104,12 +121,12 @@ const NotebookCard = ({ room, isMine }) => {
 
   return (
     <Card className={classes.root}>
-      <CardContent>
+      <CardContent onClick={(e) => nevigate(`${room._id}`)}>
         <Typography className={classes.title} gutterBottom>
           {room.name}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
-          {room.date}
+          {new Date(room.date).toISOString().split("T")[0]}
         </Typography>
         <div className={classes.icons}>
           {room.members.map((member, idx) => (
@@ -168,13 +185,9 @@ const NotebookCard = ({ room, isMine }) => {
             </div>
           ) : (
             <div>
-              <IconButton
-                size="small"
-                color="inherit"
-                onClick={handleClickOpen}
-              >
-                <ExitToAppIcon />
-              </IconButton>
+              <Button size="small" color="inherit" onClick={handleClickOpen}>
+                Leave
+              </Button>
               <Dialog
                 open={open}
                 onClose={handleClose}
@@ -194,7 +207,7 @@ const NotebookCard = ({ room, isMine }) => {
                   <Button onClick={handleClose} color="primary">
                     CANCEL
                   </Button>
-                  <Button onClick={handleClose} color="primary" autoFocus>
+                  <Button onClick={handleLeave} color="primary" autoFocus>
                     LEAVE
                   </Button>
                 </DialogActions>
@@ -202,14 +215,14 @@ const NotebookCard = ({ room, isMine }) => {
             </div>
           )}
 
-          <IconButton
+          {/* <IconButton
             size="small"
             color="inherit"
             variant="outlined"
             onClick={(e) => nevigate(`${room._id}`)}
           >
             <CreateIcon />
-          </IconButton>
+          </IconButton> */}
         </Grid>
       </CardActions>
     </Card>

@@ -32,12 +32,20 @@ const deleteRoom = async (roomId) => {
   return data.data;
 };
 
+const leaveRoom = async (roomId) => {
+  const data = await axios.patch(`${backendURL}/leave/`, {
+    roomId: roomId,
+  });
+  return data.data;
+};
+
 const roomsAPI = {
   createRoom,
   getRoom,
   joinRoom,
   deleteRoom,
   getRooms,
+  leaveRoom,
 };
 
 export default roomsAPI;

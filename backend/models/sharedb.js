@@ -15,11 +15,8 @@ const createDoc = (username, id, callback) => {
     if (err) throw err;
     if (doc.type === null) {
       // insert dummy element to initilize shardb
-      doc.create(
-        [{ insert: `welcome to ${username}'s room` }],
-        "rich-text",
-        callback
-      );
+      const init = username.includes("code") ? 'print("hello world")' : "hi";
+      doc.create([{ insert: init }], "rich-text", callback);
       return;
     }
     callback("doc already exist");
