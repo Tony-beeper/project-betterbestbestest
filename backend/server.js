@@ -16,6 +16,7 @@ const bcrypt = require("bcrypt");
 
 dotenv.config();
 const sharedbMongo = require("sharedb-mongo");
+const cors = require("cors");
 
 const roomRoutes = require("./routes/room");
 
@@ -46,6 +47,7 @@ function startServer() {
   // Create a web server to serve files and listen to WebSocket connections
   const app = express();
   const server = http.createServer(app);
+  app.use(cors());
 
   // body parser
   app.use(

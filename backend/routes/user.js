@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const user = require("../models/user");
 const createTextMessage = require("../utils/defaultMessages.js");
-const { MongoClient } = require("mongoDB");
+const { MongoClient } = require("mongodb");
 // const { default: mongoose } = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
