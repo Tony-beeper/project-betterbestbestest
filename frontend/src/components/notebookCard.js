@@ -21,7 +21,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Typography from "@material-ui/core/Typography";
 import { deepOrange, deepPurple } from "@material-ui/core/colors";
 
-import roomsAPI from "../api/room";
+import roomsAPI from "../api/rooms";
 import handleError from "../utils/errhandling";
 
 const useStyles = makeStyles((theme) => ({

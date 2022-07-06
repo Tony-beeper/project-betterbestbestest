@@ -18,7 +18,6 @@ const bcrypt = require("bcrypt");
 
 dotenv.config();
 const sharedbMongo = require("sharedb-mongo");
-const cors = require("cors");
 
 const roomRoutes = require("./routes/room");
 

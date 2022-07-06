@@ -5,7 +5,7 @@ import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
 import { useNavigate } from "react-router-dom";
 
 import NotebookCard from "../../components/notebookCard";
-import roomsAPI from "../../api/room";
+import roomsAPI from "../../api/rooms";
 import handleError from "../../utils/errhandling";
 
 const useStyles = makeStyles((theme) => ({

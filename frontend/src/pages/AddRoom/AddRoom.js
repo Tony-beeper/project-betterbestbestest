@@ -14,7 +14,7 @@ import {
 import { makeStyles, createTheme } from "@material-ui/core/styles";
 import { ExpandMoreRounded } from "@material-ui/icons";
 
-import roomAPI from "../../api/room";
+import roomAPI from "../../api/rooms";
 import handleError from "../../utils/errhandling";
 
 const useStyles = makeStyles({

@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AddRoom from "./pages/AddRoom/AddRoom";
 import Room from "./pages/MyRooms/Room";
 import Bar from "./components/appbar";
+import NoteBook from "./components/Notebook/Notebook";
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
         <Route path="/" element={<h1>hello world</h1>} />
         <Route path="/room/add/" element={<AddRoom />} />
         <Route path="/room/" element={<Room />} />
-        <Route path="/room/:id" element={<h1>room</h1>} />
+        <Route path="/room/:id" element={<NoteBook />} />
       </Routes>
     </Router>
   );
