@@ -11,9 +11,7 @@ function TextBlock(props) {
   useEffect(() => {
     doc.subscribe((error) => {
       console.log(doc);
-      attachQuillRefs();
-      // set initial content
-      quillRef.setContents(doc.data);
+      initQuill();
       doc.on("op", function (op, source) {
         if (source) return;
         console.log(op);
@@ -22,7 +20,7 @@ function TextBlock(props) {
       });
     });
   }, []);
-  const attachQuillRefs = () => {
+  const initQuill = () => {
     if (
       !reactQuillRef.current ||
       typeof reactQuillRef.current.getEditor !== "function"
@@ -30,6 +28,8 @@ function TextBlock(props) {
       return;
     // init quill ref
     quillRef = reactQuillRef.current.getEditor();
+    // set initial content
+    quillRef.setContents(doc.data);
     console.log(quillRef);
   };
   const handleChange = (content, delta, source, editor) => {

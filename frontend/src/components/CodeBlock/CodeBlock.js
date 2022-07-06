@@ -17,9 +17,7 @@ function CodeBlock(props) {
   useEffect(() => {
     doc.subscribe((error) => {
       console.log(doc);
-      attachQuillRefs();
-      // set initial content
-      quillRef.setContents(doc.data);
+      initQuill();
       doc.on("op", function (op, source) {
         if (source) return;
         console.log(op);
@@ -29,7 +27,7 @@ function CodeBlock(props) {
     });
   }, []);
 
-  const attachQuillRefs = () => {
+  const initQuill = () => {
     if (
       !reactQuillRef.current ||
       typeof reactQuillRef.current.getEditor !== "function"
@@ -37,6 +35,8 @@ function CodeBlock(props) {
       return;
     // init quill ref
     quillRef = reactQuillRef.current.getEditor();
+    // set initial content
+    quillRef.setContents(doc.data);
     // create a code-block
     quillRef.formatLine(0, quillRef.getLength(), { "code-block": true });
     console.log(quillRef);
