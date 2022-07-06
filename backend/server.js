@@ -3,6 +3,7 @@ const userRoute = require("./routes/user.js");
 const express = require("express");
 const bodyParser = require("body-parser");
 const chalk = require("chalk");
+const cors = require("cors");
 
 const session = require("express-session");
 
@@ -16,7 +17,6 @@ const bcrypt = require("bcrypt");
 
 dotenv.config();
 const sharedbMongo = require("sharedb-mongo");
-const cors = require("cors");
 
 const roomRoutes = require("./routes/room");
 
@@ -24,8 +24,6 @@ const db = sharedbMongo(process.env.MONGO_CONN_STR);
 ShareDB.types.register(richText.type);
 var backend = new ShareDB({ db });
 createDoc(startServer);
-
-const cookie = require("cookie");
 
 // Create initial document then fire callback
 function createDoc(callback) {
@@ -47,22 +45,33 @@ function startServer() {
   // Create a web server to serve files and listen to WebSocket connections
   const app = express();
   const server = http.createServer(app);
-  app.use(cors());
 
   // body parser
   app.use(
-    session({
-      secret: "please change this secret",
-      resave: false,
-      saveUninitialized: true,
-      cookie: {
-        secure: true,
-        sameSite: true,
-        httpOnly: true,
-      },
+    cors({
+      origin: "*",
+    })
+  );
+  app.use(
+    cors({
+      methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
     })
   );
   app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
+
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: true,
+      cookie: {
+        // secure: true,
+        // sameSite: true,
+        // httpOnly: true,
+      },
+    })
+  );
   app.use(function (req, res, next) {
     req.username = req.session.username ? req.session.username : "test";
     console.log("HTTP request", req.username, req.method, req.url, req.body);
@@ -75,6 +84,7 @@ function startServer() {
 
   // app routes
   app.use("/api/room", roomRoutes);
+  app.use("/api/user", userRoute);
 
   // Connect any incoming WebSocket connection to ShareDB
   const wss = new WebSocket.Server({ server: server });
@@ -95,47 +105,6 @@ function startServer() {
     .catch((err) => {
       console.log(err);
     });
-  app.use(
-    session({
-      secret: process.env.SESSION_SECRET,
-      resave: false,
-      saveUninitialized: true,
-      cookie: {
-        secure: true,
-        sameSite: true,
-        httpOnly: true,
-      },
-    })
-  );
-
-  // app.use(function (req, res, next) {
-  //   req.username = req.session.username ? req.session.username : "";
-  //   res.setHeader(
-  //     "Set-Cookie",
-  //     cookie.serialize("username", req.username, {
-  //       path: "/",
-  //       maxAge: 120 * 60 * 24 * 7, // 1 week in number of seconds
-  //     })
-  //   );
-  //   console.log("HTTP request", req.username, req.method, req.url, req.body);
-  //   next();
-  // });
-
-  app.use(function (req, res, next) {
-    req.username = req.session.username ? req.session.username : "test";
-    console.log("HTTP request", req.username, req.method, req.url, req.body);
-    next();
-  });
-
-  app.use(function (req, res, next) {
-    if (!req.username) return res.status(401).json({ err: "access denied" });
-    next();
-  });
-
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(bodyParser.json());
-
-  app.use("/api/user", userRoute);
 
   const PORT = process.env.PORT || 8080;
 
