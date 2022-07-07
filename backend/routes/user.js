@@ -27,17 +27,28 @@ router.post("/signup", async (req, res) => {
     console.log("connected to server");
     const user_db = client.db(dbName);
     const user = user_db.collection("user");
-    await user.insertOne(newUser);
-    console.log("created user");
-    req.session.username = username;
+    const result = await user.findOne({ username: username });
+    if (result) {
+      return res
+        .cookie("username", "", {
+          path: "/",
+          maxAge: 60 * 60 * 24 * 7,
+        })
+        .status(StatusCodes.CONFLICT)
+        .send(createTextMessage("Username Taken"));
+    } else {
+      await user.insertOne(newUser);
+      console.log("created user");
+      req.session.username = username;
 
-    return res
-      .cookie("username", username, {
-        path: "/",
-        maxAge: 60 * 60 * 24 * 7,
-      })
-      .status(StatusCodes.SUCCESS)
-      .send("created user");
+      return res
+        .cookie("username", username, {
+          path: "/",
+          maxAge: 60 * 60 * 24 * 7,
+        })
+        .status(StatusCodes.SUCCESS)
+        .send("created user");
+    }
   } catch (err) {
     console.log(err);
     return res
@@ -72,15 +83,11 @@ router.post("/login", async (req, res) => {
           .status(StatusCodes.SUCCESS)
           .send("Login Success");
       } else {
-        console.log("wrong pw");
-
         return res
           .status(StatusCodes.UNAUTHORIZED)
           .send(createTextMessage("Wrong Password"));
       }
     } else {
-      console.log("no this user ");
-
       return res
         .status(StatusCodes.NOT_FOUND)
         .send(createTextMessage("User not found"));

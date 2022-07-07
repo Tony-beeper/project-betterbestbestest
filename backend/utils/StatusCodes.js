@@ -4,6 +4,7 @@ const StatusCodes = {
   SUCCESS: 200,
   NOT_FOUND: 404,
   UNAUTHORIZED: 401,
+  CONFLICT: 409,
 };
 
 module.exports = StatusCodes;
