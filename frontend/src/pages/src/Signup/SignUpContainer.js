@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import SignUpForm from "./SignUpForm.js";
-import userAPI from "../../../api/SignUp";
+import userAPI from "../../../api/userAPI";
 import validateSignUpForm from "../validate";
 import errorHandler from "../utils/errhandling";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const SignUpContainer = () => {
   let nav = useNavigate();
@@ -63,13 +64,12 @@ const SignUpContainer = () => {
     userAPI
       .signup(user.username, user.password)
       .then((data) => {
-        console.log("here executed!");
-        console.log(data);
+        toast.success(data.message);
         nav("/");
         window.location.reload();
       })
       .catch(({ response }) => {
-        errorHandler.handleError(response);
+        errorHandler.handleSignUp(response);
       });
   };
 

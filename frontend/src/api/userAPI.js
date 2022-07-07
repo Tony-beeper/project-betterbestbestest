@@ -23,7 +23,6 @@ const signup = async (username, password) => {
       password: password, // This is the body part
     },
     withCredentials: true,
-    // withCredentials: true,
   });
 
   //   res.data.data; // '{"answer":42}'
@@ -57,7 +56,7 @@ const login = async (username, password) => {
   console.log("res.data");
 
   console.log(res);
-  // return res;
+  return res.data;
 };
 
 const userAPI = {

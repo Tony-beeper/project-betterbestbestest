@@ -74,7 +74,7 @@ const SignUpForm = ({
       </form>
       <p>
         Aleady have an account? <br />
-        <a href="/">Log in here</a>
+        <a href="/login">Log in here</a>
       </p>
     </div>
   );

@@ -18,4 +18,13 @@ const handleLogin = (response) => {
   }
 };
 
-export default { handleError, handleLogin };
+const handleSignUp = (response) => {
+  if (response && response.data) {
+    if (response.data) toast.error(response.data.message);
+    else toast.error("something went wrong...");
+  } else {
+    toast.error("something went wrong...");
+  }
+};
+
+export default { handleError, handleLogin, handleSignUp };

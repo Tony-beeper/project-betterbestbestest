@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import LoginForm from "./LoginForm.js";
-import userAPI from "../../../api/userAPI";
+import userAPI from "../../../../api/userAPI";
 import errorHandler from "../utils/errhandling";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
 
 const zxcvbn = require("zxcvbn");
 
@@ -65,7 +63,7 @@ const LoginContainer = () => {
     userAPI
       .login(user.username, user.password)
       .then((data) => {
-        toast.success(data);
+        console.log(data);
         nav("/");
         window.location.reload();
       })
@@ -83,21 +81,19 @@ const LoginContainer = () => {
   };
 
   return (
-    <MuiThemeProvider>
-      <div>
-        <LoginForm
-          onSubmit={submitLogin}
-          onChange={handleChange}
-          onPwChange={pwHandleChange}
-          errors={errors}
-          user={user}
-          score={score}
-          btnTxt={btnTxt}
-          type={type}
-          pwMask={pwMask}
-        />
-      </div>
-    </MuiThemeProvider>
+    <div>
+      <LoginForm
+        onSubmit={submitLogin}
+        onChange={handleChange}
+        onPwChange={pwHandleChange}
+        errors={errors}
+        user={user}
+        score={score}
+        btnTxt={btnTxt}
+        type={type}
+        pwMask={pwMask}
+      />
+    </div>
   );
 };
 export default LoginContainer;
