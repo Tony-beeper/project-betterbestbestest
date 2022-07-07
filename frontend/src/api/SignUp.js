@@ -15,13 +15,14 @@ const signup = async (username, password) => {
   //   });
 
   const res = await axios({
-    method: "post",
+    method: "POST",
     url: backendURL + "signup",
     headers: {},
     data: {
       username: username,
       password: password, // This is the body part
     },
+    withCredentials: true,
     // withCredentials: true,
   });
 

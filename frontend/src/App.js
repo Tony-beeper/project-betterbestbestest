@@ -1,29 +1,13 @@
-// <<<<<<< Updated upstream
-// import CodeEditor from "./components/CodeEditor/CodeEditor";
-
-// function App() {
-//     return (
-//         <div className="App">
-//             <CodeEditor />
-//         </div>
-//     );
-// =======
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import Room from "./pages/Room/Room";
-import Bar from "./components/appbar";
-import SignUp from "./pages/SignUp/SignUp";
-import Login from "./pages/SignUp/Login";
-import history from "./pages/SignUp/src/History";
-import LoginContainer from "./pages/SignUp/src/LoginContainer";
-// import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-// import SignUpContainer from "./pages/SignUp/src/SignUpContainer";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import Bar from "./components/Navbar";
+import SignUp from "./pages/SignUp";
+import Login from "./pages/Login";
 
 function App() {
   return (
-    <Router history={history}>
+    <Router>
       <ToastContainer theme="colored" />
       <Bar />
       <Routes>
@@ -31,11 +15,10 @@ function App() {
         {/* <Route path="/room/" element={<Room />} /> */}
         {/* <Route path="/room/:id" element={<h1>room</h1>} /> */}
         <Route path="/signup/" element={<SignUp />} />
-        <Route path="/login/" element={<LoginContainer />} />
+        <Route path="/login/" element={<Login />} />
       </Routes>
     </Router>
   );
-  // >>>>>>> Stashed changes
 }
 
 export default App;

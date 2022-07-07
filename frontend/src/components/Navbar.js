@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import {
   AppBar,
   Toolbar,
@@ -8,6 +10,7 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import { useState } from "react";
 
 // module.getUsername = function () {
 //   return document.cookie.replace(
@@ -15,15 +18,6 @@ import axios from "axios";
 //     "$1"
 //   );
 // };
-const handleSignout = async () => {
-  const backendURL = process.env.REACT_APP_BACKEND_URL + "/api/user/";
-  const res = await axios({
-    method: "GET",
-    url: backendURL + "signout",
-    headers: {},
-    data: {},
-  });
-};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,14 +33,30 @@ const useStyles = makeStyles((theme) => ({
 
 // const showHideSignupLogin = () => {};
 const Bar = () => {
-  const classes = useStyles();
-  const username = document.cookie.replace(
-    /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
-    "$1"
-  );
-  console.log("username");
+  let Nav = useNavigate();
 
-  console.log(username);
+  const classes = useStyles();
+  const [username, setUsername] = useState(
+    document.cookie.replace(
+      /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
+      "$1"
+    )
+  );
+
+  const HandleSignout = async () => {
+    const backendURL = process.env.REACT_APP_BACKEND_URL + "/api/user/";
+    const res = await axios({
+      method: "GET",
+      url: backendURL + "signout",
+      headers: {},
+      data: {},
+      withCredentials: true,
+    });
+    setUsername("");
+    Nav("/");
+  };
+
+
   return (
     <div className={classes.root}>
       {username ? (
@@ -65,7 +75,7 @@ const Bar = () => {
                 CodeT
               </Typography>
 
-              <Button color="inherit" onClick={handleSignout}>
+              <Button color="inherit" onClick={HandleSignout}>
                 SignOut
               </Button>
             </Toolbar>

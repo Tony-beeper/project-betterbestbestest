@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import SignUpForm from "./SignUpForm.js";
 import userAPI from "../../../api/SignUp";
-import validateSignUpForm from "./validate";
-import errorHandler from "./utils/errhandling";
-
-// const FormValidators = require("./validate");
-// const validateSignUpForm = FormValidators.validateSignUpForm;
-const zxcvbn = require("zxcvbn");
-// password strength estimator
+import validateSignUpForm from "../validate";
+import errorHandler from "../utils/errhandling";
+import { useNavigate } from "react-router";
 
 const SignUpContainer = () => {
+  let nav = useNavigate();
+  const zxcvbn = require("zxcvbn");
+
   const [errors, setError] = useState({});
   const [user, setUser] = useState({
     username: "",
@@ -19,13 +18,6 @@ const SignUpContainer = () => {
   const [btnTxt, setBtnTxt] = useState("show");
   const [type, setType] = useState("password");
   const [score, setScore] = useState("0");
-
-  // this.pwMask = this.pwMask.bind(this);
-  // this.handleChange = this.handleChange.bind(this);
-  // this.submitSignup = this.submitSignup.bind(this);
-  // this.validateForm = this.validateForm.bind(this);
-  // this.pwHandleChange = this.pwHandleChange.bind(this);
-
   const handleChange = (event) => {
     const field = event.target.name;
 
@@ -67,19 +59,16 @@ const SignUpContainer = () => {
     }
   };
 
-  const submitSignup = (e) => {
-    e.preventDefault();
-    // console.log("submitSignup called");
-
+  const submitSignup = () => {
     userAPI
       .signup(user.username, user.password)
       .then((data) => {
+        console.log("here executed!");
         console.log(data);
-        // nevigate(`${data._id}`);
+        nav("/");
+        window.location.reload();
       })
       .catch(({ response }) => {
-        // setRoomNumber("");
-        // setJoinCode("");
         errorHandler.handleError(response);
       });
   };
@@ -91,16 +80,9 @@ const SignUpContainer = () => {
     console.log(user);
     var payload = validateSignUpForm(user);
     if (payload.success) {
-      //   this.setState({
-      //     errors: {},
-      //   });
       setError({});
-      var usr = {
-        usr: user.username,
-        pw: user.password,
-      };
 
-      submitSignup(usr);
+      submitSignup();
     } else {
       const errors = payload.errors;
       console.log(errors);

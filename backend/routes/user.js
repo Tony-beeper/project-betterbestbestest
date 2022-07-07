@@ -5,7 +5,6 @@ const router = express.Router();
 const user = require("../models/user");
 const createTextMessage = require("../utils/defaultMessages.js");
 const { MongoClient } = require("mongodb");
-// const { default: mongoose } = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -14,7 +13,6 @@ const dbName = "user_db";
 const cookie = require("cookie");
 
 router.post("/signup", async (req, res) => {
-  // req.session.username = username;
   console.log(req.session.username);
 
   const username = req.body.username;
@@ -31,10 +29,15 @@ router.post("/signup", async (req, res) => {
     const user = user_db.collection("user");
     await user.insertOne(newUser);
     console.log("created user");
+    req.session.username = username;
 
     return res
-      .status(StatusCodes.CREATED)
-      .send(createTextMessage("saved user"));
+      .cookie("username", username, {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      })
+      .status(StatusCodes.SUCCESS)
+      .send("created user");
   } catch (err) {
     console.log(err);
     return res
@@ -91,14 +94,6 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/signout/", function (req, res, next) {
-  // res.setHeader(
-  //   "Set-Cookie",
-  //   cookie.serialize("username", "", {
-  //     path: "/",
-  //     maxAge: 60 * 60 * 24 * 7, // 1 week in number of seconds
-  //   })
-  // );
-  // return res;
   req.session.username = "";
   return res
     .cookie("username", "", {

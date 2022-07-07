@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import LoginForm from "./LoginForm.js";
 import userAPI from "../../../api/SignUp";
-import errorHandler from "./utils/errhandling";
+import errorHandler from "../utils/errhandling";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import { useNavigate } from "react-router";
 
 const zxcvbn = require("zxcvbn");
 
 const LoginContainer = () => {
+  let nav = useNavigate();
   const errors = {};
   const [user, setUser] = useState({
     username: "",
@@ -63,6 +65,8 @@ const LoginContainer = () => {
       .login(user.username, user.password)
       .then((data) => {
         console.log(data);
+        nav("/");
+        window.location.reload();
       })
       .catch(({ response }) => {
         console.log(response);
