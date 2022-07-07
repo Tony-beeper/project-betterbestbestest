@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import SignUpForm from "./SignUpForm.js";
 import userAPI from "../../../api/SignUp";
 import validateSignUpForm from "./validate";
@@ -9,69 +9,70 @@ import errorHandler from "./utils/errhandling";
 const zxcvbn = require("zxcvbn");
 // password strength estimator
 
-class SignUpContainer extends Component {
-  constructor(props) {
-    super(props);
+const SignUpContainer = () => {
+  const [errors, setError] = useState({});
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+    pwconfirm: "",
+  });
+  const [btnTxt, setBtnTxt] = useState("show");
+  const [type, setType] = useState("password");
+  const [score, setScore] = useState("0");
 
-    this.state = {
-      errors: {},
-      user: {
-        username: "",
-        password: "",
-        pwconfirm: "",
-      },
-      btnTxt: "show",
-      type: "password",
-      score: "0",
-    };
+  // this.pwMask = this.pwMask.bind(this);
+  // this.handleChange = this.handleChange.bind(this);
+  // this.submitSignup = this.submitSignup.bind(this);
+  // this.validateForm = this.validateForm.bind(this);
+  // this.pwHandleChange = this.pwHandleChange.bind(this);
 
-    this.pwMask = this.pwMask.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.submitSignup = this.submitSignup.bind(this);
-    this.validateForm = this.validateForm.bind(this);
-    this.pwHandleChange = this.pwHandleChange.bind(this);
-  }
-
-  handleChange(event) {
+  const handleChange = (event) => {
     const field = event.target.name;
-    const user = this.state.user;
-    user[field] = event.target.value;
 
-    this.setState({
-      user,
-    });
-  }
+    switch (field) {
+      case "username":
+        setUser({ ...user, username: event.target.value });
+        break;
+      case "password":
+        setUser({ ...user, password: event.target.value });
+        break;
+      case "pwconfirm":
+        setUser({ ...user, pwconfirm: event.target.value });
+        break;
+      default:
+    }
+  };
 
-  pwHandleChange(event) {
+  const pwHandleChange = (event) => {
     const field = event.target.name;
-    const user = this.state.user;
-    user[field] = event.target.value;
-
-    this.setState({
-      user,
-    });
+    switch (field) {
+      case "username":
+        setUser({ ...user, username: event.target.value });
+        break;
+      case "password":
+        setUser({ ...user, password: event.target.value });
+        break;
+      case "pwconfirm":
+        setUser({ ...user, pwconfirm: event.target.value });
+        break;
+      default:
+    }
 
     if (event.target.value === "") {
-      this.setState((state) =>
-        Object.assign({}, state, {
-          score: "null",
-        })
-      );
+      setScore("null");
     } else {
       var pw = zxcvbn(event.target.value);
-      this.setState((state) =>
-        Object.assign({}, state, {
-          score: pw.score + 1,
-        })
-      );
+      const newScore = pw.score + 1;
+      setScore(newScore);
     }
-  }
+  };
 
-  submitSignup(user) {
-    console.log("submitSignup called");
+  const submitSignup = (e) => {
+    e.preventDefault();
+    // console.log("submitSignup called");
 
     userAPI
-      .signup(this.state.user.username, this.state.user.password)
+      .signup(user.username, user.password)
       .then((data) => {
         console.log(data);
         // nevigate(`${data._id}`);
@@ -81,57 +82,53 @@ class SignUpContainer extends Component {
         // setJoinCode("");
         errorHandler.handleError(response);
       });
-  }
+  };
 
-  validateForm(event) {
+  const validateForm = (event) => {
     event.preventDefault();
-    var payload = validateSignUpForm(this.state.user);
+    console.log("user obj is");
+
+    console.log(user);
+    var payload = validateSignUpForm(user);
     if (payload.success) {
-      this.setState({
-        errors: {},
-      });
-      var user = {
-        usr: this.state.user.username,
-        pw: this.state.user.password,
+      //   this.setState({
+      //     errors: {},
+      //   });
+      setError({});
+      var usr = {
+        usr: user.username,
+        pw: user.password,
       };
-      this.submitSignup(user);
+
+      submitSignup(usr);
     } else {
       const errors = payload.errors;
       console.log(errors);
-
-      this.setState({
-        errors,
-      });
+      setError(errors);
     }
-  }
+  };
 
-  pwMask(event) {
+  const pwMask = (event) => {
     event.preventDefault();
-    this.setState((state) =>
-      Object.assign({}, state, {
-        type: this.state.type === "password" ? "input" : "password",
-        btnTxt: this.state.btnTxt === "show" ? "hide" : "show",
-      })
-    );
-  }
 
-  render() {
-    return (
-      <div>
-        <SignUpForm
-          onSubmit={this.validateForm}
-          onChange={this.handleChange}
-          onPwChange={this.pwHandleChange}
-          errors={this.state.errors}
-          user={this.state.user}
-          score={this.state.score}
-          btnTxt={this.state.btnTxt}
-          type={this.state.type}
-          pwMask={this.pwMask}
-        />
-      </div>
-    );
-  }
-}
+    btnTxt === "show" ? setBtnTxt("hide") : setBtnTxt("show");
+    type === "password" ? setType("input") : setType("password");
+  };
 
+  return (
+    <div>
+      <SignUpForm
+        onSubmit={validateForm}
+        onChange={handleChange}
+        onPwChange={pwHandleChange}
+        errors={errors}
+        user={user}
+        score={score}
+        btnTxt={btnTxt}
+        type={type}
+        pwMask={pwMask}
+      />
+    </div>
+  );
+};
 export default SignUpContainer;

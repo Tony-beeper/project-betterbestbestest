@@ -16,9 +16,10 @@ import Bar from "./components/appbar";
 import SignUp from "./pages/SignUp/SignUp";
 import Login from "./pages/SignUp/Login";
 import history from "./pages/SignUp/src/History";
-
+import LoginContainer from "./pages/SignUp/src/LoginContainer";
 // import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 // import SignUpContainer from "./pages/SignUp/src/SignUpContainer";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
         {/* <Route path="/room/" element={<Room />} /> */}
         {/* <Route path="/room/:id" element={<h1>room</h1>} /> */}
         <Route path="/signup/" element={<SignUp />} />
-        <Route path="/login/" element={<Login />} />
+        <Route path="/login/" element={<LoginContainer />} />
       </Routes>
     </Router>
   );

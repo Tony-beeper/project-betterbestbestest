@@ -5,9 +5,9 @@ import "../../index.css";
 
 const Login = () => {
   return (
-    <MuiThemeProvider>
-      <LoginContainer />
-    </MuiThemeProvider>
+    // <MuiThemeProvider>
+    <LoginContainer />
+    // {/* </MuiThemeProvider> */}
   );
 };
 
