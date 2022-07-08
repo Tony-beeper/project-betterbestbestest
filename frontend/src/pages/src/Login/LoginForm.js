@@ -3,15 +3,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
 import "../style.css";
 
-const LoginForm = ({
-  onSubmit,
-  onChange,
-  errors,
-  user,
-
-  type,
-  onPwChange,
-}) => {
+const LoginForm = ({ onSubmit, onChange, errors, user, type, onPwChange }) => {
   return (
     <div className="loginBox">
       <h1>Login</h1>

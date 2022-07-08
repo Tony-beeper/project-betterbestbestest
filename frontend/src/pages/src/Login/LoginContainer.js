@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import LoginForm from "./LoginForm.js";
 import userAPI from "../../../api/userAPI";
-import errorHandler from "../utils/errhandling";
+import errorHandler from "../utils/errorHandler";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { ThemeContext } from "../../../App";
 
 const zxcvbn = require("zxcvbn");
 
 const LoginContainer = () => {
+  let [context, setContext] = useContext(ThemeContext);
+
   let nav = useNavigate();
   const errors = {};
   const [user, setUser] = useState({
@@ -66,8 +69,8 @@ const LoginContainer = () => {
       .login(user.username, user.password)
       .then((data) => {
         toast.success(data);
+        setContext(user.username);
         nav("/");
-        window.location.reload();
       })
       .catch(({ response }) => {
         console.log(response);
