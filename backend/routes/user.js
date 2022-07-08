@@ -1,4 +1,5 @@
 const StatusCodes = require("../utils/StatusCodes");
+const { body, validationResult } = require("express-validator");
 
 const express = require("express");
 const router = express.Router();
@@ -7,98 +8,136 @@ const createTextMessage = require("../utils/defaultMessages.js");
 const { MongoClient } = require("mongodb");
 const dotenv = require("dotenv");
 dotenv.config();
-
 const client = new MongoClient(process.env.MONGO_CONN_STR);
 const dbName = "user_db";
-const cookie = require("cookie");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
-router.post("/signup", async (req, res) => {
-  console.log(req.session.username);
-
-  const username = req.body.username;
-  const password = req.body.password;
-  const newUser = new user({
-    username: username,
-    password: password,
-  });
-
-  try {
-    await client.connect();
-    console.log("connected to server");
-    const user_db = client.db(dbName);
-    const user = user_db.collection("user");
-    const result = await user.findOne({ username: username });
-    if (result) {
+router.post(
+  "/signup",
+  body("username")
+    .notEmpty()
+    .trim()
+    .escape()
+    .withMessage({ err: "Missing Username" }),
+  body("password").notEmpty().isLength({ min: 8 }).trim().escape().withMessage({
+    err: "Missing Password or Password Less than 8 Characters",
+  }),
+  async (req, res) => {
+    const err = validationResult(req);
+    if (!err.isEmpty()) {
       return res
-        .cookie("username", "", {
-          path: "/",
-          maxAge: 60 * 60 * 24 * 7,
-        })
-        .status(StatusCodes.CONFLICT)
-        .send(createTextMessage("Username Taken"));
-    } else {
-      await user.insertOne(newUser);
-      console.log("created user");
-      req.session.username = username;
-
-      return res
-        .cookie("username", username, {
-          path: "/",
-          maxAge: 60 * 60 * 24 * 7,
-        })
-        .status(StatusCodes.SUCCESS)
-        .send("created user");
+        .status(StatusCodes.UNAUTHORIZED)
+        .send(createTextMessage(err.errors[0].msg.err));
     }
-  } catch (err) {
-    console.log(err);
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .send(createTextMessage("Error saving user to database"));
-  }
-});
-
-router.post("/login", async (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
-  // const newUser = new user({
-  //   username: username,
-  //   password: password,
-  // });
-  // console.log(req.session.username);
-  try {
-    await client.connect();
-    const user_db = client.db(dbName);
-    const user = user_db.collection("user");
-    const result = await user.findOne({ username: username });
-    if (result) {
-      if (result.password === password) {
-        console.log("found");
-        req.session.username = username;
-
+    bcrypt.hash(req.body.password, saltRounds, async function (err, hash) {
+      if (err)
         return res
-          .cookie("username", username, {
+          .cookie("username", "", {
             path: "/",
             maxAge: 60 * 60 * 24 * 7,
           })
-          .status(StatusCodes.SUCCESS)
-          .send("Login Success");
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .send(createTextMessage("Bcrypt Error"));
+      const username = req.body.username;
+      const password = hash;
+      const newUser = new user({
+        username: username,
+        password: password,
+      });
+      try {
+        await client.connect();
+        console.log("connected to server");
+        const user_db = client.db(dbName);
+        const user = user_db.collection("user");
+        const result = await user.findOne({ username: username });
+        if (result) {
+          return res
+            .cookie("username", "", {
+              path: "/",
+              maxAge: 60 * 60 * 24 * 7,
+            })
+            .status(StatusCodes.CONFLICT)
+            .send(createTextMessage("Username Taken"));
+        } else {
+          await user.insertOne(newUser);
+          req.session.username = username;
+
+          return res
+            .cookie("username", username, {
+              path: "/",
+              maxAge: 60 * 60 * 24 * 7,
+            })
+            .status(StatusCodes.SUCCESS)
+            .send("Sign up success");
+        }
+      } catch (err) {
+        console.log(err);
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .send(createTextMessage("Error saving user to database"));
+      }
+    });
+  }
+);
+
+router.post(
+  "/login",
+  body("username")
+    .notEmpty()
+    .trim()
+    .escape()
+    .withMessage({ err: "Missing Username" }),
+  body("password").notEmpty().trim().escape().withMessage({
+    err: "Missing Password",
+  }),
+  async (req, res) => {
+    const err = validationResult(req);
+    if (!err.isEmpty()) {
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .send(createTextMessage(err.errors[0].msg.err));
+    }
+    const username = req.body.username;
+    const password = req.body.password;
+
+    try {
+      await client.connect();
+      const user_db = client.db(dbName);
+      const user = user_db.collection("user");
+      const result = await user.findOne({ username: username });
+      if (result) {
+        const hash = result.password;
+        bcrypt.compare(password, hash, function (err, comparisonResult) {
+          if (err) return res.status(500).end(err);
+          if (!comparisonResult)
+            return res
+              .status(StatusCodes.UNAUTHORIZED)
+              .send(createTextMessage("Access Denied"));
+
+          req.session.username = username;
+
+          return res
+            .cookie("username", username, {
+              path: "/",
+              maxAge: 60 * 60 * 24 * 7,
+            })
+            .status(StatusCodes.SUCCESS)
+            .send("Login Success");
+        });
       } else {
         return res
-          .status(StatusCodes.UNAUTHORIZED)
-          .send(createTextMessage("Wrong Password"));
+          .status(StatusCodes.NOT_FOUND)
+          .send(createTextMessage("User not found"));
       }
-    } else {
+    } catch (err) {
+      console.log(err);
       return res
-        .status(StatusCodes.NOT_FOUND)
-        .send(createTextMessage("User not found"));
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send(createTextMessage("Error saving user to database"));
     }
-  } catch (err) {
-    console.log(err);
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .send(createTextMessage("Error saving user to database"));
   }
-});
+);
 
 router.get("/signout/", function (req, res, next) {
   req.session.username = "";
