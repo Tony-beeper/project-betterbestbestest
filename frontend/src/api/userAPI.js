@@ -32,30 +32,17 @@ const signup = async (username, password) => {
 };
 
 const login = async (username, password) => {
-  console.log(username);
-  console.log(password);
-
-  console.log("login is called!");
-  console.log("backendURL");
-
-  console.log("backendURL" + backendURL);
   const res = await axios({
     method: "POST",
     url: backendURL + "login",
     headers: {},
     data: {
       username: username,
-      password: password, // This is the body part
+      password: password,
     },
     withCredentials: true,
-    // withCredentials: true,
   });
 
-  //   res.data.data; // '{"answer":42}'
-  //   res.data.headers["Content-Type"]; // 'application/json',
-  console.log("res.data");
-
-  console.log(res);
   return res.data;
 };
 
