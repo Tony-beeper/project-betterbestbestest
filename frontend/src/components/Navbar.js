@@ -10,8 +10,8 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-import { useState } from "react";
-
+import { useEffect, useState, useContext } from "react";
+import { ThemeContext } from "../App";
 // module.getUsername = function () {
 //   return document.cookie.replace(
 //     /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
@@ -34,14 +34,19 @@ const useStyles = makeStyles((theme) => ({
 // const showHideSignupLogin = () => {};
 const Bar = () => {
   let Nav = useNavigate();
+  let [context, setContext] = useContext(ThemeContext);
 
   const classes = useStyles();
-  const [username, setUsername] = useState(
-    document.cookie.replace(
-      /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
-      "$1"
-    )
-  );
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    setUsername(
+      document.cookie.replace(
+        /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
+        "$1"
+      )
+    );
+  }, [context]);
 
   const HandleSignout = async () => {
     const backendURL = process.env.REACT_APP_BACKEND_URL + "/api/user/";
@@ -55,7 +60,6 @@ const Bar = () => {
     setUsername("");
     Nav("/");
   };
-
 
   return (
     <div className={classes.root}>
