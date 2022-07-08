@@ -6,7 +6,6 @@ import PasswordStr from "./PasswordStr";
 import "../style.css";
 
 const SignUpForm = ({
-  history,
   onSubmit,
   onChange,
   errors,

@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import SignUpForm from "./SignUpForm.js";
 import userAPI from "../../../api/userAPI";
 import validateSignUpForm from "../validate";
-import errorHandler from "../utils/errhandling";
+import errorHandler from "../utils/errorHandler";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { ThemeContext } from "../../../App";
 
 const SignUpContainer = () => {
   let nav = useNavigate();
   const zxcvbn = require("zxcvbn");
+  let [context, setContext] = useContext(ThemeContext);
 
   const [errors, setError] = useState({});
   const [user, setUser] = useState({
@@ -64,9 +66,10 @@ const SignUpContainer = () => {
     userAPI
       .signup(user.username, user.password)
       .then((data) => {
-        toast.success(data.message);
+        toast.success(data);
+        setContext(user.username);
+
         nav("/");
-        window.location.reload();
       })
       .catch(({ response }) => {
         errorHandler.handleSignUp(response);
