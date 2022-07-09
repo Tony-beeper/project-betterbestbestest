@@ -1,5 +1,5 @@
 # stage 1 build react app
-FROM node:alpine as react-build
+FROM node:16-alpine as react-build
 WORKDIR /app
 COPY ./package*.json ./
 RUN npm install
