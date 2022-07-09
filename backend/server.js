@@ -2,6 +2,8 @@ const dotenv = require("dotenv");
 const userRoute = require("./routes/user.js");
 const express = require("express");
 const bodyParser = require("body-parser");
+require("dotenv").config();
+const cors = require("cors");
 const chalk = require("chalk");
 
 const session = require("express-session");
@@ -16,7 +18,6 @@ const bcrypt = require("bcrypt");
 
 dotenv.config();
 const sharedbMongo = require("sharedb-mongo");
-const cors = require("cors");
 
 const roomRoutes = require("./routes/room");
 
@@ -33,7 +34,6 @@ function createDoc(callback) {
   const doc = connection.get("code", "rich-text");
   doc.fetch((err) => {
     if (err) throw err;
-    console.log(doc.type);
     if (doc.type === null) {
       // insert dummy element to initilize shardb
       doc.create([{ insert: "Hi!" }], "rich-text", callback);
@@ -62,6 +62,7 @@ function startServer() {
       },
     })
   );
+  app.use(cors());
   app.use(bodyParser.json());
   app.use(function (req, res, next) {
     req.username = req.session.username ? req.session.username : "test";
@@ -74,7 +75,7 @@ function startServer() {
   });
 
   // app routes
-  app.use("/api/room", roomRoutes);
+  app.use("/api/rooms", roomRoutes);
 
   // Connect any incoming WebSocket connection to ShareDB
   const wss = new WebSocket.Server({ server: server });
