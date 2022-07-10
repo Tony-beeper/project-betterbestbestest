@@ -1,19 +1,19 @@
 const mongoose = require("mongoose");
 
 const RoomSchema = new mongoose.Schema({
-  join_code: {
+  joinCode: {
     type: String,
     required: true,
   },
-  Owner: {
+  owner: {
     type: String,
     required: true,
   },
-  comment_sharedbID: {
+  commentSharedbID: {
     type: String,
     required: true,
   },
-  code_sharedbID: {
+  codeSharedbID: {
     type: String,
     required: true,
   },
@@ -21,7 +21,15 @@ const RoomSchema = new mongoose.Schema({
     type: Array,
     required: true,
   },
-  roomId: {
+  roomNumber: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  date: {
     type: String,
     required: true,
   },

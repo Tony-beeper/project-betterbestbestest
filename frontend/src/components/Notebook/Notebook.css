@@ -1,11 +1,12 @@
 .notebook-container {
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  width: 80%;
 }
-
 .notebook-body {
   display: flex;
-  gap: 5em;
+  flex-direction: column;
+  width: 80%;
+}
+.notebook-content {
+  display: flex;
 }

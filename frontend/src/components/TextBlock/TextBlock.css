@@ -1,3 +1,4 @@
 .text-block {
   flex: 1;
+  max-width: 50%;
 }

@@ -2,6 +2,8 @@ const dotenv = require("dotenv");
 const userRoute = require("./routes/user.js");
 const express = require("express");
 const bodyParser = require("body-parser");
+require("dotenv").config();
+const cors = require("cors");
 const chalk = require("chalk");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -30,7 +32,6 @@ function createDoc(callback) {
   const doc = connection.get("code", "rich-text");
   doc.fetch((err) => {
     if (err) throw err;
-    console.log(doc.type);
     if (doc.type === null) {
       // insert dummy element to initilize shardb
       doc.create([{ insert: "Hi!" }], "rich-text", callback);
