@@ -46,6 +46,8 @@ const Bar = () => {
         "$1"
       )
     );
+    console.log("context in Navbar.js");
+    console.log(context);
   }, [context]);
 
   const HandleSignout = async () => {
