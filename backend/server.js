@@ -7,7 +7,7 @@ const cors = require("cors");
 const chalk = require("chalk");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
-
+const isAuthenticated = require("./middlewares/validateUser");
 const WebSocket = require("ws");
 const ShareDB = require("sharedb");
 const WebSocketJSONStream = require("@teamwork/websocket-json-stream");
@@ -78,14 +78,14 @@ function startServer() {
     next();
   });
   app.use("/api/user", userRoute);
+  app.use("/api/rooms", isAuthenticated, roomRoutes);
 
-  app.use(function (req, res, next) {
-    if (!req.username) return res.status(401).json({ err: "access denied" });
-    next();
-  });
+  // app.use(function (req, res, next) {
+  //   if (!req.username) return res.status(401).json({ err: "access denied" });
+  //   next();
+  // });
 
   // app routes
-  app.use("/api/rooms", roomRoutes);
 
   // Connect any incoming WebSocket connection to ShareDB
   const wss = new WebSocket.Server({ server: server });
