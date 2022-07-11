@@ -25,6 +25,7 @@ router.post(
     .escape()
     .withMessage({ err: "wrong or missing roomName" }),
   async (req, res) => {
+    // console.log("jason");
     const err = validationResult(req);
     if (!err.isEmpty()) {
       return res.status(400).json(err);
