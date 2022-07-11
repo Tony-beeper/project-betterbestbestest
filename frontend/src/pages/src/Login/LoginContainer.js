@@ -1,7 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import LoginForm from "./LoginForm.js";
 import userAPI from "../../../api/userAPI";
-import errorHandler from "../utils/errorHandler";
+import errorHandler from "../../../utils/errorHandler";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
@@ -22,6 +22,10 @@ const LoginContainer = () => {
   const [btnTxt, setBtnTxt] = useState("show");
   const [type, setType] = useState("password");
   const [score, setScore] = useState("0");
+
+  // useEffect(() => {
+  //   setUser(...user, { username: context.username });
+  // }, [context]);
   const handleChange = (event) => {
     const field = event.target.name;
 
@@ -69,12 +73,17 @@ const LoginContainer = () => {
       .login(user.username, user.password)
       .then((data) => {
         toast.success(data);
-        setContext(user.username);
-        nav("/");
+
+        setContext({ username: user.username });
+
+        nav("/room");
       })
       .catch(({ response }) => {
         console.log(response);
         errorHandler.handleLogin(response);
+      })
+      .finally(() => {
+        console.log(context);
       });
   };
 

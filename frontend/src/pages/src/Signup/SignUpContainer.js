@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import SignUpForm from "./SignUpForm.js";
 import userAPI from "../../../api/userAPI";
 import validateSignUpForm from "../validate";
-import errorHandler from "../utils/errorHandler";
+import errorHandler from "../../../utils/errorHandler";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { ThemeContext } from "../../../App";
@@ -67,9 +67,9 @@ const SignUpContainer = () => {
       .signup(user.username, user.password)
       .then((data) => {
         toast.success(data);
-        setContext(user.username);
+        setContext({ username: user.username });
 
-        nav("/");
+        nav("/room");
       })
       .catch(({ response }) => {
         errorHandler.handleSignUp(response);
