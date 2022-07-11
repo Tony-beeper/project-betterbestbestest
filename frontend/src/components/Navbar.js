@@ -46,13 +46,11 @@ const Bar = () => {
         "$1"
       )
     );
-    console.log("context in Navbar.js");
-    console.log(context);
   }, [context]);
 
   const HandleSignout = async () => {
     const backendURL = process.env.REACT_APP_BACKEND_URL + "/api/user/";
-    const res = await axios({
+    await axios({
       method: "GET",
       url: backendURL + "signout",
       headers: {},
@@ -61,6 +59,10 @@ const Bar = () => {
     });
     setUsername("");
     Nav("/");
+  };
+
+  const handleRoomsClick = async () => {
+    Nav("/room");
   };
 
   return (
@@ -80,6 +82,10 @@ const Bar = () => {
               <Typography variant="h6" className={classes.title}>
                 CodeT
               </Typography>
+
+              <Button color="inherit" onClick={handleRoomsClick}>
+                Rooms
+              </Button>
 
               <Button color="inherit" onClick={HandleSignout}>
                 SignOut
