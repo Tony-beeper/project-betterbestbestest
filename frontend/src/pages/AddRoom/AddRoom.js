@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   Button,
   TextField,
@@ -15,7 +15,8 @@ import { makeStyles, createTheme } from "@material-ui/core/styles";
 import { ExpandMoreRounded } from "@material-ui/icons";
 
 import roomAPI from "../../api/rooms";
-import handleError from "../../utils/errhandling";
+import errorHandler from "../../utils/errorHandler";
+import { ThemeContext } from "../../App";
 
 const useStyles = makeStyles({
   root: {
@@ -49,22 +50,30 @@ const theme = createTheme({
 const Room = () => {
   const classes = useStyles();
   const nevigate = useNavigate();
-
+  let [context, setContext] = useContext(ThemeContext);
+  let [username, setUsername] = useState(context);
   const [roomName, setRoomName] = useState("");
   const [roomNumber, setRoomNumber] = useState("");
   const [joinCode, setJoinCode] = useState("");
 
+  useEffect(() => {
+    setUsername(context.username);
+    console.log("username in addroom.js");
+    console.log(username);
+  }, [context]);
+
   const handleCreateRoom = (e) => {
     e.preventDefault();
+    setUsername(context.username);
 
     roomAPI
-      .createRoom("test", roomName)
+      .createRoom(username, roomName)
       .then((data) => {
         console.log(data);
         nevigate(`../room/${data._id}`, { replace: true });
       })
       .catch(({ response }) => {
-        handleError(response);
+        errorHandler.handleError(response);
         setRoomName("");
       });
   };
@@ -81,7 +90,7 @@ const Room = () => {
       .catch(({ response }) => {
         setRoomNumber("");
         setJoinCode("");
-        handleError(response);
+        errorHandler.handleError(response);
       });
   };
 
