@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const showHideSignupLogin = () => {};
 const Bar = () => {
   let Nav = useNavigate();
   let [context, setContext] = useContext(ThemeContext);
