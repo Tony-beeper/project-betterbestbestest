@@ -11,17 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
-/* for the signup page */
-@import url("https://fonts.googleapis.com/css?family=Roboto");
-
-html,
-body,
-#root {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: #0abab5;
-  font-family: "Roboto", Arial, Helvetica, sans-serif;
-}
