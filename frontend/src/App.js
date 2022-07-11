@@ -13,8 +13,12 @@ export const ThemeContext = React.createContext();
 
 function App() {
   const [context, setContext] = useState({
-    username: "",
+    username: document.cookie.replace(
+      /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
+      "$1"
+    ),
   });
+
   return (
     <ThemeContext.Provider value={[context, setContext]}>
       <Router>
