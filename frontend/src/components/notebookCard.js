@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { useNavigate } from "react-router-dom";
-import CreateIcon from "@material-ui/icons/Create";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+// import CreateIcon from "@material-ui/icons/Create";
+// import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { useState } from "react";
 import {
   Grid,
@@ -22,7 +22,7 @@ import Typography from "@material-ui/core/Typography";
 import { deepOrange, deepPurple } from "@material-ui/core/colors";
 
 import roomsAPI from "../api/rooms";
-import handleError from "../utils/errhandling";
+import errorHandler from "../utils/errorHandler";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -89,7 +89,7 @@ const NotebookCard = ({ room, isMine, leaveRoom, deleteMyRoom }) => {
         deleteMyRoom(data._id);
       })
       .catch(({ response }) => {
-        handleError(response);
+        errorHandler.handleError(response);
       })
       .finally(() => {
         handleClose();
@@ -104,7 +104,7 @@ const NotebookCard = ({ room, isMine, leaveRoom, deleteMyRoom }) => {
         leaveRoom(data._id);
       })
       .catch(({ response }) => {
-        handleError(response);
+        errorHandler.handleError(response);
       })
       .finally(() => {
         handleClose();
