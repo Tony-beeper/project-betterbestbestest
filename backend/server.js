@@ -5,7 +5,6 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 const cors = require("cors");
 const chalk = require("chalk");
-const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 
@@ -63,7 +62,7 @@ function startServer() {
   app.use(
     session({
       secret: process.env.SESSION_SECRET,
-      resave: false,
+      resave: true,
       saveUninitialized: true,
       cookie: {
         // secure: true,
@@ -72,19 +71,21 @@ function startServer() {
       },
     })
   );
+
   app.use(function (req, res, next) {
-    req.username = req.session.username ? req.session.username : "test";
+    req.username = req.session.username ? req.session.username : "";
     console.log("HTTP request", req.username, req.method, req.url, req.body);
     next();
   });
+  app.use("/api/user", userRoute);
+
   app.use(function (req, res, next) {
     if (!req.username) return res.status(401).json({ err: "access denied" });
     next();
   });
 
   // app routes
-  app.use("/api/room", roomRoutes);
-  app.use("/api/user", userRoute);
+  app.use("/api/rooms", roomRoutes);
 
   // Connect any incoming WebSocket connection to ShareDB
   const wss = new WebSocket.Server({ server: server });
