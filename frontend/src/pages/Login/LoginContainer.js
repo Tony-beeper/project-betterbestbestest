@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import LoginForm from "./LoginForm.js";
 import userAPI from "../../api/userAPI";
-import errorHandler from "../../utils/errorHandler";
+import errorHandler from "../../utils/ErrorHandler";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
@@ -29,9 +29,7 @@ const LoginContainer = () => {
     );
     if (cookieCheck) nav("/room");
   });
-  // useEffect(() => {
-  //   setUser(...user, { username: context.username });
-  // }, [context]);
+
   const handleChange = (event) => {
     const field = event.target.name;
 

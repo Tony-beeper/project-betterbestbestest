@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import SignUpForm from "./SignUpForm.js";
 import userAPI from "../../api/userAPI";
 import validateSignUpForm from "../FormValidate";
-import errorHandler from "../../utils/errorHandler";
+import errorHandler from "../../utils/ErrorHandler";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { ThemeContext } from "../../App";
