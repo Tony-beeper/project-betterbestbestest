@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import SignUpForm from "./SignUpForm.js";
 import userAPI from "../../../api/userAPI";
 import validateSignUpForm from "../validate";
@@ -21,6 +21,15 @@ const SignUpContainer = () => {
   const [btnTxt, setBtnTxt] = useState("show");
   const [type, setType] = useState("password");
   const [score, setScore] = useState("0");
+
+  useEffect(() => {
+    const cookieCheck = document.cookie.replace(
+      /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
+      "$1"
+    );
+    if (cookieCheck) nav("/room");
+  });
+
   const handleChange = (event) => {
     const field = event.target.name;
 

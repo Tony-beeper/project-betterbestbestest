@@ -22,7 +22,13 @@ const LoginContainer = () => {
   const [btnTxt, setBtnTxt] = useState("show");
   const [type, setType] = useState("password");
   const [score, setScore] = useState("0");
-
+  useEffect(() => {
+    const cookieCheck = document.cookie.replace(
+      /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
+      "$1"
+    );
+    if (cookieCheck) nav("/room");
+  });
   // useEffect(() => {
   //   setUser(...user, { username: context.username });
   // }, [context]);
