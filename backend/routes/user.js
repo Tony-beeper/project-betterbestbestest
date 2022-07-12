@@ -36,6 +36,7 @@ router.post(
           .cookie("username", "", {
             path: "/",
             maxAge: 60 * 60 * 24 * 7,
+            sameSite: true,
           })
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .send(Message.createErrorMessage("Bcrypt Error"));
@@ -55,6 +56,7 @@ router.post(
           return res
             .cookie("username", "", {
               path: "/",
+              sameSite: true,
               maxAge: 60 * 60 * 24 * 7,
             })
             .status(StatusCodes.CONFLICT)
@@ -66,6 +68,8 @@ router.post(
           return res
             .cookie("username", username, {
               path: "/",
+              sameSite: true,
+
               maxAge: 60 * 60 * 24 * 7,
             })
             .status(StatusCodes.SUCCESS)
@@ -121,6 +125,8 @@ router.post(
           return res
             .cookie("username", username, {
               path: "/",
+              sameSite: true,
+
               maxAge: 60 * 60 * 24 * 7,
             })
             .status(StatusCodes.SUCCESS)
@@ -145,10 +151,12 @@ router.get("/signout/", function (req, res, next) {
   return res
     .cookie("username", "", {
       path: "/",
+      sameSite: true,
+
       maxAge: 60 * 60 * 24 * 7,
     })
     .status(StatusCodes.SUCCESS)
-    .send("Cleared Cookie");
+    .send(Message.createTextMessage("Cookie Cleared"));
 });
 
 module.exports = router;
