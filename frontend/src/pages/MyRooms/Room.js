@@ -4,9 +4,9 @@ import { Container, Grid, Button, Typography } from "@material-ui/core";
 import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
 import { useNavigate } from "react-router-dom";
 
-import NotebookCard from "../../components/notebookCard";
+import NotebookCard from "../../components/NotebookCard";
 import roomsAPI from "../../api/rooms";
-import errorHandler from "../../utils/errorHandler";
+import errorHandler from "../../utils/ErrorHandler";
 import { ThemeContext } from "../../App";
 
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Room = () => {
-  const nevigate = useNavigate();
+  const navigate = useNavigate();
   const classes = useStyles();
   let [context, setContext] = useContext(ThemeContext);
   let [username, setUsername] = useState(context);
@@ -26,6 +26,11 @@ const Room = () => {
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
+    const cookieCheck = document.cookie.replace(
+      /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
+      "$1"
+    );
+    if (!cookieCheck) navigate("/");
     setUsername(context.username);
     console.log("username in room.js");
     console.log(username);
@@ -74,7 +79,7 @@ const Room = () => {
             background: "linear-gradient(to right,  #2980B9, #6DD5FA)",
           }}
           onClick={(e) => {
-            nevigate("add");
+            navigate("add");
           }}
           startIcon={<LibraryAddIcon />}
         >

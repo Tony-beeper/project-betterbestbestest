@@ -15,7 +15,7 @@ import { makeStyles, createTheme } from "@material-ui/core/styles";
 import { ExpandMoreRounded } from "@material-ui/icons";
 
 import roomAPI from "../../api/rooms";
-import errorHandler from "../../utils/errorHandler";
+import errorHandler from "../../utils/ErrorHandler";
 import { ThemeContext } from "../../App";
 
 const useStyles = makeStyles({
@@ -49,7 +49,7 @@ const theme = createTheme({
 
 const Room = () => {
   const classes = useStyles();
-  const nevigate = useNavigate();
+  const navigate = useNavigate();
   let [context, setContext] = useContext(ThemeContext);
   let [username, setUsername] = useState(context);
   const [roomName, setRoomName] = useState("");
@@ -57,9 +57,13 @@ const Room = () => {
   const [joinCode, setJoinCode] = useState("");
 
   useEffect(() => {
+    const cookieCheck = document.cookie.replace(
+      /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
+      "$1"
+    );
+    if (!cookieCheck) navigate("/");
+    // else navigate("/");
     setUsername(context.username);
-    console.log("username in addroom.js");
-    console.log(username);
   }, [context]);
 
   const handleCreateRoom = (e) => {
@@ -70,7 +74,7 @@ const Room = () => {
       .createRoom(username, roomName)
       .then((data) => {
         console.log(data);
-        nevigate(`../room/${data._id}`, { replace: true });
+        navigate(`../room/${data._id}`, { replace: true });
       })
       .catch(({ response }) => {
         errorHandler.handleError(response);
@@ -85,7 +89,7 @@ const Room = () => {
       .joinRoom(roomNumber, joinCode)
       .then((data) => {
         console.log(data);
-        nevigate(`../room/${data._id}`, { replace: true });
+        navigate(`../room/${data._id}`, { replace: true });
       })
       .catch(({ response }) => {
         setRoomNumber("");
