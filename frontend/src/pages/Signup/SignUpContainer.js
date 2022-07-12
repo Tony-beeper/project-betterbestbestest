@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 import SignUpForm from "./SignUpForm.js";
-import userAPI from "../../../api/userAPI";
-import validateSignUpForm from "../validate";
-import errorHandler from "../../../utils/errorHandler";
+import userAPI from "../../api/userAPI";
+import validateSignUpForm from "../FormValidate";
+import errorHandler from "../../utils/errorHandler";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import { ThemeContext } from "../../../App";
+import { ThemeContext } from "../../App";
 
 const SignUpContainer = () => {
   let nav = useNavigate();

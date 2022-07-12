@@ -1,7 +1,7 @@
 import React from "react";
-import SignUpContainer from "./src/Signup/SignUpContainer";
+import SignUpContainer from "./Signup/SignUpContainer";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import "./srcIndex.css";
+import "./LoginSignUpPage.css";
 
 const SignUp = () => {
   return (

@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 import LoginForm from "./LoginForm.js";
-import userAPI from "../../../api/userAPI";
-import errorHandler from "../../../utils/errorHandler";
+import userAPI from "../../api/userAPI";
+import errorHandler from "../../utils/errorHandler";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import { ThemeContext } from "../../../App";
+import { ThemeContext } from "../../App";
 
 const zxcvbn = require("zxcvbn");
 
