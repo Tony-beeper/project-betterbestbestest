@@ -22,7 +22,7 @@ import Typography from "@material-ui/core/Typography";
 import { deepOrange, deepPurple } from "@material-ui/core/colors";
 
 import roomsAPI from "../api/rooms";
-import errorHandler from "../utils/errorHandler";
+import errorHandler from "../utils/ErrorHandler";
 
 const useStyles = makeStyles((theme) => ({
   root: {
