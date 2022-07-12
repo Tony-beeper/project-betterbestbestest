@@ -4,7 +4,7 @@ const { body, validationResult } = require("express-validator");
 const express = require("express");
 const router = express.Router();
 const user = require("../models/user");
-const createTextMessage = require("../utils/defaultMessages.js");
+const Message = require("../utils/defaultMessages.js");
 const { MongoClient } = require("mongodb");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -28,7 +28,7 @@ router.post(
     if (!err.isEmpty()) {
       return res
         .status(StatusCodes.UNAUTHORIZED)
-        .send(createTextMessage(err.errors[0].msg.err));
+        .send(Message.createErrorMessage(err.errors[0].msg.err));
     }
     bcrypt.hash(req.body.password, saltRounds, async function (err, hash) {
       if (err)
@@ -38,7 +38,7 @@ router.post(
             maxAge: 60 * 60 * 24 * 7,
           })
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .send(createTextMessage("Bcrypt Error"));
+          .send(Message.createErrorMessage("Bcrypt Error"));
       const username = req.body.username;
       const password = hash;
       const newUser = new user({
@@ -58,7 +58,7 @@ router.post(
               maxAge: 60 * 60 * 24 * 7,
             })
             .status(StatusCodes.CONFLICT)
-            .send(createTextMessage("Username Taken"));
+            .send(Message.createErrorMessage("Username Taken"));
         } else {
           await user.insertOne(newUser);
           req.session.username = username;
@@ -75,7 +75,7 @@ router.post(
         console.log(err);
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .send(createTextMessage("Error saving user to database"));
+          .send(Message.createErrorMessage("Error saving user to database"));
       }
     });
   }
@@ -96,7 +96,7 @@ router.post(
     if (!err.isEmpty()) {
       return res
         .status(StatusCodes.UNAUTHORIZED)
-        .send(createTextMessage(err.errors[0].msg.err));
+        .send(Message.createErrorMessage(err.errors[0].msg.err));
     }
     const username = req.body.username;
     const password = req.body.password;
@@ -109,11 +109,12 @@ router.post(
       if (result) {
         const hash = result.password;
         bcrypt.compare(password, hash, function (err, comparisonResult) {
-          if (err) return res.status(500).end(err);
+          if (err)
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end(err);
           if (!comparisonResult)
             return res
               .status(StatusCodes.UNAUTHORIZED)
-              .send(createTextMessage("Access Denied"));
+              .send(Message.createErrorMessage("Access Denied"));
 
           req.session.username = username;
 
@@ -128,13 +129,13 @@ router.post(
       } else {
         return res
           .status(StatusCodes.NOT_FOUND)
-          .send(createTextMessage("User not found"));
+          .send(Message.createErrorMessage("User not found"));
       }
     } catch (err) {
       console.log(err);
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send(createTextMessage("Error saving user to database"));
+        .send(Message.createErrorMessage("Error saving user to database"));
     }
   }
 );
