@@ -26,7 +26,6 @@ function App() {
         <Bar />
         <Routes>
           <Route path="/" element={<h1>hello world</h1>} />
-          <Route path="/" element={<h1>hello world</h1>} />
           <Route path="/room/add/" element={<AddRoom />} />
           <Route path="/room/" element={<Room />} />
           <Route path="/room/:id" element={<NoteBook />} />
