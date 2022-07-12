@@ -2,28 +2,29 @@ import { toast } from "react-toastify";
 
 const handleError = (response) => {
   if (response && response.data) {
+    console.log(response);
     if (response.data.err) toast.error(response.data.err);
-    else toast.error("something went wrong...");
+    else toast.error("No Error Message On handleError");
   } else {
-    toast.error("something went wrong...");
+    toast.error("No error Response in handleError or No data in the response");
   }
 };
 
 const handleLogin = (response) => {
   if (response && response.data) {
-    if (response.data) toast.error(response.data.message);
-    else toast.error("something went wrong...");
+    if (response.data.err) toast.error(response.data.err);
+    else toast.error("No Error Message On handleLogin");
   } else {
-    toast.error("something went wrong...");
+    toast.error("No error Response in handleLogin or No data in the response");
   }
 };
 
 const handleSignUp = (response) => {
   if (response && response.data) {
-    if (response.data) toast.error(response.data.message);
-    else toast.error("something went wrong...");
+    if (response.data.err) toast.error(response.data.err);
+    else toast.error("No Error Message On handleSignUp");
   } else {
-    toast.error("something went wrong...");
+    toast.error("No error Response in handleSignUp or No data in the response");
   }
 };
 
