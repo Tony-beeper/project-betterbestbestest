@@ -12,6 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { ThemeContext } from "../App";
+
 // module.getUsername = function () {
 //   return document.cookie.replace(
 //     /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
@@ -28,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+  },
+  coloring: {
+    background: "#141414",
   },
 }));
 
@@ -68,7 +72,7 @@ const Bar = () => {
     <div className={classes.root}>
       {username ? (
         <>
-          <AppBar position="static">
+          <AppBar position="static" className={classes.coloring}>
             <Toolbar>
               <IconButton
                 edge="start"
@@ -79,7 +83,7 @@ const Bar = () => {
                 <MenuIcon />
               </IconButton>
               <Typography variant="h6" className={classes.title}>
-                CodeT
+                CodeBook
               </Typography>
 
               <Button color="inherit" onClick={handleRoomsClick}>
@@ -94,7 +98,7 @@ const Bar = () => {
         </>
       ) : (
         <>
-          <AppBar position="static">
+          <AppBar position="static" className={classes.coloring}>
             <Toolbar>
               <IconButton
                 edge="start"
@@ -105,7 +109,7 @@ const Bar = () => {
                 <MenuIcon />
               </IconButton>
               <Typography variant="h6" className={classes.title}>
-                CodeT
+                CodeBook
               </Typography>
               <Button color="inherit" href="login">
                 Login
