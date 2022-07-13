@@ -66,7 +66,7 @@ function startServer() {
       saveUninitialized: true,
       cookie: {
         // secure: true,
-        sameSite: true,
+        // sameSite: true,
         // httpOnly: true,
       },
     })
