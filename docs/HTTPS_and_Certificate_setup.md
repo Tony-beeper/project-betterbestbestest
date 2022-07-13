@@ -9,3 +9,11 @@
 ## Setup guide with nginx
 
 - Follow this [guide](https://mindsers.blog/post/https-using-nginx-certbot-docker/)
+
+## Useful commands
+
+1. Create a cert with certbot
+
+   `docker-compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ -d example.org`
+
+   replace example.org with your domain
