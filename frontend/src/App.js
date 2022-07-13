@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import AddRoom from "./pages/AddRoom/AddRoom";
 import Room from "./pages/MyRooms/Room";
 import NoteBook from "./components/Notebook/Notebook";
-
+import HomePage from "./pages/HomePage/HomePage";
 export const ThemeContext = React.createContext();
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
         <ToastContainer theme="colored" />
         <Bar />
         <Routes>
-          <Route path="/" element={<h1>hello world</h1>} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/room/add/" element={<AddRoom />} />
           <Route path="/room/" element={<Room />} />
           <Route path="/room/:id" element={<NoteBook />} />
