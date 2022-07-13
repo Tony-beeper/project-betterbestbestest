@@ -18,18 +18,17 @@
 
 1. `ssh root@[ip address]`
 
--   you might have to specify ssh key
+    - you might have to specify ssh key
 
 2. `cd /usr/src/app/project-better-best-bestest`
 
-# Docker Setup for Backend
+# Screen
 
-1. `cd backend`
-2. In root folder of project, run `docker-compose up --build`
-3. clean up unused images with `docker image prune -a`
+1. `cd backend` or `cd frontend`
+2. `screen -ls` to list all existing screens
+3. `screen -S [screen name]` to create a new screen or `screen -r [screen name]` to attach an existing screen
 
-# Docker Setup for Frontend
+    - make sure to stop any running containers
 
-1. `cd frontend`
-2. run `docker-compose up --build`
-3. clean up unused images with `docker image prune -a`
+4. `docker-compose up --build` to build/start docker containers
+5. clean up unused images with `docker image prune -a`
