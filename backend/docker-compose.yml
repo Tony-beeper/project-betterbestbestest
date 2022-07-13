@@ -1,8 +1,13 @@
 version: "3.9"
 services:
-  frontend:
+  backend:
     build:
       context: ./
+    ports:
+      - "8080:8080"
+  nginx:
+    image: nginx:latest
+    restart: always
     ports:
       - "80:80"
       - "443:443"
