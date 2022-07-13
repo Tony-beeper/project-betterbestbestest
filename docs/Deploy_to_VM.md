@@ -1,0 +1,35 @@
+# Generate ssh key
+
+1. generate ssh key with `ssh-keygen` and follow instructions
+2. `cd ~/.ssh` and find `id_rsa.pub`
+
+# Add ssh key to vm
+
+1. give `id_rsa.pub` to admin
+2. admin add public key `~/.ssh/authorized_keys`
+
+# Git
+
+1. `git fetch`
+2. `git pull` (if necessary)
+3. `git switch [branchname]` (if necessary)
+
+# ssh into vm
+
+1. `ssh root@[ip address]`
+
+-   you might have to specify ssh key
+
+2. `cd /usr/src/app/project-better-best-bestest`
+
+# Docker Setup for Backend
+
+1. `cd backend`
+2. In root folder of project, run `docker-compose up --build`
+3. clean up unused images with `docker image prune -a`
+
+# Docker Setup for Frontend
+
+1. `cd frontend`
+2. run `docker-compose up --build`
+3. clean up unused images with `docker image prune -a`
