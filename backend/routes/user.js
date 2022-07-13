@@ -48,7 +48,6 @@ router.post(
       });
       try {
         await client.connect();
-        console.log("connected to server");
         const user_db = client.db(dbName);
         const user = user_db.collection("user");
         const result = await user.findOne({ username: username });
@@ -76,7 +75,6 @@ router.post(
             .send("Sign up success");
         }
       } catch (err) {
-        console.log(err);
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .send(Message.createErrorMessage("Error saving user to database"));
@@ -138,7 +136,6 @@ router.post(
           .send(Message.createErrorMessage("User not found"));
       }
     } catch (err) {
-      console.log(err);
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .send(Message.createErrorMessage("Error saving user to database"));

@@ -32,8 +32,7 @@ const Room = () => {
     );
     if (!cookieCheck) navigate("/");
     setUsername(context.username);
-    console.log("username in room.js");
-    console.log(username);
+
     roomsAPI
       // .getRooms(username.username)
       .getRooms(username.username)
@@ -44,7 +43,6 @@ const Room = () => {
       .catch(({ response }) => {
         errorHandler.handleError(response);
       });
-    console.log(context);
   }, [context]);
 
   const deleteMyRoom = (roomId) => {

@@ -83,12 +83,9 @@ const LoginContainer = () => {
         nav("/room");
       })
       .catch(({ response }) => {
-        console.log(response);
         errorHandler.handleLogin(response);
       })
-      .finally(() => {
-        console.log(context);
-      });
+      .finally(() => {});
   };
 
   const pwMask = (event) => {

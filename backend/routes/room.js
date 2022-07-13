@@ -97,7 +97,6 @@ router.delete(
         .status(statusCode.NOT_FOUND)
         .send(Message.createErrorMessage("room does not exist"));
     }
-    console.log(room);
     // if (room.roomOwner !== req.username)
     //   return res
     //     .status(403)
@@ -194,7 +193,6 @@ router.patch(
     const roomNumber = req.body.roomNumber;
     const joinCode = req.body.joinCode;
     const room = await Room.findOne({ roomNumber: roomNumber });
-    console.log(room);
     if (!room || room.joinCode !== joinCode) {
       return res
         .status(statusCode.BAD_REQUEST)

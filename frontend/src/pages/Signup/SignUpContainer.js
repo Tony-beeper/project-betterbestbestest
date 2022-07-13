@@ -87,9 +87,7 @@ const SignUpContainer = () => {
 
   const validateForm = (event) => {
     event.preventDefault();
-    console.log("user obj is");
 
-    console.log(user);
     var payload = validateSignUpForm(user);
     if (payload.success) {
       setError({});
@@ -97,7 +95,6 @@ const SignUpContainer = () => {
       submitSignup();
     } else {
       const errors = payload.errors;
-      console.log(errors);
       setError(errors);
     }
   };

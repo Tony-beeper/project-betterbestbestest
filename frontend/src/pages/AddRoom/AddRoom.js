@@ -73,7 +73,6 @@ const Room = () => {
     roomAPI
       .createRoom(username, roomName)
       .then((data) => {
-        console.log(data);
         navigate(`../room/${data._id}`, { replace: true });
       })
       .catch(({ response }) => {
@@ -88,7 +87,6 @@ const Room = () => {
     roomAPI
       .joinRoom(roomNumber, joinCode)
       .then((data) => {
-        console.log(data);
         navigate(`../room/${data._id}`, { replace: true });
       })
       .catch(({ response }) => {
