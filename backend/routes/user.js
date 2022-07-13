@@ -38,8 +38,8 @@ router.post(
             maxAge: 60 * 60 * 24 * 7,
             hostOnly: false,
             httpOnly: false,
-            sameSite: "none",
-            secure: true,
+            sameSite: false,
+            // sameSite: true,
           })
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .send(Message.createErrorMessage("Bcrypt Error"));
@@ -58,9 +58,11 @@ router.post(
           return res
             .cookie("username", "", {
               path: "/",
-              sameSite: "none",
-              secure: true,
+              // sameSite: true,
+              sameSite: false,
 
+              hostOnly: false,
+              httpOnly: false,
               maxAge: 60 * 60 * 24 * 7,
             })
             .status(StatusCodes.CONFLICT)
@@ -72,9 +74,11 @@ router.post(
           return res
             .cookie("username", username, {
               path: "/",
-              sameSite: "none",
-              secure: true,
+              // sameSite: true,
+              sameSite: false,
 
+              hostOnly: false,
+              httpOnly: false,
               maxAge: 60 * 60 * 24 * 7,
             })
             .status(StatusCodes.SUCCESS)
@@ -129,9 +133,11 @@ router.post(
           return res
             .cookie("username", username, {
               path: "/",
-              sameSite: "none",
-              secure: true,
+              // sameSite: true,
+              sameSite: false,
 
+              hostOnly: false,
+              httpOnly: false,
               maxAge: 60 * 60 * 24 * 7,
             })
             .status(StatusCodes.SUCCESS)
@@ -155,9 +161,11 @@ router.get("/signout/", function (req, res, next) {
   return res
     .cookie("username", "", {
       path: "/",
-      sameSite: "none",
-      secure: true,
+      // sameSite: true,
+      sameSite: false,
 
+      hostOnly: false,
+      httpOnly: false,
       maxAge: 60 * 60 * 24 * 7,
     })
     .status(StatusCodes.SUCCESS)

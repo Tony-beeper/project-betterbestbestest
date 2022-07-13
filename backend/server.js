@@ -11,10 +11,7 @@ const isAuthenticated = require("./middlewares/validateUser");
 const WebSocket = require("ws");
 const ShareDB = require("sharedb");
 const WebSocketJSONStream = require("@teamwork/websocket-json-stream");
-// const http = require("http");
-const https = require("https");
-const fs = require("fs");
-
+const http = require("http");
 const richText = require("rich-text");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
@@ -42,16 +39,11 @@ function createDoc(callback) {
     callback();
   });
 }
-var privateKey = fs.readFileSync("server.key");
-var certificate = fs.readFileSync("server.crt");
-var config = {
-  key: privateKey,
-  cert: certificate,
-};
+
 function startServer() {
   // Create a web server to serve files and listen to WebSocket connections
   const app = express();
-  const server = https.createServer(config, app);
+  const server = http.createServer(app);
   // app.use(express.json());
   // body parser
   const corConfig = { origin: true, credentials: true };
@@ -73,11 +65,13 @@ function startServer() {
       resave: true,
       saveUninitialized: true,
       cookie: {
-        path: "/",
-        sameSite: "none",
-        secure: true,
+        // secure: true,
+        hostOnly: false,
         httpOnly: false,
-        maxAge: 60 * 60 * 24 * 7,
+        // sameSite: true,
+        sameSite: false,
+
+        // httpOnly: true,
       },
     })
   );
