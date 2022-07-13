@@ -69,6 +69,8 @@ function startServer() {
         hostOnly: false,
         httpOnly: false,
         // sameSite: true,
+        sameSite: false,
+
         // httpOnly: true,
       },
     })

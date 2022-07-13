@@ -38,6 +38,7 @@ router.post(
             maxAge: 60 * 60 * 24 * 7,
             hostOnly: false,
             httpOnly: false,
+            sameSite: false,
             // sameSite: true,
           })
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -58,6 +59,8 @@ router.post(
             .cookie("username", "", {
               path: "/",
               // sameSite: true,
+              sameSite: false,
+
               hostOnly: false,
               httpOnly: false,
               maxAge: 60 * 60 * 24 * 7,
@@ -72,6 +75,8 @@ router.post(
             .cookie("username", username, {
               path: "/",
               // sameSite: true,
+              sameSite: false,
+
               hostOnly: false,
               httpOnly: false,
               maxAge: 60 * 60 * 24 * 7,
@@ -129,6 +134,8 @@ router.post(
             .cookie("username", username, {
               path: "/",
               // sameSite: true,
+              sameSite: false,
+
               hostOnly: false,
               httpOnly: false,
               maxAge: 60 * 60 * 24 * 7,
@@ -155,6 +162,8 @@ router.get("/signout/", function (req, res, next) {
     .cookie("username", "", {
       path: "/",
       // sameSite: true,
+      sameSite: false,
+
       hostOnly: false,
       httpOnly: false,
       maxAge: 60 * 60 * 24 * 7,

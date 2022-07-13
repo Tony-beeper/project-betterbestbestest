@@ -3,7 +3,7 @@ import SignUpForm from "./SignUpForm.js";
 import userAPI from "../../api/userAPI";
 import validateSignUpForm from "../FormValidate";
 import errorHandler from "../../utils/ErrorHandler";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ThemeContext } from "../../App";
 
