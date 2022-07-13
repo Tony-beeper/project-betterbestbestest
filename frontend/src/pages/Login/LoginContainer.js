@@ -3,7 +3,7 @@ import LoginForm from "./LoginForm.js";
 import userAPI from "../../api/userAPI";
 import errorHandler from "../../utils/ErrorHandler";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { ThemeContext } from "../../App";
 
