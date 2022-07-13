@@ -18,7 +18,6 @@
     "express": "^4.18.1",
     "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
-    "fs": "^0.0.1-security",
     "mongodb": "^4.7.0",
     "mongoose": "^6.4.1",
     "rich-text": "^4.1.0",
