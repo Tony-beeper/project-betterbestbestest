@@ -65,7 +65,7 @@ function startServer() {
       resave: true,
       saveUninitialized: true,
       cookie: {
-        // secure: true,
+        secure: true,
         // sameSite: true,
         // httpOnly: true,
       },

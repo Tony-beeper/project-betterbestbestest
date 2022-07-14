@@ -37,6 +37,7 @@ router.post(
             path: "/",
             maxAge: 60 * 60 * 24 * 7,
             // sameSite: true,
+            secure: true,
           })
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .send(Message.createErrorMessage("Bcrypt Error"));
@@ -56,6 +57,7 @@ router.post(
             .cookie("username", "", {
               path: "/",
               // sameSite: true,
+              secure: true,
               maxAge: 60 * 60 * 24 * 7,
             })
             .status(StatusCodes.CONFLICT)
@@ -68,6 +70,7 @@ router.post(
             .cookie("username", username, {
               path: "/",
               // sameSite: true,
+              secure: true,
 
               maxAge: 60 * 60 * 24 * 7,
             })
@@ -124,6 +127,7 @@ router.post(
             .cookie("username", username, {
               path: "/",
               // sameSite: true,
+              secure: true,
 
               maxAge: 60 * 60 * 24 * 7,
             })
@@ -149,6 +153,7 @@ router.get("/signout/", function (req, res, next) {
     .cookie("username", "", {
       path: "/",
       // sameSite: true,
+      secure: true,
 
       maxAge: 60 * 60 * 24 * 7,
     })
