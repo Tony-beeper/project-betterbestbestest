@@ -49,7 +49,7 @@ function startServer() {
   const corConfig = { origin: true, credentials: true };
   app.use(
     cors({
-      origin: true,
+      origin: false,
       credentials: true,
       methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
     })
