@@ -23,31 +23,39 @@ const createDoc = (username, id, callback) => {
   });
 };
 
-const deleteDoc = async (docName, id) => {
+const deleteDoc = async (docName, id, callback) => {
   console.log(docName, id);
+  const doc = connection.get(docName, id);
   const conn = await mongoose
     .createConnection(process.env.MONGO_CONN_STR)
     .asPromise();
-  await conn.dropCollection(docName);
-  await conn.dropCollection(`o_${docName}`);
-  return;
-  // doc.fetch((err) => {
-  //   if (err) throw err;
-  //   if (doc.type !== null) {
-  //     // insert dummy element to initilize shardb
-  //     doc.del({}, async (err) => {
-  //       if (err) return callback(err);
-  //       // const conn = await mongoose
-  //       //   .createConnection(process.env.MONGO_CONN_STR)
-  //       //   .asPromise();
-  //       // await conn.dropCollection(docName);
-  //       // await conn.dropCollection(`o_${docName}`);
-  //       return callback();
-  //     });
-  //   }
-  //   callback("doc does not exist");
-  // });
+  doc.del({}, async (err) => {
+    if (err) return callback(err);
+    try {
+      await conn.dropCollection(docName);
+      await conn.dropCollection(`o_${docName}`);
+    } catch (err) {
+      return callback();
+    }
+    return callback();
+  });
 };
+// doc.fetch((err) => {
+//   if (err) throw err;
+//   if (doc.type !== null) {
+//     // insert dummy element to initilize shardb
+//     doc.del({}, async (err) => {
+//       if (err) return callback(err);
+//       // const conn = await mongoose
+//       //   .createConnection(process.env.MONGO_CONN_STR)
+//       //   .asPromise();
+//       // await conn.dropCollection(docName);
+//       // await conn.dropCollection(`o_${docName}`);
+//       return callback();
+//     });
+//   }
+//   callback("doc does not exist");
+// });
 
 const test = (username, id, callback) => {
   const doc = connection.get(username, id);

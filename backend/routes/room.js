@@ -101,10 +101,15 @@ router.delete(
     //   return res
     //     .status(403)
     //     .json({ err: "you are not allowed to delete the room" });
-    await deleteDoc(`${room._id}_comment`, room.commentSharedbID);
-    await deleteDoc(`${room._id}_code`, room.codeSharedbID);
-    await Room.deleteOne({ _id: ObjectId(roomId) });
-    return res.json(room.toObject());
+    deleteDoc(`${room._id}_comment`, room.commentSharedbID, (err) => {
+      console.log(err);
+      deleteDoc(`${room._id}_code`, room.codeSharedbID, async (err) => {
+        if (err) return res.json({ err: "error when delete" });
+        await Room.deleteOne({ _id: ObjectId(roomId) });
+        return res.json(room.toObject());
+      });
+    });
+
     // deleteDoc(`${room.Owner}_comment`, room.comment_sharedbID, (err) => {
     //   if (err) return res.status(500).json({ err: err });
     //   deleteDoc(`${room.Owner}_code`, room.code_sharedbID, async (err) => {

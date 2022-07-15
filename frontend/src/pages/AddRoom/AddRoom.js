@@ -55,6 +55,7 @@ const Room = () => {
   const [roomName, setRoomName] = useState("");
   const [roomNumber, setRoomNumber] = useState("");
   const [joinCode, setJoinCode] = useState("");
+  const [disable, setDisable] = useState(false);
 
   useEffect(() => {
     const cookieCheck = document.cookie.replace(
@@ -69,6 +70,7 @@ const Room = () => {
   const handleCreateRoom = (e) => {
     e.preventDefault();
     setUsername(context.username);
+    setDisable(true);
 
     roomAPI
       .createRoom(username, roomName)
@@ -78,11 +80,13 @@ const Room = () => {
       .catch(({ response }) => {
         errorHandler.handleError(response);
         setRoomName("");
-      });
+      })
+      .finally(() => setDisable(false));
   };
 
   const handleJoin = (e) => {
     e.preventDefault();
+    setDisable(true);
 
     roomAPI
       .joinRoom(roomNumber, joinCode)
@@ -93,7 +97,8 @@ const Room = () => {
         setRoomNumber("");
         setJoinCode("");
         errorHandler.handleError(response);
-      });
+      })
+      .finally(() => setDisable(false));
   };
 
   const handleRoomNameChange = (e) => {
@@ -139,6 +144,7 @@ const Room = () => {
                   label="room name"
                 />
                 <Button
+                  disabled={disable}
                   variant="contained"
                   color="primary"
                   type="submit"
@@ -185,6 +191,7 @@ const Room = () => {
                   label="join code"
                 />
                 <Button
+                  disabled={disable}
                   variant="contained"
                   fullWidth
                   color="primary"

@@ -7,7 +7,7 @@ import Login from "./pages/Login";
 import React, { useState } from "react";
 import AddRoom from "./pages/AddRoom/AddRoom";
 import Room from "./pages/MyRooms/Room";
-import NoteBook from "./components/Notebook/Notebook";
+import NoteBook from "./pages/Notebook/Notebook";
 import HomePage from "./pages/HomePage/HomePage";
 export const ThemeContext = React.createContext();
 
