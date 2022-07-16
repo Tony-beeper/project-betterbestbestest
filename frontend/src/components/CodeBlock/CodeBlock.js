@@ -8,13 +8,15 @@ import UploadFileForm from "../UploadFileForm";
 import tinycolor from "tinycolor2";
 import { useNavigate } from "react-router-dom";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
+import { ThemeContext } from "../../App";
 
 function CodeBlock(props) {
   let Nav = useNavigate();
   const doc = props.doc;
   const [quill, setQuill] = useState(null);
+  const [context, setContext] = useContext(ThemeContext);
   let colors = {};
 
   // hljs.registerLanguage("python", python);
@@ -40,7 +42,7 @@ function CodeBlock(props) {
       theme: "snow", // or 'bubble'
     });
     setQuill(quill);
-    // let cursors = quill.getModule("cursors");
+    let cursors = quill.getModule("cursors");
 
     quill.setContents(doc.data);
     quill.formatLine(0, quill.getLength(), { "code-block": true });
@@ -58,49 +60,49 @@ function CodeBlock(props) {
       Nav("../room");
     });
 
-    // let presence = doc.connection.getDocPresence(props.collection, props.id);
+    let presence = doc.connection.getDocPresence(props.collection, props.id);
 
-    // presence.subscribe(function (error) {
-    //   if (error) throw error;
-    //   console.log("down");
-    // });
+    presence.subscribe(function (error) {
+      console.log("subscribed");
+      if (error) throw error;
+    });
 
-    // let localPresence = presence.create(props.id);
-    // console.log(presence);
+    presence.on("receive", function (id, range) {
+      console.log(range);
+      colors[id] = colors[id] || tinycolor.random().toHexString();
+      var name = (range && range.name) || "Anonymous";
+      cursors.createCursor(id, name, colors[id]);
+      cursors.moveCursor(id, range);
+    });
 
-    // quill.on("selection-change", function (range, oldRange, source) {
-    //   // We only need to send updates if the user moves the cursor
-    //   // themselves. Cursor updates as a result of text changes will
-    //   // automatically be handled by the remote client.
-    //   if (source !== "user") return;
-    //   // Ignore blurring, so that we can see lots of users in the
-    //   // same window. In real use, you may want to clear the cursor.
-    //   if (!range) return;
-    //   // In this particular instance, we can send extra information
-    //   // on the presence object. This ability will vary depending on
-    //   // type.
-    //   range.name = "test";
+    let localPresence = presence.create();
+    console.log(presence);
 
-    //   console.log(localPresence);
-    //   localPresence.submit(range, function (error) {
-    //     if (error) throw error;
-    //     console.log(range);
-    //   });
-    // });
+    quill.on("selection-change", function (range, oldRange, source) {
+      // We only need to send updates if the user moves the cursor
+      // themselves. Cursor updates as a result of text changes will
+      // automatically be handled by the remote client.
+      if (source !== "user") return;
+      // Ignore blurring, so that we can see lots of users in the
+      // same window. In real use, you may want to clear the cursor.
+      if (!range) return;
+      // In this particular instance, we can send extra information
+      // on the presence object. This ability will vary depending on
+      // type.
+      range.name = context.username;
+
+      console.log(presence);
+      localPresence.submit(range, function (error) {
+        if (error) throw error;
+        console.log(range);
+      });
+    });
 
     // presence.on("error", function (error) {
     //   console.log(error);
     // });
     // presence.on("error", function (error) {
     //   console.log(error);
-    // });
-
-    // presence.on("receive", function (id, range) {
-    //   console.log(range);
-    //   colors[id] = colors[id] || tinycolor.random().toHexString();
-    //   var name = (range && range.name) || "Anonymous";
-    //   cursors.createCursor(id, name, colors[id]);
-    //   cursors.moveCursor(id, range);
     // });
   };
 
