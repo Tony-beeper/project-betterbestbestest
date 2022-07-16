@@ -49,7 +49,7 @@ function startServer() {
   const corConfig = { origin: true, credentials: true };
   app.use(
     cors({
-      origin: true,
+      origin: false,
       credentials: true,
       methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
     })
@@ -59,16 +59,12 @@ function startServer() {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
 
+  // cookie flags are added by nginx
   app.use(
     session({
       secret: process.env.SESSION_SECRET,
       resave: true,
       saveUninitialized: true,
-      cookie: {
-        // secure: true,
-        sameSite: false,
-        // httpOnly: true,
-      },
     })
   );
 
