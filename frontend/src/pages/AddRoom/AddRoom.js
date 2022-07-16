@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   Button,
   TextField,
@@ -15,7 +15,8 @@ import { makeStyles, createTheme } from "@material-ui/core/styles";
 import { ExpandMoreRounded } from "@material-ui/icons";
 
 import roomAPI from "../../api/rooms";
-import handleError from "../../utils/errhandling";
+import errorHandler from "../../utils/ErrorHandler";
+import { ThemeContext } from "../../App";
 
 const useStyles = makeStyles({
   root: {
@@ -48,23 +49,34 @@ const theme = createTheme({
 
 const Room = () => {
   const classes = useStyles();
-  const nevigate = useNavigate();
-
+  const navigate = useNavigate();
+  let [context, setContext] = useContext(ThemeContext);
+  let [username, setUsername] = useState(context);
   const [roomName, setRoomName] = useState("");
   const [roomNumber, setRoomNumber] = useState("");
   const [joinCode, setJoinCode] = useState("");
 
+  useEffect(() => {
+    const cookieCheck = document.cookie.replace(
+      /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
+      "$1"
+    );
+    if (!cookieCheck) navigate("/");
+    // else navigate("/");
+    setUsername(context.username);
+  }, [context]);
+
   const handleCreateRoom = (e) => {
     e.preventDefault();
+    setUsername(context.username);
 
     roomAPI
-      .createRoom("test", roomName)
+      .createRoom(username, roomName)
       .then((data) => {
-        console.log(data);
-        nevigate(`../room/${data._id}`, { replace: true });
+        navigate(`../room/${data._id}`, { replace: true });
       })
       .catch(({ response }) => {
-        handleError(response);
+        errorHandler.handleError(response);
         setRoomName("");
       });
   };
@@ -75,13 +87,12 @@ const Room = () => {
     roomAPI
       .joinRoom(roomNumber, joinCode)
       .then((data) => {
-        console.log(data);
-        nevigate(`../room/${data._id}`, { replace: true });
+        navigate(`../room/${data._id}`, { replace: true });
       })
       .catch(({ response }) => {
         setRoomNumber("");
         setJoinCode("");
-        handleError(response);
+        errorHandler.handleError(response);
       });
   };
 

@@ -5,9 +5,9 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 const cors = require("cors");
 const chalk = require("chalk");
-
+const cookieParser = require("cookie-parser");
 const session = require("express-session");
-
+const isAuthenticated = require("./middlewares/validateUser");
 const WebSocket = require("ws");
 const ShareDB = require("sharedb");
 const WebSocketJSONStream = require("@teamwork/websocket-json-stream");
@@ -15,7 +15,6 @@ const http = require("http");
 const richText = require("rich-text");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-
 dotenv.config();
 const sharedbMongo = require("sharedb-mongo");
 
@@ -25,8 +24,6 @@ const db = sharedbMongo(process.env.MONGO_CONN_STR);
 ShareDB.types.register(richText.type);
 var backend = new ShareDB({ db });
 createDoc(startServer);
-
-const cookie = require("cookie");
 
 // Create initial document then fire callback
 function createDoc(callback) {
@@ -47,35 +44,44 @@ function startServer() {
   // Create a web server to serve files and listen to WebSocket connections
   const app = express();
   const server = http.createServer(app);
-  app.use(cors());
-
+  // app.use(express.json());
   // body parser
+  const corConfig = { origin: true, credentials: true };
   app.use(
-    session({
-      secret: "please change this secret",
-      resave: false,
-      saveUninitialized: true,
-      cookie: {
-        secure: true,
-        sameSite: true,
-        httpOnly: true,
-      },
+    cors({
+      origin: true,
+      credentials: true,
+      methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
     })
   );
-  app.use(cors());
+  app.options("*", cors(corConfig));
+
   app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
+
+  // cookie flags are added by nginx
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: true,
+      saveUninitialized: true,
+    })
+  );
+
   app.use(function (req, res, next) {
-    req.username = req.session.username ? req.session.username : "test";
+    req.username = req.session.username ? req.session.username : "";
     console.log("HTTP request", req.username, req.method, req.url, req.body);
     next();
   });
-  app.use(function (req, res, next) {
-    if (!req.username) return res.status(401).json({ err: "access denied" });
-    next();
-  });
+  app.use("/api/user", userRoute);
+  app.use("/api/rooms", isAuthenticated, roomRoutes);
+
+  // app.use(function (req, res, next) {
+  //   if (!req.username) return res.status(401).json({ err: "access denied" });
+  //   next();
+  // });
 
   // app routes
-  app.use("/api/rooms", roomRoutes);
 
   // Connect any incoming WebSocket connection to ShareDB
   const wss = new WebSocket.Server({ server: server });
@@ -96,47 +102,6 @@ function startServer() {
     .catch((err) => {
       console.log(err);
     });
-  app.use(
-    session({
-      secret: process.env.SESSION_SECRET,
-      resave: false,
-      saveUninitialized: true,
-      cookie: {
-        secure: true,
-        sameSite: true,
-        httpOnly: true,
-      },
-    })
-  );
-
-  // app.use(function (req, res, next) {
-  //   req.username = req.session.username ? req.session.username : "";
-  //   res.setHeader(
-  //     "Set-Cookie",
-  //     cookie.serialize("username", req.username, {
-  //       path: "/",
-  //       maxAge: 120 * 60 * 24 * 7, // 1 week in number of seconds
-  //     })
-  //   );
-  //   console.log("HTTP request", req.username, req.method, req.url, req.body);
-  //   next();
-  // });
-
-  app.use(function (req, res, next) {
-    req.username = req.session.username ? req.session.username : "test";
-    console.log("HTTP request", req.username, req.method, req.url, req.body);
-    next();
-  });
-
-  app.use(function (req, res, next) {
-    if (!req.username) return res.status(401).json({ err: "access denied" });
-    next();
-  });
-
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(bodyParser.json());
-
-  app.use("/api/user", userRoute);
 
   const PORT = process.env.PORT || 8080;
 

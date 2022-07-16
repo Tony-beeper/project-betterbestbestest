@@ -1,0 +1,22 @@
+.homepage {
+  display: flex;
+  justify-content: center;
+}
+
+.penguinImage {
+  display: block;
+  margin: 0 auto;
+  width: 40%;
+}
+
+.backgroundImage {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.welcomeText {
+  display: flex;
+  justify-content: center;
+  font-size: larger;
+}

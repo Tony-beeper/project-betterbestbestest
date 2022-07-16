@@ -4,4 +4,8 @@ const createTextMessage = (message) => ({
   message: message,
 });
 
-module.exports = createTextMessage;
+const createErrorMessage = (err) => ({
+  err: err,
+});
+
+module.exports = { createTextMessage, createErrorMessage };
