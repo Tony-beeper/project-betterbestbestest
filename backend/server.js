@@ -59,16 +59,12 @@ function startServer() {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
 
+  // cookie flags are added by nginx
   app.use(
     session({
       secret: process.env.SESSION_SECRET,
       resave: true,
       saveUninitialized: true,
-      cookie: {
-        // secure: true,
-        sameSite: false,
-        // httpOnly: true,
-      },
     })
   );
 
