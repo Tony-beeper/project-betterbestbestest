@@ -16,6 +16,7 @@ function CodeBlock(props) {
   let Nav = useNavigate();
   const doc = props.doc;
   const [quill, setQuill] = useState(null);
+  const [presence, setPresence] = useState(null);
   const [context, setContext] = useContext(ThemeContext);
   let colors = {};
 
@@ -53,6 +54,7 @@ function CodeBlock(props) {
     doc.on("op", function (op, source) {
       if (source === quill) return;
       quill.updateContents(op);
+      quill.formatLine(0, quill.getLength(), { "code-block": true });
     });
 
     doc.on("del", function (data, source) {
@@ -68,15 +70,31 @@ function CodeBlock(props) {
     });
 
     presence.on("receive", function (id, range) {
-      console.log(range);
-      colors[id] = colors[id] || tinycolor.random().toHexString();
-      var name = (range && range.name) || "Anonymous";
-      cursors.createCursor(id, name, colors[id]);
-      cursors.moveCursor(id, range);
+      if (range?.join_name) {
+        if (range.join_name !== context.username) {
+          props.join(range);
+        }
+      } else if (range?.index) {
+        colors[id] = colors[id] || tinycolor.random().toHexString();
+        var name = (range && range.name) || "Anonymous";
+        cursors.createCursor(id, name, colors[id]);
+        cursors.moveCursor(id, range);
+      }
     });
 
     let localPresence = presence.create();
     console.log(presence);
+
+    setPresence(presence);
+
+    const interval = setInterval(() => {
+      localPresence.submit(
+        { join_name: context.username, join_time: new Date() },
+        function (err) {
+          if (err) throw err;
+        }
+      );
+    }, 5000);
 
     quill.on("selection-change", function (range, oldRange, source) {
       // We only need to send updates if the user moves the cursor
@@ -104,12 +122,26 @@ function CodeBlock(props) {
     // presence.on("error", function (error) {
     //   console.log(error);
     // });
+    return () => clearInterval(interval);
   };
 
   return (
     <div className="code-block">
       <UploadFileForm quill={quill} doc={doc} isCode={true} />
       <div id="editor-container"></div>
+      {presence && (
+        <button
+          onClick={() => {
+            console.log("delete");
+            presence.destroy((err) => {
+              console.log(presence);
+              Nav("../room");
+            });
+          }}
+        >
+          leave
+        </button>
+      )}
     </div>
   );
 }

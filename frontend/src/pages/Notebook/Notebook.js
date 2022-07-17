@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import roomsAPI from "../../api/rooms";
 import errorHandler from "../../utils/ErrorHandler";
+import UserNameList from "../../components/UserNameList/UserNameList";
 
 sharedb.types.register(richText.type);
 const socket = new ReconnectingWebSocket(process.env.REACT_APP_WS_URL);
@@ -20,6 +21,8 @@ function NoteBook() {
   const [data, setData] = useState(null);
   const [codeBlockDoc, setCodeBlockDoc] = useState(null);
   const [textBlockDoc, setTextBlockDoc] = useState(null);
+  const [usersInRoom, setUsersInRoom] = useState({});
+
   useEffect(() => {
     // hardcoded sharedb connection
     const testRoomId = id;
@@ -34,17 +37,42 @@ function NoteBook() {
         errorHandler.handleError(response);
         nav("../room");
       });
-  }, []);
+    console.log(usersInRoom);
+
+    const interval = setInterval(() => {
+      let filteredUserInRoom = {};
+      const timeNow = new Date();
+      for (let user in usersInRoom) {
+        console.log(timeNow - new Date(usersInRoom[user]));
+        if (timeNow - new Date(usersInRoom[user]) <= 5000) {
+          filteredUserInRoom[user] = usersInRoom[user];
+        }
+      }
+      setUsersInRoom(filteredUserInRoom);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [usersInRoom]);
+
+  const join = (joinInfo) => {
+    let filteredUserInRoom = usersInRoom;
+    filteredUserInRoom[[joinInfo.join_name]] = joinInfo.join_time;
+    setUsersInRoom(filteredUserInRoom);
+  };
+
   return (
     <div className="notebook-container">
       <div className="notebook-body">
-        <h1>NoteBook</h1>
+        <div className="notebook-title">
+          <h1>{data && data.name}</h1>
+          <UserNameList users={Object.keys(usersInRoom)} />
+        </div>
         <div className="notebook-content">
           {codeBlockDoc && (
             <CodeBlock
               doc={codeBlockDoc}
               collection={`${id}_code`}
               id={data.codeSharedbID}
+              join={join}
             />
           )}
           {textBlockDoc && <TextBlock doc={textBlockDoc} />}
