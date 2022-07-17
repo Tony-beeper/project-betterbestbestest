@@ -17,6 +17,7 @@ function CodeBlock(props) {
   const doc = props.doc;
   const [quill, setQuill] = useState(null);
   const [presence, setPresence] = useState(null);
+  const [intervalId, setIntervalId] = useState(null);
   const [context, setContext] = useContext(ThemeContext);
   let colors = {};
 
@@ -27,6 +28,7 @@ function CodeBlock(props) {
     doc.subscribe((err) => {
       if (err) console.log(err);
       initQuill();
+      return () => clearInterval(intervalId);
     });
   }, []);
 
@@ -94,7 +96,10 @@ function CodeBlock(props) {
           if (err) throw err;
         }
       );
+      console.log("submit");
     }, 5000);
+
+    setIntervalId(interval);
 
     quill.on("selection-change", function (range, oldRange, source) {
       // We only need to send updates if the user moves the cursor
@@ -135,6 +140,7 @@ function CodeBlock(props) {
             console.log("delete");
             presence.destroy((err) => {
               console.log(presence);
+              clearInterval(intervalId);
               Nav("../room");
             });
           }}

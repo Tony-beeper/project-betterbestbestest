@@ -37,7 +37,6 @@ function NoteBook() {
         errorHandler.handleError(response);
         nav("../room");
       });
-    console.log(usersInRoom);
 
     const interval = setInterval(() => {
       let filteredUserInRoom = {};
@@ -54,6 +53,7 @@ function NoteBook() {
   }, [usersInRoom]);
 
   const join = (joinInfo) => {
+    console.log(joinInfo);
     let filteredUserInRoom = usersInRoom;
     filteredUserInRoom[[joinInfo.join_name]] = joinInfo.join_time;
     setUsersInRoom(filteredUserInRoom);
