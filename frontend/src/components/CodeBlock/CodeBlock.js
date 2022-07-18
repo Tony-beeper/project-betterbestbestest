@@ -28,9 +28,15 @@ function CodeBlock(props) {
     doc.subscribe((err) => {
       if (err) console.log(err);
       initQuill();
-      return () => clearInterval(intervalId);
     });
   }, []);
+
+  useEffect(() => {
+    return () => {
+      console.log("cleared interval");
+      clearInterval(intervalId);
+    };
+  }, [intervalId]);
 
   const initQuill = () => {
     const quill = new Quill("#editor-container", {
