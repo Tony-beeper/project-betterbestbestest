@@ -113,7 +113,7 @@ router.post(
           if (!comparisonResult)
             return res
               .status(StatusCodes.UNAUTHORIZED)
-              .send(Message.createErrorMessage("Access Denied"));
+              .send(Message.createErrorMessage("wrong username or password"));
 
           req.session.username = username;
 
@@ -128,7 +128,7 @@ router.post(
       } else {
         return res
           .status(StatusCodes.NOT_FOUND)
-          .send(Message.createErrorMessage("User not found"));
+          .send(Message.createErrorMessage("wrong username or password"));
       }
     } catch (err) {
       return res
