@@ -22,7 +22,11 @@ const roomRoutes = require("./routes/room");
 
 const db = sharedbMongo(process.env.MONGO_CONN_STR);
 ShareDB.types.register(richText.type);
-var backend = new ShareDB({ db });
+var backend = new ShareDB({
+  db,
+  presence: true,
+  doNotForwardSendPresenceErrorsToClient: true,
+});
 createDoc(startServer);
 
 // Create initial document then fire callback

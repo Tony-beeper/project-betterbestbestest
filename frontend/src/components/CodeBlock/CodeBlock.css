@@ -2,3 +2,8 @@
   flex: 1;
   max-width: 50%;
 }
+
+#editor-container {
+  background-color: #23241e;
+  max-height: 900px;
+}

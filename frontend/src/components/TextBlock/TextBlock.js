@@ -1,12 +1,15 @@
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./TextBlock.css";
-import { useEffect, useRef } from "react";
+import React from "react";
+import { useEffect, useState, useRef } from "react";
+import UploadFileForm from "../UploadFileForm";
 
 function TextBlock(props) {
   const doc = props.doc;
   let reactQuillRef = useRef(null);
   let quillRef = null;
+  let [quill, setQuill] = useState(null);
 
   useEffect(() => {
     doc.subscribe((error) => {
@@ -19,7 +22,7 @@ function TextBlock(props) {
         quillRef.updateContents(op);
       });
     });
-  }, []);
+  }, [quill]);
   const initQuill = () => {
     if (
       !reactQuillRef.current ||
@@ -28,6 +31,7 @@ function TextBlock(props) {
       return;
     // init quill ref
     quillRef = reactQuillRef.current.getEditor();
+    setQuill(quillRef);
     // set initial content
     quillRef.setContents(doc.data);
     console.log(quillRef);
@@ -39,6 +43,11 @@ function TextBlock(props) {
   const modules = {};
   return (
     <div className="text-block">
+      {quill && doc ? (
+        <UploadFileForm quill={quill} isCode={false} doc={doc} />
+      ) : (
+        <div></div>
+      )}
       <ReactQuill
         ref={reactQuillRef}
         modules={modules}
