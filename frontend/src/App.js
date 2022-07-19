@@ -9,6 +9,7 @@ import AddRoom from "./pages/AddRoom/AddRoom";
 import Room from "./pages/MyRooms/Room";
 import NoteBook from "./pages/Notebook/Notebook";
 import HomePage from "./pages/HomePage/HomePage";
+import Test from "./test";
 export const ThemeContext = React.createContext();
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           <Route path="/room/:id" element={<NoteBook />} />
           <Route path="/signup/" element={<SignUp />} />
           <Route path="/login/" element={<Login />} />
+          <Route path="/test" element={<Test />} />
         </Routes>
       </Router>
     </ThemeContext.Provider>

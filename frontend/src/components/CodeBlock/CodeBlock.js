@@ -16,8 +16,8 @@ function CodeBlock(props) {
   let Nav = useNavigate();
   const doc = props.doc;
   const [quill, setQuill] = useState(null);
-  const [presence, setPresence] = useState(null);
-  const [intervalId, setIntervalId] = useState(null);
+  const [localPresenceS, setLocalPresenceS] = useState(null);
+  const [intervalId, setIntervalId] = useState([]);
   const [context, setContext] = useContext(ThemeContext);
   let colors = {};
 
@@ -27,16 +27,33 @@ function CodeBlock(props) {
   useEffect(() => {
     doc.subscribe((err) => {
       if (err) console.log(err);
-      initQuill();
+      let res = initQuill();
+      console.log(res.interval);
+      setIntervalId([...intervalId, res.interval]);
+      if (!localPresenceS) setLocalPresenceS(res.localPresence);
     });
+
+    // return () => {
+    //   doc.unsubscribe();
+    //   console.log(localPresenceS);
+    //   if (localPresenceS) localPresenceS.destroy();
+    //   console.log(`cleared interval ${intervalId}`);
+    //   clearInterval(intervalId);
+    // };
   }, []);
 
   useEffect(() => {
     return () => {
-      console.log("cleared interval");
-      clearInterval(intervalId);
+      console.log(`cleared interval ${JSON.stringify(intervalId)}`);
+      console.log(localPresenceS);
+      doc.unsubscribe();
+      if (localPresenceS) localPresenceS.destroy();
+      console.log(localPresenceS);
+      intervalId.forEach((id) => {
+        clearInterval(id);
+      });
     };
-  }, [intervalId]);
+  }, [localPresenceS]);
 
   const initQuill = () => {
     const quill = new Quill("#editor-container", {
@@ -91,9 +108,6 @@ function CodeBlock(props) {
     });
 
     let localPresence = presence.create();
-    console.log(presence);
-
-    setPresence(presence);
 
     const interval = setInterval(() => {
       localPresence.submit(
@@ -104,8 +118,6 @@ function CodeBlock(props) {
       );
       console.log("submit");
     }, 5000);
-
-    setIntervalId(interval);
 
     quill.on("selection-change", function (range, oldRange, source) {
       // We only need to send updates if the user moves the cursor
@@ -120,27 +132,19 @@ function CodeBlock(props) {
       // type.
       range.name = context.username;
 
-      console.log(presence);
       localPresence.submit(range, function (error) {
         if (error) throw error;
-        console.log(range);
       });
     });
 
-    // presence.on("error", function (error) {
-    //   console.log(error);
-    // });
-    // presence.on("error", function (error) {
-    //   console.log(error);
-    // });
-    return () => clearInterval(interval);
+    return { interval, localPresence };
   };
 
   return (
     <div className="code-block">
       <UploadFileForm quill={quill} doc={doc} isCode={true} />
       <div id="editor-container"></div>
-      {presence && (
+      {/* {presence && (
         <button
           onClick={() => {
             console.log("delete");
@@ -153,7 +157,7 @@ function CodeBlock(props) {
         >
           leave
         </button>
-      )}
+      )} */}
     </div>
   );
 }

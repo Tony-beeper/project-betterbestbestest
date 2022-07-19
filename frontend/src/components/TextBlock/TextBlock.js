@@ -13,11 +13,11 @@ function TextBlock(props) {
 
   useEffect(() => {
     doc.subscribe((error) => {
-      console.log(doc);
+      // console.log(doc);
       initQuill();
       doc.on("op", function (op, source) {
         if (source) return;
-        console.log(op);
+        // console.log(op);
         // update quill with new op
         quillRef.updateContents(op);
       });
@@ -34,7 +34,7 @@ function TextBlock(props) {
     setQuill(quillRef);
     // set initial content
     quillRef.setContents(doc.data);
-    console.log(quillRef);
+    // console.log(quillRef);
   };
   const handleChange = (content, delta, source, editor) => {
     if (source !== "user") return;

@@ -37,7 +37,9 @@ function NoteBook() {
         errorHandler.handleError(response);
         nav("../room");
       });
+  }, []);
 
+  useEffect(() => {
     const interval = setInterval(() => {
       let filteredUserInRoom = {};
       const timeNow = new Date();
@@ -49,13 +51,21 @@ function NoteBook() {
       }
       setUsersInRoom(filteredUserInRoom);
     }, 10000);
-    return () => clearInterval(interval);
+
+    return () => {
+      console.log(`clear room ${interval}`);
+      clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log(usersInRoom);
   }, [usersInRoom]);
 
   const join = (joinInfo) => {
-    console.log(joinInfo);
     let filteredUserInRoom = usersInRoom;
     filteredUserInRoom[[joinInfo.join_name]] = joinInfo.join_time;
+    console.log(filteredUserInRoom);
     setUsersInRoom(filteredUserInRoom);
   };
 
