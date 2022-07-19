@@ -49,10 +49,12 @@ function CodeBlock(props) {
     quill.on("text-change", function (delta, oldDelta, source) {
       if (source !== "user") return;
       doc.submitOp(delta, { source: quill });
+      quill.formatLine(0, quill.getLength(), { "code-block": true });
     });
     doc.on("op", function (op, source) {
       if (source === quill) return;
       quill.updateContents(op);
+      quill.formatLine(0, quill.getLength(), { "code-block": true });
     });
 
     doc.on("del", function (data, source) {
@@ -97,13 +99,6 @@ function CodeBlock(props) {
         console.log(range);
       });
     });
-
-    // presence.on("error", function (error) {
-    //   console.log(error);
-    // });
-    // presence.on("error", function (error) {
-    //   console.log(error);
-    // });
   };
 
   return (
