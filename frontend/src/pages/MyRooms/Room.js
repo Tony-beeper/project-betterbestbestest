@@ -54,7 +54,7 @@ const Room = () => {
   };
 
   const leaveRoom = (roomId) => {
-    setMyRooms(
+    setRooms(
       myRooms.filter((value, index, array) => {
         return value._id !== roomId;
       })
