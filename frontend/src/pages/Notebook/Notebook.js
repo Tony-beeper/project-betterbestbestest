@@ -80,7 +80,13 @@ function NoteBook() {
               leave={leave}
             />
           )}
-          {textBlockDoc && <TextBlock doc={textBlockDoc} />}
+          {textBlockDoc && (
+            <TextBlock
+              doc={textBlockDoc}
+              collection={`${id}_comment`}
+              id={data.commentSharedbID}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -80,6 +80,7 @@ function CodeBlock(props) {
     quill.on("text-change", function (delta, oldDelta, source) {
       if (source !== "user") return;
       doc.submitOp(delta, { source: quill });
+      quill.formatLine(0, quill.getLength(), { "code-block": true });
     });
     doc.on("op", function (op, source) {
       if (source === quill) return;
