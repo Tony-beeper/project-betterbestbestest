@@ -16,8 +16,6 @@ function CodeBlock(props) {
   let Nav = useNavigate();
   const doc = props.doc;
   const [quill, setQuill] = useState(null);
-  const [localPresenceS, setLocalPresenceS] = useState(null);
-  const [intervalId, setIntervalId] = useState([]);
   const [context, setContext] = useContext(ThemeContext);
   let colors = {};
 
@@ -25,35 +23,42 @@ function CodeBlock(props) {
   Quill.register("modules/cursors", QuillCursors);
 
   useEffect(() => {
+    let intervalId;
+    let localPresence;
     doc.subscribe((err) => {
       if (err) console.log(err);
       let res = initQuill();
-      console.log(res.interval);
-      setIntervalId([...intervalId, res.interval]);
-      if (!localPresenceS) setLocalPresenceS(res.localPresence);
+      // setIntervalId(res.interval);
+      intervalId = res.interval;
+      localPresence = res.localPresence;
+      // if (!localPresenceS) setLocalPresenceS(res.localPresence);
     });
 
-    // return () => {
-    //   doc.unsubscribe();
-    //   console.log(localPresenceS);
-    //   if (localPresenceS) localPresenceS.destroy();
-    //   console.log(`cleared interval ${intervalId}`);
-    //   clearInterval(intervalId);
-    // };
-  }, []);
-
-  useEffect(() => {
     return () => {
-      console.log(`cleared interval ${JSON.stringify(intervalId)}`);
-      console.log(localPresenceS);
       doc.unsubscribe();
-      if (localPresenceS) localPresenceS.destroy();
-      console.log(localPresenceS);
-      intervalId.forEach((id) => {
-        clearInterval(id);
+      console.log(localPresence);
+      // if (localPresenceS) localPresenceS.destroy();
+      localPresence.destroy(() => {
+        console.log(`cleared localpresense`);
+        // console.log(`cleared interval ${intervalId}`);
+        // clearInterval(intervalId);
       });
     };
-  }, [localPresenceS]);
+  }, []);
+
+  // useEffect(() => {
+  //   return () => {
+  //     console.log(`cleared interval ${JSON.stringify(intervalId)}`);
+  //     console.log(localPresenceS);
+  //     doc.unsubscribe();
+  //     // if (localPresenceS) localPresenceS.destroy();
+  //     console.log(localPresenceS);
+  //     clearInterval(intervalId);
+  //     // intervalId.forEach((id) => {
+  //     //   clearInterval(id);
+  //     // });
+  //   };
+  // }, [intervalId]);
 
   const initQuill = () => {
     const quill = new Quill("#editor-container", {
@@ -95,6 +100,7 @@ function CodeBlock(props) {
     });
 
     presence.on("receive", function (id, range) {
+      console.log(range);
       if (range?.join_name) {
         if (range.join_name !== context.username) {
           props.join(range);
@@ -104,32 +110,31 @@ function CodeBlock(props) {
         var name = (range && range.name) || "Anonymous";
         cursors.createCursor(id, name, colors[id]);
         cursors.moveCursor(id, range);
+      } else if (range === null) {
+        cursors.removeCursor(id);
+        props.leave({
+          join_name: context.username,
+          localPresenceId: localPresence.id,
+        });
       }
     });
 
     let localPresence = presence.create();
+    localPresence.submit({ join_name: context.username, id: localPresence.id });
 
-    const interval = setInterval(() => {
-      localPresence.submit(
-        { join_name: context.username, join_time: new Date() },
-        function (err) {
-          if (err) throw err;
-        }
-      );
-      console.log("submit");
-    }, 5000);
+    // const interval = setInterval(() => {
+    //   localPresence.submit(
+    //     { join_name: context.username, join_time: new Date() },
+    //     function (err) {
+    //       if (err) throw err;
+    //     }
+    //   );
+    //   console.log("submit");
+    // }, 5000);
 
     quill.on("selection-change", function (range, oldRange, source) {
-      // We only need to send updates if the user moves the cursor
-      // themselves. Cursor updates as a result of text changes will
-      // automatically be handled by the remote client.
       if (source !== "user") return;
-      // Ignore blurring, so that we can see lots of users in the
-      // same window. In real use, you may want to clear the cursor.
       if (!range) return;
-      // In this particular instance, we can send extra information
-      // on the presence object. This ability will vary depending on
-      // type.
       range.name = context.username;
 
       localPresence.submit(range, function (error) {
@@ -137,7 +142,7 @@ function CodeBlock(props) {
       });
     });
 
-    return { interval, localPresence };
+    return { localPresence, presence };
   };
 
   return (

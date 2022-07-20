@@ -29,16 +29,9 @@ const deleteDoc = async (docName, id, callback) => {
   const conn = await mongoose
     .createConnection(process.env.MONGO_CONN_STR)
     .asPromise();
-  doc.del({}, async (err) => {
-    if (err) return callback(err);
-    try {
-      await conn.dropCollection(docName);
-      await conn.dropCollection(`o_${docName}`);
-    } catch (err) {
-      return callback();
-    }
-    return callback();
-  });
+  await conn.dropCollection(docName);
+  await conn.dropCollection(`o_${docName}`);
+  return callback();
 };
 // doc.fetch((err) => {
 //   if (err) throw err;

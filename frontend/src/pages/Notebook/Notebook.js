@@ -3,6 +3,7 @@ import sharedb from "sharedb/lib/client";
 import richText from "rich-text";
 import CodeBlock from "../../components/CodeBlock/CodeBlock";
 import TextBlock from "../../components/TextBlock/TextBlock";
+import { toast } from "react-toastify";
 import "./Notebook.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +22,7 @@ function NoteBook() {
   const [data, setData] = useState(null);
   const [codeBlockDoc, setCodeBlockDoc] = useState(null);
   const [textBlockDoc, setTextBlockDoc] = useState(null);
-  const [usersInRoom, setUsersInRoom] = useState({});
+  const [usersInRoom, setUsersInRoom] = useState([]);
 
   useEffect(() => {
     // hardcoded sharedb connection
@@ -39,34 +40,19 @@ function NoteBook() {
       });
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      let filteredUserInRoom = {};
-      const timeNow = new Date();
-      for (let user in usersInRoom) {
-        console.log(timeNow - new Date(usersInRoom[user]));
-        if (timeNow - new Date(usersInRoom[user]) <= 5000) {
-          filteredUserInRoom[user] = usersInRoom[user];
-        }
-      }
-      setUsersInRoom(filteredUserInRoom);
-    }, 10000);
-
-    return () => {
-      console.log(`clear room ${interval}`);
-      clearInterval(interval);
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log(usersInRoom);
-  }, [usersInRoom]);
+  useEffect(() => {}, [usersInRoom]);
 
   const join = (joinInfo) => {
-    let filteredUserInRoom = usersInRoom;
-    filteredUserInRoom[[joinInfo.join_name]] = joinInfo.join_time;
-    console.log(filteredUserInRoom);
+    setUsersInRoom([...usersInRoom, joinInfo]);
+    // toast.info(`${joinInfo["join_name"]} joined the room`);
+  };
+
+  const leave = (leaveInfo) => {
+    const filteredUserInRoom = usersInRoom.filter((value, index) => {
+      return value["id"] !== leaveInfo.localPresenceId;
+    });
     setUsersInRoom(filteredUserInRoom);
+    // toast.info(`${leaveInfo["join_name"]} leave the room`);
   };
 
   return (
@@ -74,7 +60,15 @@ function NoteBook() {
       <div className="notebook-body">
         <div className="notebook-title">
           <h1>{data && data.name}</h1>
-          <UserNameList users={Object.keys(usersInRoom)} />
+          <UserNameList
+            users={[
+              ...new Set(
+                usersInRoom.map((joinInfo) => {
+                  return joinInfo["join_name"];
+                })
+              ),
+            ]}
+          />
         </div>
         <div className="notebook-content">
           {codeBlockDoc && (
@@ -83,6 +77,7 @@ function NoteBook() {
               collection={`${id}_code`}
               id={data.codeSharedbID}
               join={join}
+              leave={leave}
             />
           )}
           {textBlockDoc && <TextBlock doc={textBlockDoc} />}
