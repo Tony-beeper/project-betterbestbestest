@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "cross-env NODE_ENV=prod node server.js",
+    "dev": "cross-env NODE_ENV=dev nodemon server.js"
   },
   "author": "",
   "license": "ISC",
@@ -28,6 +28,7 @@
     "ws": "^8.8.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodemon": "^2.0.18"
   }
 }
