@@ -1,8 +1,9 @@
 const dotenv = require("dotenv");
+const path = require("path");
+dotenv.config({ path: path.join(__dirname, `.env.${process.env.NODE_ENV}`) });
 const userRoute = require("./routes/user.js");
 const express = require("express");
 const bodyParser = require("body-parser");
-require("dotenv").config();
 const cors = require("cors");
 const chalk = require("chalk");
 const cookieParser = require("cookie-parser");
@@ -15,10 +16,11 @@ const http = require("http");
 const richText = require("rich-text");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-dotenv.config();
+console.log(process.env.NODE_ENV);
 const sharedbMongo = require("sharedb-mongo");
 
 const roomRoutes = require("./routes/room");
+const pistonRoutes = require("./routes/piston");
 
 const db = sharedbMongo(process.env.MONGO_CONN_STR);
 ShareDB.types.register(richText.type);
@@ -79,6 +81,7 @@ function startServer() {
   });
   app.use("/api/user", userRoute);
   app.use("/api/rooms", isAuthenticated, roomRoutes);
+  app.use("/api/piston", isAuthenticated, pistonRoutes);
 
   // app.use(function (req, res, next) {
   //   if (!req.username) return res.status(401).json({ err: "access denied" });
