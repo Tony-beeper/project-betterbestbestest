@@ -12,6 +12,7 @@ import { useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { ThemeContext } from "../../App";
 import CodeExecution from "../CodeExecution/CodeExecution";
+import constants from "../../utils/Constants";
 function CodeBlock(props) {
   let Nav = useNavigate();
   const doc = props.doc;
@@ -31,6 +32,7 @@ function CodeBlock(props) {
 
   const initQuill = () => {
     const quill = new Quill("#editor-container", {
+      formats: ["code-block"],
       modules: {
         syntax: {
           highlight: (text) =>
@@ -47,7 +49,13 @@ function CodeBlock(props) {
     quill.setContents(doc.data);
     quill.formatLine(0, quill.getLength(), { "code-block": true });
     quill.on("text-change", function (delta, oldDelta, source) {
+      console.log(oldDelta);
       if (source !== "user") return;
+      console.log(delta);
+      if (quill.getLength() > constants.CHAR_LIMIT) {
+        quill.deleteText(constants.CHAR_LIMIT, quill.getLength());
+        return;
+      }
       doc.submitOp(delta, { source: quill });
       quill.formatLine(0, quill.getLength(), { "code-block": true });
     });

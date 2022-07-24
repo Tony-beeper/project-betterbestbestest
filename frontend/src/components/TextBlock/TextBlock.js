@@ -7,6 +7,7 @@ import tinycolor from "tinycolor2";
 import { useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { ThemeContext } from "../../App";
+import constants from "../../utils/Constants";
 
 function TextBlock(props) {
   const doc = props.doc;
@@ -36,6 +37,10 @@ function TextBlock(props) {
     quill.setContents(doc.data);
     quill.on("text-change", function (delta, oldDelta, source) {
       if (source !== "user") return;
+      if (quill.getLength() > constants.CHAR_LIMIT) {
+        quill.deleteText(constants.CHAR_LIMIT, quill.getLength());
+        return;
+      }
       doc.submitOp(delta, { source: quill });
     });
     doc.on("op", function (op, source) {

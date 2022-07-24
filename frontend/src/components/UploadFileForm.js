@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 import { useState } from "react";
+import constants from "../utils/Constants";
 
 function readFileContent(file) {
   const reader = new FileReader();
@@ -37,6 +38,7 @@ function UploadFileForm({ quill, isCode, doc }) {
   const handleSubmit = () => {
     readFileContent(selectedFile)
       .then((content) => {
+        content = content.substring(0, constants.CHAR_LIMIT);
         console.log(content);
         console.log(quill);
         const delta = quill.insertText(quill.getLength(), content);
