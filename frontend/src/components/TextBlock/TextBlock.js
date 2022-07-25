@@ -17,10 +17,16 @@ function TextBlock(props) {
   Quill.register("modules/cursors", QuillCursors);
 
   useEffect(() => {
+    let localPresence;
     doc.subscribe((error) => {
-      console.log(doc);
-      initQuill();
+      // console.log(doc);
+      localPresence = initQuill();
     });
+
+    return () => {
+      localPresence.destroy();
+      doc.unsubscribe();
+    };
   }, []);
 
   const initQuill = () => {
@@ -80,6 +86,7 @@ function TextBlock(props) {
         console.log(range);
       });
     });
+    return localPresence;
   };
 
   return (

@@ -204,12 +204,12 @@ router.patch(
         .send(Message.createErrorMessage("Wrong RoomId or Join Code"));
     }
     if (room.members.length >= MAX_MEMBERS) {
-      res
+      return res
         .status(statusCode.BAD_REQUEST)
         .send(Message.createErrorMessage("Room Already Full"));
     }
     if (room.members.includes(req.username)) {
-      res
+      return res
         .status(statusCode.BAD_REQUEST)
         .json(Message.createErrorMessage("You Join the Room Already"));
     }
