@@ -1,12 +1,14 @@
 import ReconnectingWebSocket from "reconnecting-websocket";
 import sharedb from "sharedb/lib/client";
 import richText from "rich-text";
+import { IconButton } from "@material-ui/core";
+import GitHubIcon from "@material-ui/icons/GitHub";
+
 import CodeBlock from "../../components/CodeBlock/CodeBlock";
 import TextBlock from "../../components/TextBlock/TextBlock";
-import { toast } from "react-toastify";
 import "./Notebook.css";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import roomsAPI from "../../api/rooms";
 import errorHandler from "../../utils/ErrorHandler";
@@ -60,6 +62,18 @@ function NoteBook() {
       <div className="notebook-body">
         <div className="notebook-title">
           <h1>{data && data.name}</h1>
+          <IconButton
+            onClick={() => {
+              const client_id = process.env.CLIENT_ID;
+              window.location.href =
+                `https://github.com/login/oauth/authorize?client_id=${client_id}&` +
+                `redirect_uri=http://localhost:3000/room/${id}` +
+                `&scope=repo`;
+              return null;
+            }}
+          >
+            <GitHubIcon />
+          </IconButton>
           <UserNameList
             users={[
               ...new Set(
