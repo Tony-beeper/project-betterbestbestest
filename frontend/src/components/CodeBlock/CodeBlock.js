@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { ThemeContext } from "../../App";
-
+import CodeExecution from "../CodeExecution/CodeExecution";
 function CodeBlock(props) {
   let Nav = useNavigate();
   const doc = props.doc;
@@ -150,20 +150,7 @@ function CodeBlock(props) {
     <div className="code-block">
       <UploadFileForm quill={quill} doc={doc} isCode={true} />
       <div id="editor-container"></div>
-      {/* {presence && (
-        <button
-          onClick={() => {
-            console.log("delete");
-            presence.destroy((err) => {
-              console.log(presence);
-              clearInterval(intervalId);
-              Nav("../room");
-            });
-          }}
-        >
-          leave
-        </button>
-      )} */}
+      <CodeExecution quill={quill} />
     </div>
   );
 }
