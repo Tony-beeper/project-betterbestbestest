@@ -8,8 +8,10 @@ import { useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { ThemeContext } from "../../App";
 import constants from "../../utils/Constants";
+import { useNavigate } from "react-router-dom";
 
 function TextBlock(props) {
+  let Nav = useNavigate();
   const doc = props.doc;
   const [quill, setQuill] = useState(null);
   const [context, setContext] = useContext(ThemeContext);
@@ -37,11 +39,20 @@ function TextBlock(props) {
     quill.setContents(doc.data);
     quill.on("text-change", function (delta, oldDelta, source) {
       if (source !== "user") return;
-      if (quill.getLength() > constants.CHAR_LIMIT) {
-        quill.deleteText(constants.CHAR_LIMIT, quill.getLength());
+      const currLength = quill.getLength();
+      if (currLength > constants.CHAR_LIMIT) {
+        toast.error(
+          `${currLength} exceeds max charater limit of ${constants.CHAR_LIMIT} you will be redirected back to rooms`
+        );
+        setTimeout(() => {
+          Nav("../room");
+        }, 5000);
+        quill.enable(false);
         return;
+      } else {
+        quill.enable(true);
+        doc.submitOp(delta, { source: quill });
       }
-      doc.submitOp(delta, { source: quill });
     });
     doc.on("op", function (op, source) {
       if (source === quill) return;
