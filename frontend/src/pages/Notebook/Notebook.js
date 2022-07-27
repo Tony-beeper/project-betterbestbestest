@@ -1,18 +1,18 @@
 import ReconnectingWebSocket from "reconnecting-websocket";
 import sharedb from "sharedb/lib/client";
 import richText from "rich-text";
-import { IconButton } from "@material-ui/core";
-import GitHubIcon from "@material-ui/icons/GitHub";
-
 import CodeBlock from "../../components/CodeBlock/CodeBlock";
 import TextBlock from "../../components/TextBlock/TextBlock";
 import "./Notebook.css";
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import roomsAPI from "../../api/rooms";
+import githubAPI from "../../api/github";
 import errorHandler from "../../utils/ErrorHandler";
 import UserNameList from "../../components/UserNameList/UserNameList";
+import GitHubOauthButton from "../../components/GithubOauthButton";
+import { toast } from "react-toastify";
 
 sharedb.types.register(richText.type);
 const socket = new ReconnectingWebSocket(process.env.REACT_APP_WS_URL);
@@ -25,8 +25,34 @@ function NoteBook() {
   const [codeBlockDoc, setCodeBlockDoc] = useState(null);
   const [textBlockDoc, setTextBlockDoc] = useState(null);
   const [usersInRoom, setUsersInRoom] = useState([]);
+  const [oauth, setOauth] = useState(false);
 
   useEffect(() => {
+    if (!oauth) {
+      githubAPI
+        .getRepos()
+        .then((data) => {
+          setOauth(true);
+        })
+        .catch(({ response }) => {
+          const code =
+            window.location.href.match(/\?code=(.*)/) &&
+            window.location.href.match(/\?code=(.*)/)[1];
+          if (code && !oauth) {
+            githubAPI
+              .getToken(code)
+              .then((data) => {
+                console.log(data);
+                setOauth(true);
+                toast.success("github oauth success");
+              })
+              .catch(({ response }) => {
+                errorHandler.handleError(response);
+              });
+          }
+        });
+    }
+
     // hardcoded sharedb connection
     const testRoomId = id;
     roomsAPI
@@ -61,19 +87,10 @@ function NoteBook() {
     <div className="notebook-container">
       <div className="notebook-body">
         <div className="notebook-title">
-          <h1>{data && data.name}</h1>
-          <IconButton
-            onClick={() => {
-              const client_id = process.env.CLIENT_ID;
-              window.location.href =
-                `https://github.com/login/oauth/authorize?client_id=${client_id}&` +
-                `redirect_uri=http://localhost:3000/room/${id}` +
-                `&scope=repo`;
-              return null;
-            }}
-          >
-            <GitHubIcon />
-          </IconButton>
+          <div className="group">
+            <h1>{data && data.name}</h1>
+            <GitHubOauthButton id={id} oauth={oauth} />
+          </div>
           <UserNameList
             users={[
               ...new Set(
@@ -92,6 +109,7 @@ function NoteBook() {
               id={data.codeSharedbID}
               join={join}
               leave={leave}
+              oauth={oauth}
             />
           )}
           {textBlockDoc && (
