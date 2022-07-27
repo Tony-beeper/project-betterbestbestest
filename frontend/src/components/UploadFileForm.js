@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import { useState } from "react";
 import constants from "../utils/Constants";
+import { toast } from "react-toastify";
 
 function readFileContent(file) {
   const reader = new FileReader();
@@ -31,8 +32,16 @@ function UploadFileForm({ quill, isCode, doc }) {
   };
 
   const handleUpload = (e) => {
-    setSelectedFile(e.target.files[0]);
-    console.log(selectedFile);
+    const currFile = e.target.files[0];
+    const extension = currFile.name.split(".").pop().toLowerCase();
+    if (extension === "py") {
+      setSelectedFile(e.target.files[0]);
+      console.log(selectedFile);
+    } else {
+      toast.error(
+        `${currFile.name} has an invalid file type. Please upload a .py file`
+      );
+    }
   };
 
   const handleSubmit = () => {
@@ -67,14 +76,23 @@ function UploadFileForm({ quill, isCode, doc }) {
         <DialogContent>
           <DialogContentText>uploading a file here</DialogContentText>
           <form>
-            <input type="file" name="file" onChange={handleUpload} />
+            <input
+              type="file"
+              name="file"
+              onChange={handleUpload}
+              accept=".py"
+            />
           </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary">
+          <Button
+            onClick={handleSubmit}
+            color="primary"
+            disabled={!selectedFile}
+          >
             add
           </Button>
         </DialogActions>
