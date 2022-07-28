@@ -32,7 +32,6 @@ const LoginForm = ({ onSubmit, onChange, errors, user, type, onPwChange }) => {
               floatingLabelText="Username"
               value={user.username}
               onChange={onChange}
-              errorText={errors.username}
               autoComplete="off"
               label="Username"
               margin="normal"
@@ -49,7 +48,6 @@ const LoginForm = ({ onSubmit, onChange, errors, user, type, onPwChange }) => {
               floatingLabelText="password"
               value={user.password}
               onChange={onPwChange}
-              errorText={errors.password}
               label="Password"
               margin="normal"
               InputLabelProps={{

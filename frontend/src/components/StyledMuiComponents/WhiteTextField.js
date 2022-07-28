@@ -1,5 +1,6 @@
 import { withStyles } from "@material-ui/core/styles";
 import { TextField } from "@material-ui/core";
+import { red } from "@material-ui/core/colors";
 
 const WhiteTextField = withStyles({
   root: {
@@ -15,6 +16,14 @@ const WhiteTextField = withStyles({
     "& .MuiInput-underline:after": {
       borderBottomColor: "#fff", // Solid underline on focus
     },
+    "& .Mui-error": {
+      color: "red",
+    },
+    "& .MuiFormHelperText-root": {
+      color: "red",
+      textAlign: "center",
+    },
+
     width: "85%",
   },
 })(TextField);

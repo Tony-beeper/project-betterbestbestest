@@ -6,6 +6,7 @@ import errorHandler from "../../utils/ErrorHandler";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { ThemeContext } from "../../App";
+import { ErrorSharp } from "@material-ui/icons";
 
 const SignUpContainer = () => {
   let nav = useNavigate();
@@ -88,13 +89,14 @@ const SignUpContainer = () => {
   const validateForm = (event) => {
     event.preventDefault();
 
-    var payload = validateSignUpForm(user);
+    const payload = validateSignUpForm(user);
     if (payload.success) {
       setError({});
 
       submitSignup();
     } else {
       const errors = payload.errors;
+      console.log(errors);
       setError(errors);
     }
   };

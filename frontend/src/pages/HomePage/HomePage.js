@@ -4,13 +4,13 @@ import penguin from "../../media/Logo.png";
 import engineers from "../../media/engineers.jpeg";
 import WhiteTextTypography from "../../components/StyledMuiComponents/WhiteTypography";
 import { Container, Grid, Button, Typography } from "@material-ui/core";
-import CodeBookIconWhite from "../../media/codebookicon2.png";
+import CodeBookIconWhite from "../../media/codebookiconwhite.png";
 
 const HomePage = () => {
   return (
     <Container maxWidth="lg">
       <WhiteTextTypography variant="h3" align="center" gutterBottom>
-        Login or Sign up to start Coding with CodeBook!!!
+        CodeBook
       </WhiteTextTypography>
       <div className="homepage">
         <img src={CodeBookIconWhite} className="backgroundImage" alt="icon" />

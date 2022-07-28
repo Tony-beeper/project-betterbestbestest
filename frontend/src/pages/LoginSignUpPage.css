@@ -5,6 +5,12 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* background-image: "frontend/src/media/codebookbackground.gif";
+  background-size: cover;
+
+  height: 100vh;
+  padding: 0;
+  margin: 0; */
 }
 
 code {
@@ -23,4 +29,11 @@ body,
   padding: 0;
   background-color: #010409;
   font-family: "Roboto", Arial, Helvetica, sans-serif;
+
+  background-image: url("https://colinlin.netlify.app/static/media/background.6675aa29.gif");
+  background-size: cover;
+
+  height: 100vh;
+  padding: 0;
+  margin: 0;
 }

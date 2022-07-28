@@ -14,7 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { ThemeContext } from "../App";
-import CodeBookIconWhite from "../media/codebookicon2.png";
+import CodeBookIconWhite from "../media/codebookiconwhite.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -85,22 +85,16 @@ const Bar = () => {
             <Toolbar>
               <IconButton
                 edge="start"
-                classes={{ root: classes.iconRoot }}
+                className={classes.menuButton}
                 color="inherit"
                 aria-label="menu"
+                size="large"
               >
-                <img
-                  className={classes.imageIcon}
-                  src="/graphics/firebase-logo.svg"
-                />{" "}
+                <Icon classes={{ root: classes.iconRoot }}>
+                  <img className={classes.imageIcon} src={CodeBookIconWhite} />
+                </Icon>
               </IconButton>
 
-              <Icon classes={{ root: classes.iconRoot }}>
-                <img
-                  className={classes.imageIcon}
-                  src="/graphics/firebase-logo.svg"
-                />
-              </Icon>
               <Typography variant="h6" className={classes.title}>
                 CodeBook
               </Typography>
