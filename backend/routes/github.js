@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const Token = require("../models/token");
 const { param, body, validationResult } = require("express-validator");
 dotenv.config();
 const router = express.Router();
@@ -13,14 +14,15 @@ const { Octokit } = require("octokit");
 const base64 = require("base-64");
 const sanitize = require("sanitize-filename");
 
-let token;
-
-const withToken = (req, res, next) => {
-  if (!token) {
+const withToken = async (req, res, next) => {
+  let tokenData = await Token.findOne({ username: req.username });
+  console.tokenData;
+  if (!tokenData) {
     return res
       .status(statusCode.BAD_REQUEST)
       .send(Message.createErrorMessage("no token"));
   }
+  req.token = tokenData.token;
   next();
 };
 
@@ -45,13 +47,22 @@ router.post(
       data: {},
       withCredentials: true,
     })
-      .then((authoRes) => {
+      .then(async (authoRes) => {
         if (!authoRes.data.includes("access_token")) {
           return res
             .status(statusCode.INTERNAL_SERVER_ERROR)
             .send(Message.createErrorMessage("github authorize fail"));
         }
-        token = authoRes.data.substring(13, 53);
+        const token = authoRes.data.substring(13, 53);
+        let tokenData = await Token.findOne({ username: req.username });
+        if (tokenData) {
+          await Token.deleteOne({ username: req.username });
+        }
+        const newToken = new Token({
+          username: req.username,
+          token: token,
+        });
+        await newToken.save();
         console.log(token);
         return res.json({ msg: "github aouth success" });
       })
@@ -66,7 +77,7 @@ router.post(
 
 router.get("/repos", withToken, (req, res) => {
   const octokit = new Octokit({
-    auth: token,
+    auth: req.token,
   });
 
   octokit
@@ -85,6 +96,7 @@ router.get("/repos", withToken, (req, res) => {
 
 router.post(
   "/repos/:owner/:repo/",
+  withToken,
   param("owner")
     .notEmpty()
     .trim()
@@ -114,9 +126,8 @@ router.post(
         .status(statusCode.BAD_REQUEST)
         .json(Message.createErrorMessage(err.errors[0].msg.err));
     }
-
     const octokit = new Octokit({
-      auth: token,
+      auth: req.token,
     });
 
     let content;
