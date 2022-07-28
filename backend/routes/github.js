@@ -70,7 +70,7 @@ router.get("/repos", withToken, (req, res) => {
   });
 
   octokit
-    .request("GET /user/repos", {})
+    .request("GET /user/repos?per_page=100", {})
     .then(({ data }) => {
       const parsedData = data.map((repo) => repo["full_name"]);
       return res.json(parsedData);

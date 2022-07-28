@@ -24,7 +24,6 @@ router.post(
   body("roomName")
     .notEmpty()
     .trim()
-    .escape()
     .withMessage({ err: "wrong or missing roomName" }),
   async (req, res) => {
     // console.log("jason");
