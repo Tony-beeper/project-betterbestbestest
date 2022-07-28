@@ -1,74 +1,66 @@
 import React from "react";
-import RaisedButton from "material-ui/RaisedButton";
-import TextField from "material-ui/TextField";
+// import TextField from "material-ui/TextField";
 import "../LoginSignUpBox.css";
-import { Typography, Box, Button, Container, Layout } from "@material-ui/core";
+import { Box, Container, ThemeProvider } from "@material-ui/core";
+import CodeBookButton from "../../components/Buttons/CodeBookButton";
+import { createTheme } from "@material-ui/core/styles";
+import WhiteTextField from "../../components/StyledMuiComponents/WhiteTextField";
+import WhiteTextTypography from "../../components/StyledMuiComponents/WhiteTypography";
+
+const theme = createTheme({
+  palette: {
+    secondary: {
+      main: "#e3f2fd",
+    },
+  },
+});
 
 const LoginForm = ({ onSubmit, onChange, errors, user, type, onPwChange }) => {
   return (
     <Container maxWidth="lg">
       <div className="loginBox">
-        <Typography variant="h4">Login</Typography>
+        <WhiteTextTypography variant="h4">
+          Sign in to CodeBook
+        </WhiteTextTypography>
         {errors.message && <p style={{ color: "red" }}>{errors.message}</p>}
-        <Box
-          noValidate
-          component="form"
-          onSubmit={onSubmit}
-          className="signUpForm"
-          sx={{ mt: 1 }}
-        >
-          {/* <form onSubmit={onSubmit} className="signUpForm"> */}
-          <TextField
-            autoFocus
-            required
-            fullWidth
-            name="username"
-            floatingLabelText="Username"
-            value={user.username}
-            onChange={onChange}
-            errorText={errors.username}
-            autoComplete="off"
-            label="Username"
-            margin="normal"
-          />
-          <TextField
-            required
-            fullWidth
-            type={type}
-            name="password"
-            floatingLabelText="password"
-            value={user.password}
-            onChange={onPwChange}
-            errorText={errors.password}
-            label="Password"
-            margin="normal"
-          />
+        <ThemeProvider theme={theme}>
+          <Box noValidate component="form" onSubmit={onSubmit} sx={{ mt: 1 }}>
+            <WhiteTextField
+              autoFocus
+              required
+              name="username"
+              floatingLabelText="Username"
+              value={user.username}
+              onChange={onChange}
+              errorText={errors.username}
+              autoComplete="off"
+              label="Username"
+              margin="normal"
+              multiline
+              InputLabelProps={{
+                style: { color: "#fff" },
+              }}
+            />
+            <br />
+            <WhiteTextField
+              required
+              type={type}
+              name="password"
+              floatingLabelText="password"
+              value={user.password}
+              onChange={onPwChange}
+              errorText={errors.password}
+              label="Password"
+              margin="normal"
+              InputLabelProps={{
+                style: { color: "#fff" },
+              }}
+            />
+            <br />
 
-          {/* <RaisedButton
-          className="signUpSubmit"
-          primary={true}
-          type="submit"
-          label="submit"
-        /> */}
-          <Button
-            className="signUpSubmit"
-            size="large"
-            primary={true}
-            type="submit"
-            variant="contained"
-            label="submit"
-            sx={{ mt: 3, mb: 2 }}
-            style={{
-              borderRadius: 35,
-              backgroundColor: "#b8b4ae",
-              padding: "18px 36px",
-              fontSize: "18px",
-            }}
-          >
-            Login
-          </Button>
-          {/* </form> */}
-        </Box>
+            <CodeBookButton>Sign in</CodeBookButton>
+          </Box>
+        </ThemeProvider>
       </div>
     </Container>
   );

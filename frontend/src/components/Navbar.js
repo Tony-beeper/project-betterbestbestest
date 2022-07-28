@@ -13,13 +13,6 @@ import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { ThemeContext } from "../App";
 
-// module.getUsername = function () {
-//   return document.cookie.replace(
-//     /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
-//     "$1"
-//   );
-// };
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -31,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   coloring: {
-    background: "#141414",
+    background: "#161a23",
   },
 }));
 
@@ -68,6 +61,10 @@ const Bar = () => {
     Nav("/room");
   };
 
+  const handleMenuClick = async () => {
+    Nav("/");
+  };
+
   return (
     <div className={classes.root}>
       {username ? (
@@ -82,6 +79,7 @@ const Bar = () => {
               >
                 <MenuIcon />
               </IconButton>
+
               <Typography variant="h6" className={classes.title}>
                 CodeBook
               </Typography>
