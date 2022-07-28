@@ -77,7 +77,7 @@ function UploadFileForm({ quill, isCode, doc }) {
       >
         <DialogTitle id="form-dialog-title">Upload</DialogTitle>
         <DialogContent>
-          <DialogContentText>uploading a file here</DialogContentText>
+          <DialogContentText>Upload a .py file</DialogContentText>
           <form>
             <input
               type="file"
