@@ -11,6 +11,7 @@ const statusCode = require("../utils/StatusCodes");
 const Message = require("../utils/defaultMessages");
 const { Octokit } = require("octokit");
 const base64 = require("base-64");
+const sanitize = require("sanitize-filename");
 
 let token;
 
@@ -35,7 +36,7 @@ router.post(
     if (!err.isEmpty()) {
       return res
         .status(statusCode.BAD_REQUEST)
-        .send(Message.createErrorMessage(err));
+        .json(Message.createErrorMessage(err.errors[0].msg.err));
     }
     axios({
       method: "POST",
@@ -83,14 +84,19 @@ router.get("/repos", withToken, (req, res) => {
 });
 
 router.post(
-  "/repos/:owner/:repo/:path/",
+  "/repos/:owner/:repo/",
   param("owner")
     .notEmpty()
     .trim()
     .escape()
     .withMessage({ err: "missing owner" }),
   param("repo").notEmpty().trim().escape().withMessage({ err: "missing repo" }),
-  param("path").notEmpty().trim().escape().withMessage({ err: "missing path" }),
+  body("path")
+    .notEmpty()
+    .trim()
+    .withMessage({ err: "missing path" })
+    .isLength({ max: 50 })
+    .withMessage({ err: "file name too long" }),
   body("message")
     .notEmpty()
     .trim()
@@ -102,7 +108,7 @@ router.post(
     if (!err.isEmpty()) {
       return res
         .status(statusCode.BAD_REQUEST)
-        .send(Message.createErrorMessage(err));
+        .json(Message.createErrorMessage(err.errors[0].msg.err));
     }
 
     const octokit = new Octokit({
@@ -113,7 +119,7 @@ router.post(
       .request("PUT /repos/{owner}/{repo}/contents/{path}", {
         owner: req.params.owner,
         repo: req.params.repo,
-        path: req.params.path,
+        path: sanitize(req.body.path),
         message: req.body.message,
         content: b64EncodeUnicode(req.body.content),
       })

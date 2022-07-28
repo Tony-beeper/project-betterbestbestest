@@ -10,6 +10,9 @@ const useStyles = makeStyles((theme) => ({
   commitMessageFeild: {
     marginTop: 5,
   },
+  nameFeild: {
+    marginTop: 5,
+  },
 }));
 
 export default useStyles;

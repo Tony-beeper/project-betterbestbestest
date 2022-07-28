@@ -24,6 +24,7 @@
     "mongoose": "^6.4.1",
     "octokit": "^2.0.4",
     "rich-text": "^4.1.0",
+    "sanitize-filename": "^1.6.3",
     "sharedb": "^3.0.0",
     "sharedb-mongo": "^2.0.0",
     "uuid": "^8.3.2",

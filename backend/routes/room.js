@@ -30,7 +30,9 @@ router.post(
     // console.log("jason");
     const err = validationResult(req);
     if (!err.isEmpty()) {
-      return res.status(400).json(err);
+      return res
+        .status(400)
+        .json(Message.createErrorMessage(err.errors[0].msg.err));
     }
     const roomOwner = req.body.username;
     const roomName = req.body.roomName;
@@ -88,7 +90,7 @@ router.delete(
     if (!err.isEmpty()) {
       return res
         .status(statusCode.BAD_REQUEST)
-        .send(Message.createErrorMessage(err));
+        .send(Message.createErrorMessage(err.errors[0].msg.err));
     }
     const roomId = req.params.roomId;
     const room = await Room.findOne({ _id: ObjectId(roomId) });
@@ -134,7 +136,7 @@ router.get(
     if (!err.isEmpty()) {
       return res
         .status(statusCode.BAD_REQUEST)
-        .send(Message.createErrorMessage(err));
+        .send(Message.createErrorMessage(err.errors[0].msg.err));
     }
 
     const username = req.params.username;
@@ -163,7 +165,7 @@ router.get(
     if (!err.isEmpty()) {
       return res
         .status(statusCode.BAD_REQUEST)
-        .send(Message.createErrorMessage(err));
+        .send(Message.createErrorMessage(err.errors[0].msg.err));
     }
     const roomId = req.params.roomId;
     const room = await Room.findOne({ _id: ObjectId(roomId) });
@@ -193,7 +195,9 @@ router.patch(
   async (req, res) => {
     const err = validationResult(req);
     if (!err.isEmpty()) {
-      return res.status(400).json(err);
+      return res
+        .status(400)
+        .json(Message.createErrorMessage(err.errors[0].msg.err));
     }
     const roomNumber = req.body.roomNumber;
     const joinCode = req.body.joinCode;
@@ -235,7 +239,9 @@ router.patch(
   async (req, res) => {
     const err = validationResult(req);
     if (!err.isEmpty()) {
-      return res.status(400).json(err);
+      return res
+        .status(400)
+        .json(Message.createErrorMessage(err.errors[0].msg.err));
     }
     const roomId = req.body.roomId;
     const room = await Room.findOne({ _id: roomId });

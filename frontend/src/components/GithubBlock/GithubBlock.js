@@ -11,6 +11,7 @@ import {
   DialogTitle,
   MenuItem,
   TextField,
+  InputAdornment,
 } from "@material-ui/core";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import useStyles from "./GithubBlockStyles";
@@ -18,14 +19,17 @@ import { toast } from "react-toastify";
 
 import githubAPI from "../../api/github";
 import errorHandler from "../../utils/ErrorHandler";
+import sanitize from "sanitize-filename";
 
 const GithubBlock = ({ quill }) => {
   const classes = useStyles();
   const [repo, setRepo] = useState("");
   const [open, setOpen] = useState(false);
   const [repos, setRepos] = useState([]);
-  const [message, setMessage] = useState([]);
+  const [message, setMessage] = useState("");
+  const [file, setFile] = useState("");
   const [disable, setDisable] = useState(false);
+  const [fileTooLong, setFileTooLong] = useState(false);
 
   useEffect(() => {
     githubAPI
@@ -50,6 +54,18 @@ const GithubBlock = ({ quill }) => {
     setMessage(event.target.value);
   };
 
+  const handleFileChange = (event) => {
+    if (event.target.value.length > 50) {
+      setFileTooLong(true);
+      if (!fileTooLong) {
+        toast.error("file name too long");
+      }
+    } else {
+      if (fileTooLong) setFileTooLong(false);
+      setFile(event.target.value);
+    }
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -57,10 +73,11 @@ const GithubBlock = ({ quill }) => {
   const handleDownload = () => {
     setDisable(true);
     const params = repo.split("/");
-    const path = `codeBook_${new Date().toJSON().slice(0, 10)}.py`.replace(
-      "-",
-      "_"
-    );
+    // const path = `codeBook_${new Date().toJSON().slice(0, 10)}.py`.replace(
+    //   "-",
+    //   "_"
+    // );
+    const path = sanitize(`${file}.py`);
     const content = quill.getText(0, quill.getLength());
     githubAPI
       .writeFile(params[0], params[1], path, message, content)
@@ -68,11 +85,14 @@ const GithubBlock = ({ quill }) => {
         toast.success(`${data.file} created in ${repo}`);
       })
       .catch(({ response }) => {
+        console.log(response);
         errorHandler.handleError(response);
       })
       .finally(() => {
         setOpen(false);
         setDisable(false);
+        setMessage("");
+        setFile("");
       });
   };
 
@@ -86,18 +106,16 @@ const GithubBlock = ({ quill }) => {
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
+        component="form"
       >
         <DialogTitle id="form-dialog-title">
           Downloading this file to your Github repo!
         </DialogTitle>
         <DialogContent>
-          {repo && (
+          {repo && message && file && (
             <DialogContentText>
-              {`codeBook_${new Date().toJSON().slice(0, 10)}.py`.replace(
-                "-",
-                "_"
-              )}{" "}
-              will be added to {repo}
+              {sanitize(file)}.py will be added to repo: {repo} with commit
+              message: {message}
             </DialogContentText>
           )}
           <FormControl className={classes.formControl}>
@@ -124,12 +142,28 @@ const GithubBlock = ({ quill }) => {
             onChange={handleMessageChange}
             label="commit message"
           />
+          <TextField
+            className={classes.nameFeild}
+            required
+            value={file}
+            fullWidth
+            InputProps={{
+              endAdornment: <InputAdornment position="end">.py</InputAdornment>,
+            }}
+            error={fileTooLong}
+            onChange={handleFileChange}
+            label="file name"
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleDownload} color="primary" disabled={disable}>
+          <Button
+            onClick={handleDownload}
+            color="primary"
+            disabled={disable || !repo || !message || !file}
+          >
             download
           </Button>
         </DialogActions>

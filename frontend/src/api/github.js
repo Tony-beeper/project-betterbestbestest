@@ -28,9 +28,9 @@ const getRepos = async () => {
 const writeFile = async (owner, repo, path, message, content) => {
   const res = await axios({
     method: "POST",
-    url: backendURL + `/repos/${owner}/${repo}/${path}/`,
+    url: backendURL + `/repos/${owner}/${repo}/`,
     headers: {},
-    data: { message: message, content: content },
+    data: { message: message, content: content, path: path },
     withCredentials: true,
   });
 
