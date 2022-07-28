@@ -55,7 +55,7 @@ const GithubBlock = ({ quill }) => {
   };
 
   const handleFileChange = (event) => {
-    if (event.target.value.length > 50) {
+    if (event.target.value.length > 47) {
       setFileTooLong(true);
       if (!fileTooLong) {
         toast.error("file name too long");
@@ -162,7 +162,7 @@ const GithubBlock = ({ quill }) => {
           <Button
             onClick={handleDownload}
             color="primary"
-            disabled={disable || !repo || !message || !file}
+            disabled={disable || !repo || !message || !file || fileTooLong}
           >
             download
           </Button>

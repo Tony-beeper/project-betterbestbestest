@@ -102,7 +102,11 @@ router.post(
     .trim()
     .escape()
     .withMessage({ err: "missing message" }),
-  body("content").notEmpty().withMessage({ err: "missing content" }),
+  body("content")
+    .notEmpty()
+    .withMessage({ err: "missing content" })
+    .isAscii()
+    .withMessage({ err: "file contains invalid character" }),
   (req, res) => {
     const err = validationResult(req);
     if (!err.isEmpty()) {
@@ -115,13 +119,24 @@ router.post(
       auth: token,
     });
 
+    let content;
+    let path;
+    try {
+      content = b64EncodeUnicode(req.body.content);
+      path = sanitize(req.body.path);
+    } catch (error) {
+      return res
+        .status(statusCode.BAD_REQUEST)
+        .json("file or file name contains invalid character");
+    }
+
     octokit
       .request("PUT /repos/{owner}/{repo}/contents/{path}", {
         owner: req.params.owner,
         repo: req.params.repo,
-        path: sanitize(req.body.path),
+        path: path,
         message: req.body.message,
-        content: b64EncodeUnicode(req.body.content),
+        content: content,
       })
       .then(({ data }) => {
         return res.json({ file: data.content.name });
