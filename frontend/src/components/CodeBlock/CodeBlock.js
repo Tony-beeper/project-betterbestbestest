@@ -52,16 +52,11 @@ function CodeBlock(props) {
       if (source !== "user") return;
       const currLength = quill.getLength();
       if (currLength > constants.CHAR_LIMIT) {
+        quill.setContents(oldDelta);
         toast.error(
-          `${currLength} exceeds max charater limit of ${constants.CHAR_LIMIT} you will be redirected back to rooms`
+          `${currLength} exceeds max charater limit of ${constants.CHAR_LIMIT}`
         );
-        setTimeout(() => {
-          Nav("../room");
-        }, 5000);
-        quill.enable(false);
-        return;
       } else {
-        quill.enable(true);
         doc.submitOp(delta, { source: quill });
       }
 

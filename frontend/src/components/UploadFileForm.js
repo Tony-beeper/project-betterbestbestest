@@ -47,9 +47,14 @@ function UploadFileForm({ quill, isCode, doc }) {
   const handleSubmit = () => {
     readFileContent(selectedFile)
       .then((content) => {
-        content = content.substring(0, constants.CHAR_LIMIT);
-        console.log(content);
-        console.log(quill);
+        const currLen = quill.getLength();
+        const combinedLen = content.length + currLen;
+        if (combinedLen > constants.CHAR_LIMIT) {
+          toast.error(
+            `${combinedLen} exceeds max charater limit of ${constants.CHAR_LIMIT} chars. Uploaded file has been truncated`
+          );
+          content = content.substring(0, constants.CHAR_LIMIT - currLen);
+        }
         const delta = quill.insertText(quill.getLength(), content);
         doc.submitOp(delta, { source: quill });
         quill.formatLine(0, quill.getLength(), { "code-block": isCode });
@@ -58,8 +63,6 @@ function UploadFileForm({ quill, isCode, doc }) {
       .finally(() => {
         setOpen(false);
       });
-    // console.log(quill);
-    // quill.insertText(quill.getLength(), "content");
   };
 
   return (
