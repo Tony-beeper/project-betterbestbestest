@@ -6,7 +6,6 @@ import errorHandler from "../../utils/ErrorHandler";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { ThemeContext } from "../../App";
-import { ErrorSharp } from "@material-ui/icons";
 
 const SignUpContainer = () => {
   let nav = useNavigate();
