@@ -6,12 +6,15 @@ import {
   Typography,
   Button,
   IconButton,
+  Icon,
 } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
+// import Icon from "@material-ui/core/Icon";
+
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { ThemeContext } from "../App";
+import CodeBookIconWhite from "../media/codebookicon2.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,6 +28,15 @@ const useStyles = makeStyles((theme) => ({
   },
   coloring: {
     background: "#161a23",
+  },
+
+  imageIcon: {
+    height: "100%",
+    borderRadius: "5px",
+  },
+  iconRoot: {
+    textAlign: "center",
+    fontSize: "36px",
   },
 }));
 
@@ -73,13 +85,22 @@ const Bar = () => {
             <Toolbar>
               <IconButton
                 edge="start"
-                className={classes.menuButton}
+                classes={{ root: classes.iconRoot }}
                 color="inherit"
                 aria-label="menu"
               >
-                <MenuIcon />
+                <img
+                  className={classes.imageIcon}
+                  src="/graphics/firebase-logo.svg"
+                />{" "}
               </IconButton>
 
+              <Icon classes={{ root: classes.iconRoot }}>
+                <img
+                  className={classes.imageIcon}
+                  src="/graphics/firebase-logo.svg"
+                />
+              </Icon>
               <Typography variant="h6" className={classes.title}>
                 CodeBook
               </Typography>
@@ -103,9 +124,13 @@ const Bar = () => {
                 className={classes.menuButton}
                 color="inherit"
                 aria-label="menu"
+                size="large"
               >
-                <MenuIcon />
+                <Icon classes={{ root: classes.iconRoot }}>
+                  <img className={classes.imageIcon} src={CodeBookIconWhite} />
+                </Icon>
               </IconButton>
+
               <Typography variant="h6" className={classes.title}>
                 CodeBook
               </Typography>
