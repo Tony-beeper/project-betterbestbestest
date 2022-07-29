@@ -7,10 +7,11 @@ import "./CodeBlock.css";
 import UploadFileForm from "../UploadFileForm";
 import tinycolor from "tinycolor2";
 import { useNavigate } from "react-router-dom";
-
 import { useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { ThemeContext } from "../../App";
+import CodeExecution from "../CodeExecution/CodeExecution";
+import GithubBlock from "../GithubBlock/GithubBlock";
 
 function CodeBlock(props) {
   let Nav = useNavigate();
@@ -148,22 +149,13 @@ function CodeBlock(props) {
 
   return (
     <div className="code-block">
-      <UploadFileForm quill={quill} doc={doc} isCode={true} />
+      <div className="form-group">
+        <UploadFileForm quill={quill} doc={doc} isCode={true} />
+        {props.oauth && <GithubBlock quill={quill} />}
+      </div>
+
       <div id="editor-container"></div>
-      {/* {presence && (
-        <button
-          onClick={() => {
-            console.log("delete");
-            presence.destroy((err) => {
-              console.log(presence);
-              clearInterval(intervalId);
-              Nav("../room");
-            });
-          }}
-        >
-          leave
-        </button>
-      )} */}
+      <CodeExecution quill={quill} />
     </div>
   );
 }

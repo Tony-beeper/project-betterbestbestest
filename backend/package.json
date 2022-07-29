@@ -4,29 +4,35 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "cross-env NODE_ENV=prod node server.js",
+    "dev": "cross-env NODE_ENV=dev nodemon server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@teamwork/websocket-json-stream": "^2.0.0",
+    "axios": "^0.27.2",
+    "base-64": "^1.0.0",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "crypto-js": "^4.1.1",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
     "mongodb": "^4.7.0",
     "mongoose": "^6.4.1",
+    "octokit": "^2.0.4",
     "rich-text": "^4.1.0",
+    "sanitize-filename": "^1.6.3",
     "sharedb": "^3.0.0",
     "sharedb-mongo": "^2.0.0",
     "uuid": "^8.3.2",
     "ws": "^8.8.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodemon": "^2.0.18"
   }
 }

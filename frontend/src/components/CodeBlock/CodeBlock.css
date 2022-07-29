@@ -7,3 +7,9 @@
   background-color: #23241e;
   max-height: 900px;
 }
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
