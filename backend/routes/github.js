@@ -7,12 +7,14 @@ const router = express.Router();
 const client_id = process.env.CLIENT_ID;
 const client_secrete = process.env.CLIENT_SECRETE;
 const oauth_url = process.env.OAUTH_URL;
+const token_key = process.env.TOEKN_KEY;
 const axios = require("axios").default;
 const statusCode = require("../utils/StatusCodes");
 const Message = require("../utils/defaultMessages");
 const { Octokit } = require("octokit");
 const base64 = require("base-64");
 const sanitize = require("sanitize-filename");
+const CryptoJS = require("crypto-js");
 
 const withToken = async (req, res, next) => {
   let tokenData = await Token.findOne({ username: req.username });
@@ -22,7 +24,10 @@ const withToken = async (req, res, next) => {
       .status(statusCode.BAD_REQUEST)
       .send(Message.createErrorMessage("no token"));
   }
-  req.token = tokenData.token;
+  const token = CryptoJS.AES.decrypt(tokenData.token, token_key).toString(
+    CryptoJS.enc.Utf8
+  );
+  req.token = token;
   next();
 };
 
@@ -53,17 +58,21 @@ router.post(
             .status(statusCode.INTERNAL_SERVER_ERROR)
             .send(Message.createErrorMessage("github authorize fail"));
         }
+        // get the access token
         const token = authoRes.data.substring(13, 53);
+        console.log(token);
         let tokenData = await Token.findOne({ username: req.username });
         if (tokenData) {
           await Token.deleteOne({ username: req.username });
         }
+
+        // add to Token collection
+        const encrypted = CryptoJS.AES.encrypt(token, token_key).toString();
         const newToken = new Token({
           username: req.username,
-          token: token,
+          token: encrypted,
         });
         await newToken.save();
-        console.log(token);
         return res.json({ msg: "github aouth success" });
       })
       .catch((err) => {
