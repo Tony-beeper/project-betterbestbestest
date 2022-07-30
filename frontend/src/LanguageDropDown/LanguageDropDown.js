@@ -29,6 +29,7 @@ const styles = (theme) => ({
   underline: {
     height: "20",
     padding: "2",
+    opacity: "100",
   },
   icon: {
     marginRight: "2",
@@ -37,7 +38,7 @@ const styles = (theme) => ({
 
 class ControlledOpenSelect extends React.Component {
   state = {
-    age: "python",
+    language: "python",
     open: false,
   };
 
@@ -64,7 +65,7 @@ class ControlledOpenSelect extends React.Component {
           variant="outlined"
           color="primary"
         >
-          {this.state.age}
+          {this.state.language}
           <CodeIcon className={classes.icon} />
         </Button>
         <FormControl
@@ -84,6 +85,7 @@ class ControlledOpenSelect extends React.Component {
             onClose={this.handleClose}
             onOpen={this.handleOpen}
             // value={this.state.age}
+            value=""
             onChange={this.handleChange}
             inputProps={{
               name: "age",
@@ -91,6 +93,7 @@ class ControlledOpenSelect extends React.Component {
             }}
             className={classes.underline}
             color="primary"
+            variant="standard"
           >
             <MenuItem value={"Python"}>Python</MenuItem>
           </Select> */}

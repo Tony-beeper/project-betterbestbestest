@@ -5,7 +5,7 @@
 
 #text-editor-container {
   background-color: #0c1117;
-  max-height: 900px;
+  max-height: 50vh;
 }
 
 .text-block .ql-toolbar .ql-stroke {

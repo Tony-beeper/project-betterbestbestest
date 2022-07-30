@@ -30,7 +30,7 @@ body,
   background-color: #010409;
   font-family: "Roboto", Arial, Helvetica, sans-serif;
 
-  background-image: url("https://colinlin.netlify.app/static/media/background.6675aa29.gif");
+  background-image: url("../media/codebookbackground.gif");
   background-size: cover;
 
   height: 100vh;
