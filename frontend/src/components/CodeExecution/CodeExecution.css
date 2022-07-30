@@ -2,3 +2,7 @@
     background-color: #23241e;
     max-height: 200px;
 }
+
+.ql-container {
+    overflow: scroll;
+}

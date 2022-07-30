@@ -39,6 +39,9 @@ function CodeExecution({ quill }) {
         });
         setConsoleOutput(consoleQuill);
         consoleQuill.on("text-change", function (delta, oldDelta, source) {
+            if (source !== "api") {
+                consoleQuill.setContents(oldDelta);
+            }
             consoleQuill.formatLine(0, consoleQuill.getLength(), {
                 "code-block": true,
             });
