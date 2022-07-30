@@ -7,6 +7,8 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 import { useState } from "react";
+import UploadButton from "./Buttons/UploadButton";
+import CodeBookButton from "./Buttons/CodeBookButton";
 import constants from "../utils/Constants";
 import { toast } from "react-toastify";
 
@@ -66,10 +68,11 @@ function UploadFileForm({ quill, isCode, doc }) {
   };
 
   return (
-    <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Upload file
-      </Button>
+    <div style={{ marginBottom: "2px" }}>
+      <div onClick={handleClickOpen}>
+        <UploadButton variant="contained">Upload file</UploadButton>
+      </div>
+
       <Dialog
         open={open}
         onClose={handleClose}

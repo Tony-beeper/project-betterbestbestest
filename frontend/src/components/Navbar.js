@@ -6,19 +6,15 @@ import {
   Typography,
   Button,
   IconButton,
+  Icon,
 } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
+// import Icon from "@material-ui/core/Icon";
+
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { ThemeContext } from "../App";
-
-// module.getUsername = function () {
-//   return document.cookie.replace(
-//     /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
-//     "$1"
-//   );
-// };
+import CodeBookIconWhite from "../media/codebookiconwhite.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,7 +27,16 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   coloring: {
-    background: "#141414",
+    background: "#161a23",
+  },
+
+  imageIcon: {
+    height: "100%",
+    borderRadius: "5px",
+  },
+  iconRoot: {
+    textAlign: "center",
+    fontSize: "36px",
   },
 }));
 
@@ -68,6 +73,10 @@ const Bar = () => {
     Nav("/room");
   };
 
+  const handleMenuClick = async () => {
+    Nav("/");
+  };
+
   return (
     <div className={classes.root}>
       {username ? (
@@ -79,9 +88,13 @@ const Bar = () => {
                 className={classes.menuButton}
                 color="inherit"
                 aria-label="menu"
+                size="large"
               >
-                <MenuIcon />
+                <Icon classes={{ root: classes.iconRoot }}>
+                  <img className={classes.imageIcon} src={CodeBookIconWhite} />
+                </Icon>
               </IconButton>
+
               <Typography variant="h6" className={classes.title}>
                 CodeBook
               </Typography>
@@ -105,9 +118,13 @@ const Bar = () => {
                 className={classes.menuButton}
                 color="inherit"
                 aria-label="menu"
+                size="large"
               >
-                <MenuIcon />
+                <Icon classes={{ root: classes.iconRoot }}>
+                  <img className={classes.imageIcon} src={CodeBookIconWhite} />
+                </Icon>
               </IconButton>
+
               <Typography variant="h6" className={classes.title}>
                 CodeBook
               </Typography>

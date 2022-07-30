@@ -88,13 +88,14 @@ const SignUpContainer = () => {
   const validateForm = (event) => {
     event.preventDefault();
 
-    var payload = validateSignUpForm(user);
+    const payload = validateSignUpForm(user);
     if (payload.success) {
       setError({});
 
       submitSignup();
     } else {
       const errors = payload.errors;
+      console.log(errors);
       setError(errors);
     }
   };

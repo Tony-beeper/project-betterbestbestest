@@ -88,13 +88,6 @@ const LoginContainer = () => {
       .finally(() => {});
   };
 
-  const pwMask = (event) => {
-    event.preventDefault();
-
-    btnTxt === "show" ? setBtnTxt("hide") : setBtnTxt("show");
-    type === "password" ? setType("input") : setType("password");
-  };
-
   return (
     <MuiThemeProvider>
       <div>
@@ -107,7 +100,6 @@ const LoginContainer = () => {
           score={score}
           btnTxt={btnTxt}
           type={type}
-          pwMask={pwMask}
         />
       </div>
     </MuiThemeProvider>

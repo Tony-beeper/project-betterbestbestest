@@ -64,7 +64,10 @@ const Room = () => {
   return (
     <Container maxWidth="lg">
       <div className={classes.header}>
-        <Typography variant="h2" style={{ marginTop: 30, marginBottom: 20 }}>
+        <Typography
+          variant="h2"
+          style={{ marginTop: 30, marginBottom: 20, color: "white" }}
+        >
           My Rooms
         </Typography>
         <Button

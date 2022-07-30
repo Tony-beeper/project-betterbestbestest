@@ -2,3 +2,44 @@
   flex: 1;
   max-width: 50%;
 }
+
+#text-editor-container {
+  background-color: #0c1117;
+  max-height: 50vh;
+}
+
+.text-block .ql-toolbar .ql-stroke {
+  fill: none;
+  stroke: #fff;
+}
+/* .text-block .ql-toolbar .ql {
+  fill: none;
+  stroke: #fff;
+} */
+
+.text-block .ql-toolbar .ql-fill {
+  fill: #c8d1d9;
+  stroke: none;
+}
+
+.text-block .ql-toolbar .ql-picker {
+  color: #c8d1d9;
+}
+
+.text-block .ql-editor p {
+  color: #c9d1d9;
+}
+
+.text-block :global(.ql-snow *) {
+  /* background: white; */
+}
+
+/* 
+.ql-toolbar.ql-snow {
+  border: 1px solid #20c20e;
+} */
+
+.ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+  border-color: #ccc;
+  background-color: #0d1116;
+}

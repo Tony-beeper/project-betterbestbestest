@@ -13,6 +13,11 @@ const dbName = "user_db";
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
+const usernameCookieOptions = {
+  path: "/",
+  maxAge: 1000 * 60 * 60 * 24 * 7,
+};
+
 router.post(
   "/signup",
   body("username")
@@ -33,10 +38,7 @@ router.post(
     bcrypt.hash(req.body.password, saltRounds, async function (err, hash) {
       if (err)
         return res
-          .cookie("username", "", {
-            path: "/",
-            maxAge: 60 * 60 * 24 * 7,
-          })
+          .cookie("username", "", usernameCookieOptions)
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .send(Message.createErrorMessage("Bcrypt Error"));
       const username = req.body.username;
@@ -52,11 +54,7 @@ router.post(
         const result = await user.findOne({ username: username });
         if (result) {
           return res
-            .cookie("username", "", {
-              path: "/",
-
-              maxAge: 60 * 60 * 24 * 7,
-            })
+            .cookie("username", "", usernameCookieOptions)
             .status(StatusCodes.CONFLICT)
             .send(Message.createErrorMessage("Username Taken"));
         } else {
@@ -64,10 +62,7 @@ router.post(
           req.session.username = username;
 
           return res
-            .cookie("username", username, {
-              path: "/",
-              maxAge: 60 * 60 * 24 * 7,
-            })
+            .cookie("username", username, usernameCookieOptions)
             .status(StatusCodes.SUCCESS)
             .send("Sign up success");
         }
@@ -118,10 +113,7 @@ router.post(
           req.session.username = username;
 
           return res
-            .cookie("username", username, {
-              path: "/",
-              maxAge: 60 * 60 * 24 * 7,
-            })
+            .cookie("username", username, usernameCookieOptions)
             .status(StatusCodes.SUCCESS)
             .send("Login Success");
         });
@@ -141,10 +133,7 @@ router.post(
 router.get("/signout/", function (req, res, next) {
   req.session.username = "";
   return res
-    .cookie("username", "", {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    })
+    .cookie("username", "", usernameCookieOptions)
     .status(StatusCodes.SUCCESS)
     .send(Message.createTextMessage("Cookie Cleared"));
 });

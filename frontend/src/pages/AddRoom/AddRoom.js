@@ -17,27 +17,28 @@ import { ExpandMoreRounded } from "@material-ui/icons";
 import roomAPI from "../../api/rooms";
 import errorHandler from "../../utils/ErrorHandler";
 import { ThemeContext } from "../../App";
-
-const useStyles = makeStyles({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    marginTop: 50,
-  },
-  background_blue: {
-    marginTop: 10,
-    background: "linear-gradient(to right,  #2980B9, #6DD5FA)",
-    border: 0,
-    color: "white",
-    borderRadius: 3,
-  },
-  textField: {
-    marginBottom: 10,
-  },
-  input: {
-    color: "white",
-  },
-});
+import AddRoomStyle from "./AddRoomStyle";
+import WhiteTextTypography from "../../components/StyledMuiComponents/WhiteTypography";
+// const useStyles = makeStyles({
+//   root: {
+//     display: "flex",
+//     flexDirection: "column",
+//     marginTop: 50,
+//   },
+//   background_blue: {
+//     marginTop: 10,
+//     background: "linear-gradient(to right,  #2980B9, #6DD5FA)",
+//     border: 0,
+//     color: "white",
+//     borderRadius: 3,
+//   },
+//   textField: {
+//     marginBottom: 10,
+//   },
+//   input: {
+//     color: "white",
+//   },
+// });
 
 const theme = createTheme({
   palette: {
@@ -48,7 +49,7 @@ const theme = createTheme({
 });
 
 const Room = () => {
-  const classes = useStyles();
+  const classes = AddRoomStyle();
   const navigate = useNavigate();
   let [context, setContext] = useContext(ThemeContext);
   let [username, setUsername] = useState(context);
@@ -117,9 +118,9 @@ const Room = () => {
     <Container maxWidth="xs">
       <div className={classes.root}>
         <ThemeProvider theme={theme}>
-          <Typography variant="h5" gutterBottom margin="large">
+          <WhiteTextTypography variant="h5" gutterBottom margin="large">
             Create or Join a room!
-          </Typography>
+          </WhiteTextTypography>
           <Accordion className={classes.background_blue}>
             <AccordionSummary
               expandIcon={<ExpandMoreRounded style={{ color: "#1565c0" }} />}

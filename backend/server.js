@@ -6,7 +6,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const chalk = require("chalk");
-const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const isAuthenticated = require("./middlewares/validateUser");
 const WebSocket = require("ws");

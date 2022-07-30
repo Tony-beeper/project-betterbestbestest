@@ -38,6 +38,7 @@ function TextBlock(props) {
         cursors: true,
       },
       theme: "snow", // or 'bubble'
+      color: "white",
     });
     setQuill(quill);
     let cursors = quill.getModule("cursors");

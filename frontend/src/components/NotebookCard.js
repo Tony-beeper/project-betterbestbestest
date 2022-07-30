@@ -16,11 +16,11 @@ import UserNameList from "./UserNameList/UserNameList";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    minWidth: 220,
-    minHeight: 250,
+    minWidth: 200,
+    // minHeight: 205,
     marginTop: 30,
-
-    background: "#f5f5f5",
+    border: "1px solid #2f363d",
+    background: "#010409",
   },
   root_my: {
     minWidth: 220,
@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     fontSize: 28,
+    color: "#c9d1d9",
   },
   icon: {
     display: "flex",
@@ -62,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
   pos: {
     marginBottom: 12,
+    color: "#c9d1d9",
   },
 }));
 

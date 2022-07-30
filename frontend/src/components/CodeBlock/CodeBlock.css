@@ -1,15 +1,36 @@
 .code-block {
   flex: 1;
   max-width: 50%;
+  /* margin-top: 1px; */
 }
 
 #editor-container {
   background-color: #23241e;
-  max-height: 900px;
+  max-height: 50vh;
 }
 
 .form-group {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.ql-snow * {
+  box-sizing: border-box;
+  /* box-shadow: #20c20e; */
+
+  /* border: 1px solid #20c20e; */
+}
+/* .ql-editor {
+  border: "none";
+} */
+
+/* .ql-editor {
+  border: 2px solid #20c20e;
+} */
+
+.editorbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
 }

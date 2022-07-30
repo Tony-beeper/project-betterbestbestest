@@ -9,7 +9,21 @@ import AddRoom from "./pages/AddRoom/AddRoom";
 import Room from "./pages/MyRooms/Room";
 import NoteBook from "./pages/Notebook/Notebook";
 import HomePage from "./pages/HomePage/HomePage";
+import { createTheme } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/core";
 export const ThemeContext = React.createContext();
+
+const theme = createTheme({
+  palette: {
+    primary: { main: "#21262d" },
+    secondary: { main: "#238636" },
+    // success: { main: "blue" },
+    info: {
+      main: "#faff01",
+    },
+    // success: { main: "#faff01" },
+  },
+});
 
 function App() {
   const [context, setContext] = useState({
@@ -20,20 +34,22 @@ function App() {
   });
 
   return (
-    <ThemeContext.Provider value={[context, setContext]}>
-      <Router>
-        <ToastContainer theme="colored" />
-        <Bar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/room/add/" element={<AddRoom />} />
-          <Route path="/room/" element={<Room />} />
-          <Route path="/room/:id" element={<NoteBook />} />
-          <Route path="/signup/" element={<SignUp />} />
-          <Route path="/login/" element={<Login />} />
-        </Routes>
-      </Router>
-    </ThemeContext.Provider>
+    <ThemeProvider theme={theme}>
+      <ThemeContext.Provider value={[context, setContext]}>
+        <Router>
+          <ToastContainer theme="colored" />
+          <Bar />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/room/add/" element={<AddRoom />} />
+            <Route path="/room/" element={<Room />} />
+            <Route path="/room/:id" element={<NoteBook />} />
+            <Route path="/signup/" element={<SignUp />} />
+            <Route path="/login/" element={<Login />} />
+          </Routes>
+        </Router>
+      </ThemeContext.Provider>
+    </ThemeProvider>
   );
 }
 
