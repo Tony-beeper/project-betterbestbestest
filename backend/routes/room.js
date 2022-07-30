@@ -6,7 +6,7 @@ const { createDoc, deleteDoc, test } = require("../models/sharedb");
 const { v4 } = require("uuid");
 const { ObjectId } = require("mongodb");
 const Message = require("../utils/defaultMessages");
-const MAX_MEMBERS = 3;
+const MAX_MEMBERS = 2;
 const MAX_ROOM_PER_USER = 1;
 const statusCode = require("../utils/StatusCodes");
 const StatusCodes = require("../utils/StatusCodes");
@@ -252,7 +252,10 @@ router.patch(
       return res
         .status(statusCode.FORBIDDEN)
         .send(Message.createErrorMessage("you need to join first"));
-    room.members.pop(req.username);
+    const index = room.members.indexOf(req.username);
+    if (index !== -1) {
+      room.members.splice(index, 1);
+    }
     const update_room = await Room.findOneAndUpdate(
       { _id: roomId },
       { members: room.members },
