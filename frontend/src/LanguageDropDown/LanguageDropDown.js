@@ -79,11 +79,11 @@ class ControlledOpenSelect extends React.Component {
            
             Language
           </InputLabel> */}
-          <Select
+          {/* <Select
             open={this.state.open}
             onClose={this.handleClose}
             onOpen={this.handleOpen}
-            value={this.state.age}
+            // value={this.state.age}
             onChange={this.handleChange}
             inputProps={{
               name: "age",
@@ -93,7 +93,7 @@ class ControlledOpenSelect extends React.Component {
             color="primary"
           >
             <MenuItem value={"Python"}>Python</MenuItem>
-          </Select>
+          </Select> */}
         </FormControl>
       </div>
     );

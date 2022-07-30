@@ -12,14 +12,18 @@
   fill: none;
   stroke: #fff;
 }
+/* .text-block .ql-toolbar .ql {
+  fill: none;
+  stroke: #fff;
+} */
 
 .text-block .ql-toolbar .ql-fill {
-  fill: #fff;
+  fill: #c8d1d9;
   stroke: none;
 }
 
 .text-block .ql-toolbar .ql-picker {
-  color: #fff;
+  color: #c8d1d9;
 }
 
 .text-block .ql-editor p {
@@ -34,3 +38,8 @@
 .ql-toolbar.ql-snow {
   border: 1px solid #20c20e;
 } */
+
+.ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+  border-color: #ccc;
+  background-color: #0d1116;
+}

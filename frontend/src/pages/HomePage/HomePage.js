@@ -13,7 +13,7 @@ const HomePage = () => {
         variant="h3"
         align="center"
         gutterBottom
-        style={{ marginTop: "2em" }}
+        style={{ marginTop: "1em" }}
       >
         CodeBook
       </WhiteTextTypography>

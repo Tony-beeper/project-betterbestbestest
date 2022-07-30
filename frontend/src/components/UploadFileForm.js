@@ -54,9 +54,10 @@ function UploadFileForm({ quill, isCode, doc }) {
 
   return (
     <div style={{ marginBottom: "2px" }}>
-      <UploadButton variant="contained" onClick={handleClickOpen}>
-        Upload file
-      </UploadButton>
+      <div onClick={handleClickOpen}>
+        <UploadButton variant="contained">Upload file</UploadButton>
+      </div>
+
       <Dialog
         open={open}
         onClose={handleClose}
