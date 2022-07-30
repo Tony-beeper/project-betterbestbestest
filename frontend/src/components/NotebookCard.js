@@ -10,9 +10,9 @@ import {
   CardContent,
   Typography,
 } from "@material-ui/core";
-import { deepOrange, deepPurple } from "@material-ui/core/colors";
 
 import NotebookInteractive from "./NotebookInteractive/NotebookInteractive";
+import UserNameList from "./UserNameList/UserNameList";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,19 +79,7 @@ const NotebookCard = ({ room, isMine, leaveRoom, deleteMyRoom }) => {
           {new Date(room.date).toISOString().split("T")[0]}
         </Typography>
         <div className={classes.icons}>
-          {room.members.map((member, idx) => (
-            <Avatar
-              key={`member_${idx}`}
-              style={{
-                backgroundColor: ["#ffc107", deepPurple[500], deepOrange[500]][
-                  idx % 3
-                ],
-              }}
-              className={classes.small}
-            >
-              {member.slice(0, 1).toUpperCase()}
-            </Avatar>
-          ))}
+          <UserNameList users={room.members} />
         </div>
       </CardContent>
       <CardActions

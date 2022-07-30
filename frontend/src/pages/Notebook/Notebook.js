@@ -8,7 +8,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import roomsAPI from "../../api/rooms";
+import githubAPI from "../../api/github";
 import errorHandler from "../../utils/ErrorHandler";
+import UserNameList from "../../components/UserNameList/UserNameList";
+import GitHubOauthButton from "../../components/GithubOauthButton";
+import { toast } from "react-toastify";
 
 sharedb.types.register(richText.type);
 const socket = new ReconnectingWebSocket(process.env.REACT_APP_WS_URL);
@@ -20,7 +24,35 @@ function NoteBook() {
   const [data, setData] = useState(null);
   const [codeBlockDoc, setCodeBlockDoc] = useState(null);
   const [textBlockDoc, setTextBlockDoc] = useState(null);
+  const [usersInRoom, setUsersInRoom] = useState([]);
+  const [oauth, setOauth] = useState(false);
+
   useEffect(() => {
+    if (!oauth) {
+      githubAPI
+        .getRepos()
+        .then((data) => {
+          setOauth(true);
+        })
+        .catch(({ response }) => {
+          const code =
+            window.location.href.match(/\?code=(.*)/) &&
+            window.location.href.match(/\?code=(.*)/)[1];
+          if (code && !oauth) {
+            githubAPI
+              .getToken(code)
+              .then((data) => {
+                console.log(data);
+                setOauth(true);
+                toast.success("github oauth success");
+              })
+              .catch(({ response }) => {
+                errorHandler.handleError(response);
+              });
+          }
+        });
+    }
+
     // hardcoded sharedb connection
     const testRoomId = id;
     roomsAPI
@@ -35,16 +67,49 @@ function NoteBook() {
         nav("../room");
       });
   }, []);
+
+  useEffect(() => {}, [usersInRoom]);
+
+  const join = (joinInfo) => {
+    setUsersInRoom([...usersInRoom, joinInfo]);
+    // toast.info(`${joinInfo["join_name"]} joined the room`);
+  };
+
+  const leave = (leaveInfo) => {
+    const filteredUserInRoom = usersInRoom.filter((value, index) => {
+      return value["id"] !== leaveInfo.localPresenceId;
+    });
+    setUsersInRoom(filteredUserInRoom);
+    // toast.info(`${leaveInfo["join_name"]} leave the room`);
+  };
+
   return (
     <div className="notebook-container">
       <div className="notebook-body">
-        <h1>NoteBook</h1>
+        <div className="notebook-title">
+          <div className="group">
+            <h1>{data && data.name}</h1>
+            <GitHubOauthButton id={id} oauth={oauth} />
+          </div>
+          <UserNameList
+            users={[
+              ...new Set(
+                usersInRoom.map((joinInfo) => {
+                  return joinInfo["join_name"];
+                })
+              ),
+            ]}
+          />
+        </div>
         <div className="notebook-content">
           {codeBlockDoc && (
             <CodeBlock
               doc={codeBlockDoc}
               collection={`${id}_code`}
               id={data.codeSharedbID}
+              join={join}
+              leave={leave}
+              oauth={oauth}
             />
           )}
           {textBlockDoc && (

@@ -7,12 +7,12 @@ import "./CodeBlock.css";
 import UploadFileForm from "../UploadFileForm";
 import tinycolor from "tinycolor2";
 import { useNavigate } from "react-router-dom";
-
 import { useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { ThemeContext } from "../../App";
 import CodeExecution from "../CodeExecution/CodeExecution";
 import constants from "../../utils/Constants";
+import GithubBlock from "../GithubBlock/GithubBlock";
 function CodeBlock(props) {
   let Nav = useNavigate();
   const doc = props.doc;
@@ -24,11 +24,42 @@ function CodeBlock(props) {
   Quill.register("modules/cursors", QuillCursors);
 
   useEffect(() => {
+    let intervalId;
+    let localPresence;
     doc.subscribe((err) => {
       if (err) console.log(err);
-      initQuill();
+      let res = initQuill();
+      // setIntervalId(res.interval);
+      intervalId = res.interval;
+      localPresence = res.localPresence;
+      // if (!localPresenceS) setLocalPresenceS(res.localPresence);
     });
+
+    return () => {
+      doc.unsubscribe();
+      console.log(localPresence);
+      // if (localPresenceS) localPresenceS.destroy();
+      localPresence.destroy(() => {
+        console.log(`cleared localpresense`);
+        // console.log(`cleared interval ${intervalId}`);
+        // clearInterval(intervalId);
+      });
+    };
   }, []);
+
+  // useEffect(() => {
+  //   return () => {
+  //     console.log(`cleared interval ${JSON.stringify(intervalId)}`);
+  //     console.log(localPresenceS);
+  //     doc.unsubscribe();
+  //     // if (localPresenceS) localPresenceS.destroy();
+  //     console.log(localPresenceS);
+  //     clearInterval(intervalId);
+  //     // intervalId.forEach((id) => {
+  //     //   clearInterval(id);
+  //     // });
+  //   };
+  // }, [intervalId]);
 
   const initQuill = () => {
     const quill = new Quill("#editor-container", {
@@ -82,39 +113,57 @@ function CodeBlock(props) {
 
     presence.on("receive", function (id, range) {
       console.log(range);
-      colors[id] = colors[id] || tinycolor.random().toHexString();
-      var name = (range && range.name) || "Anonymous";
-      cursors.createCursor(id, name, colors[id]);
-      cursors.moveCursor(id, range);
+      if (range?.join_name) {
+        if (range.join_name !== context.username) {
+          props.join(range);
+        }
+      } else if (range?.index) {
+        colors[id] = colors[id] || tinycolor.random().toHexString();
+        var name = (range && range.name) || "Anonymous";
+        cursors.createCursor(id, name, colors[id]);
+        cursors.moveCursor(id, range);
+      } else if (range === null) {
+        cursors.removeCursor(id);
+        props.leave({
+          join_name: context.username,
+          localPresenceId: localPresence.id,
+        });
+      }
     });
 
     let localPresence = presence.create();
-    console.log(presence);
+    localPresence.submit({ join_name: context.username, id: localPresence.id });
+
+    // const interval = setInterval(() => {
+    //   localPresence.submit(
+    //     { join_name: context.username, join_time: new Date() },
+    //     function (err) {
+    //       if (err) throw err;
+    //     }
+    //   );
+    //   console.log("submit");
+    // }, 5000);
 
     quill.on("selection-change", function (range, oldRange, source) {
-      // We only need to send updates if the user moves the cursor
-      // themselves. Cursor updates as a result of text changes will
-      // automatically be handled by the remote client.
       if (source !== "user") return;
-      // Ignore blurring, so that we can see lots of users in the
-      // same window. In real use, you may want to clear the cursor.
       if (!range) return;
-      // In this particular instance, we can send extra information
-      // on the presence object. This ability will vary depending on
-      // type.
       range.name = context.username;
 
-      console.log(presence);
       localPresence.submit(range, function (error) {
         if (error) throw error;
-        console.log(range);
       });
     });
+
+    return { localPresence, presence };
   };
 
   return (
     <div className="code-block">
-      <UploadFileForm quill={quill} doc={doc} isCode={true} />
+      <div className="form-group">
+        <UploadFileForm quill={quill} doc={doc} isCode={true} />
+        {props.oauth && <GithubBlock quill={quill} />}
+      </div>
+
       <div id="editor-container"></div>
       <CodeExecution quill={quill} />
     </div>
