@@ -3,6 +3,7 @@ import pistonAPI from "../../api/piston";
 import ErrorHandler from "../../utils/ErrorHandler";
 import Quill from "quill";
 import "./CodeExecution.css";
+import { toast } from "react-toastify";
 
 function CodeExecution({ quill }) {
     const [consoleOutput, setConsoleOutput] = useState(null);
@@ -13,14 +14,21 @@ function CodeExecution({ quill }) {
             .execute(content)
             .then((data) => {
                 console.log(data);
-                if (data.run.code === 0) {
-                    if (consoleOutput) {
-                        consoleOutput.setText(data.run.stdout);
+                if (consoleOutput) {
+                    //consoleOutput.setText(data.run.output.substring(0, 5000));
+                    if (data.run.signal === "SIGKILL") {
+                        toast.error(
+                            "Timelimit exceeded, code execution was terminated"
+                        );
                     }
-                } else {
-                    if (consoleOutput) {
-                        consoleOutput.setText(data.run.stderr);
+                    const str = data.run.output;
+                    const lines = str.split(/\r\n|\r|\n/);
+                    if (lines.length > 50) {
+                        toast.error(
+                            "Output contains more than 100 lines. Output will be truncated"
+                        );
                     }
+                    consoleOutput.setText(lines.slice(0, 100).join("\n"));
                 }
             })
             .catch((e) => {
