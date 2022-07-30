@@ -3,8 +3,8 @@ import pistonAPI from "../../api/piston";
 import ErrorHandler from "../../utils/ErrorHandler";
 import Quill from "quill";
 import "./CodeExecution.css";
-import RunButton from "../Buttons/RunButton";
-import WhiteTextTypography from "../StyledMuiComponents/WhiteTypography";
+import { toast } from "react-toastify";
+
 function CodeExecution({ quill }) {
   const [consoleOutput, setConsoleOutput] = useState(null);
   const execute = () => {
@@ -14,14 +14,21 @@ function CodeExecution({ quill }) {
       .execute(content)
       .then((data) => {
         console.log(data);
-        if (data.run.code === 0) {
-          if (consoleOutput) {
-            consoleOutput.setText(data.run.stdout);
+        if (consoleOutput) {
+          //consoleOutput.setText(data.run.output.substring(0, 5000));
+          if (data.run.signal === "SIGKILL") {
+            toast.error(
+              "Time limit or memory limit exceeded, code execution was terminated"
+            );
           }
-        } else {
-          if (consoleOutput) {
-            consoleOutput.setText(data.run.stderr);
+          const str = data.run.output;
+          const lines = str.split(/\r\n|\r|\n/);
+          if (lines.length > 100) {
+            toast.error(
+              "Output contains more than 100 lines. Output will be truncated"
+            );
           }
+          consoleOutput.setText(lines.slice(0, 100).join("\n"));
         }
       })
       .catch((e) => {
@@ -40,21 +47,21 @@ function CodeExecution({ quill }) {
     });
     setConsoleOutput(consoleQuill);
     consoleQuill.on("text-change", function (delta, oldDelta, source) {
+      if (source !== "api") {
+        consoleQuill.setContents(oldDelta);
+      }
       consoleQuill.formatLine(0, consoleQuill.getLength(), {
         "code-block": true,
       });
     });
-    consoleQuill.enable(false);
   };
   useEffect(() => {
     initQuill();
   }, []);
   return (
     <div>
-      <div onClick={execute}>
-        <RunButton>Run</RunButton>
-      </div>
-      <WhiteTextTypography variant="h5">Console Output</WhiteTextTypography>
+      <button onClick={execute}>Run</button>
+      <h3>Console Output</h3>
       <div id="console-output-container"></div>
     </div>
   );

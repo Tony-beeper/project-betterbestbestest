@@ -6,8 +6,7 @@
 
 #editor-container {
   background-color: #23241e;
-  max-height: 900px;
-  /* margin-top: 1px; */
+  max-height: 200px;
 }
 
 .form-group {
