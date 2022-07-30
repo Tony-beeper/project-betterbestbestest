@@ -9,7 +9,12 @@ import CodeBookIconWhite from "../../media/codebookiconwhite.png";
 const HomePage = () => {
   return (
     <Container maxWidth="lg">
-      <WhiteTextTypography variant="h3" align="center" gutterBottom>
+      <WhiteTextTypography
+        variant="h3"
+        align="center"
+        gutterBottom
+        style={{ marginTop: "2em" }}
+      >
         CodeBook
       </WhiteTextTypography>
       <div className="homepage">

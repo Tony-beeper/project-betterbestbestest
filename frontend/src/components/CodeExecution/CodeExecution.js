@@ -4,7 +4,8 @@ import ErrorHandler from "../../utils/ErrorHandler";
 import Quill from "quill";
 import "./CodeExecution.css";
 import { toast } from "react-toastify";
-
+import RunButton from "../Buttons/RunButton";
+import WhiteTextTypography from "../StyledMuiComponents/WhiteTypography";
 function CodeExecution({ quill }) {
   const [consoleOutput, setConsoleOutput] = useState(null);
   const execute = () => {
@@ -60,8 +61,10 @@ function CodeExecution({ quill }) {
   }, []);
   return (
     <div>
-      <button onClick={execute}>Run</button>
-      <h3>Console Output</h3>
+      <div onClick={execute}>
+        <RunButton>Run</RunButton>
+      </div>
+      <WhiteTextTypography variant="h5">Console Output</WhiteTextTypography>
       <div id="console-output-container"></div>
     </div>
   );

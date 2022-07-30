@@ -18,7 +18,10 @@ const theme = createTheme({
     primary: { main: "#21262d" },
     secondary: { main: "#238636" },
     // success: { main: "blue" },
-    disabled: { main: "#FF00F" },
+    info: {
+      main: "#faff01",
+    },
+    // success: { main: "#faff01" },
   },
 });
 
