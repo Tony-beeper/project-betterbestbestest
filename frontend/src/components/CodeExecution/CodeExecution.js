@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import pistonAPI from "../../api/piston";
 import ErrorHandler from "../../utils/ErrorHandler";
-import RunButton from "../Buttons/RunButton";
-import WhiteTextTypography from "../StyledMuiComponents/WhiteTypography";
-// import RunButton from "../Buttons/RunButton"
+import Quill from "quill";
 import "./CodeExecution.css";
+
 function CodeExecution({ quill }) {
-  const [consoleOuput, setConsoleOutput] = useState("");
+  const [consoleOutput, setConsoleOutput] = useState(null);
   const execute = () => {
     const content = quill.getText();
     console.log(content);
@@ -15,9 +14,13 @@ function CodeExecution({ quill }) {
       .then((data) => {
         console.log(data);
         if (data.run.code === 0) {
-          setConsoleOutput(data.run.stdout);
+          if (consoleOutput) {
+            consoleOutput.setText(data.run.stdout);
+          }
         } else {
-          setConsoleOutput(data.run.stderr);
+          if (consoleOutput) {
+            consoleOutput.setText(data.run.stderr);
+          }
         }
       })
       .catch((e) => {
@@ -27,16 +30,28 @@ function CodeExecution({ quill }) {
         }
       });
   };
+  const initQuill = () => {
+    const consoleQuill = new Quill("#console-output-container", {
+      modules: {
+        toolbar: false,
+      },
+      theme: "snow",
+    });
+    setConsoleOutput(consoleQuill);
+    consoleQuill.on("text-change", function (delta, oldDelta, source) {
+      consoleQuill.formatLine(0, consoleQuill.getLength(), {
+        "code-block": true,
+      });
+    });
+  };
+  useEffect(() => {
+    initQuill();
+  }, []);
   return (
     <div>
-      <div onClick={execute}>
-        <RunButton>Run</RunButton>
-      </div>
-
-      <WhiteTextTypography variant="h5">Console Output</WhiteTextTypography>
-      <div class="output">
-        <p>{consoleOuput}</p>
-      </div>
+      <button onClick={execute}>Run</button>
+      <h3>Console Output</h3>
+      <div id="console-output-container"></div>
     </div>
   );
 }
