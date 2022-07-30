@@ -18,12 +18,12 @@ function CodeExecution({ quill }) {
                     //consoleOutput.setText(data.run.output.substring(0, 5000));
                     if (data.run.signal === "SIGKILL") {
                         toast.error(
-                            "Timelimit exceeded, code execution was terminated"
+                            "Time limit or memory limit exceeded, code execution was terminated"
                         );
                     }
                     const str = data.run.output;
                     const lines = str.split(/\r\n|\r|\n/);
-                    if (lines.length > 50) {
+                    if (lines.length > 100) {
                         toast.error(
                             "Output contains more than 100 lines. Output will be truncated"
                         );
