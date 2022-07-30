@@ -12,7 +12,8 @@ import { toast } from "react-toastify";
 import { ThemeContext } from "../../App";
 import CodeExecution from "../CodeExecution/CodeExecution";
 import GithubBlock from "../GithubBlock/GithubBlock";
-
+import LanguageDropDown from "../../LanguageDropDown/LanguageDropDown";
+import WhiteTextTypography from "../StyledMuiComponents/WhiteTypography";
 function CodeBlock(props) {
   let Nav = useNavigate();
   const doc = props.doc;
@@ -149,12 +150,17 @@ function CodeBlock(props) {
 
   return (
     <div className="code-block">
+      {/* <div className="editorbar"> */}
       <div className="form-group">
         <UploadFileForm quill={quill} doc={doc} isCode={true} />
+
+        {/* <WhiteTextTypography variant="h5">Python</WhiteTextTypography> */}
         {props.oauth && <GithubBlock quill={quill} />}
       </div>
-
+      {/* </div> */}
+      <LanguageDropDown />
       <div id="editor-container"></div>
+
       <CodeExecution quill={quill} />
     </div>
   );

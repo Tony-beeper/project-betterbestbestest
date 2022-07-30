@@ -13,6 +13,7 @@ function UploadButton(props) {
       variant="contained"
       style={{
         // margin: "12px 0 12px 0",
+
         borderRadius: "6px",
         backgroundColor: "#696969",
         // padding: "4px 36px",

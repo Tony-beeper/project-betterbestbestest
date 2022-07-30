@@ -3,7 +3,7 @@ import { Typography, createTheme } from "@material-ui/core";
 
 const WhiteTextTypography = withStyles({
   root: {
-    color: "#c8d1d9",
+    color: "#c9d1d9",
   },
 })(Typography);
 

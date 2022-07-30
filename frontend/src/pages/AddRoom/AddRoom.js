@@ -18,6 +18,7 @@ import roomAPI from "../../api/rooms";
 import errorHandler from "../../utils/ErrorHandler";
 import { ThemeContext } from "../../App";
 import AddRoomStyle from "./AddRoomStyle";
+import WhiteTextTypography from "../../components/StyledMuiComponents/WhiteTypography";
 // const useStyles = makeStyles({
 //   root: {
 //     display: "flex",
@@ -117,9 +118,9 @@ const Room = () => {
     <Container maxWidth="xs">
       <div className={classes.root}>
         <ThemeProvider theme={theme}>
-          <Typography variant="h5" gutterBottom margin="large">
+          <WhiteTextTypography variant="h5" gutterBottom margin="large">
             Create or Join a room!
-          </Typography>
+          </WhiteTextTypography>
           <Accordion className={classes.background_blue}>
             <AccordionSummary
               expandIcon={<ExpandMoreRounded style={{ color: "#1565c0" }} />}
