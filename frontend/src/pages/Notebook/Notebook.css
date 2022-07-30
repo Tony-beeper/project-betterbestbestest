@@ -23,3 +23,6 @@
   align-items: center;
   justify-content: space-between;
 }
+.group h1 {
+  color: whitesmoke;
+}

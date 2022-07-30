@@ -13,3 +13,17 @@
   flex-direction: row;
   justify-content: space-between;
 }
+
+.ql-snow * {
+  box-sizing: border-box;
+  /* box-shadow: #20c20e; */
+
+  /* border: 1px solid #20c20e; */
+}
+/* .ql-editor {
+  border: "none";
+} */
+
+/* .ql-editor {
+  border: 2px solid #20c20e;
+} */

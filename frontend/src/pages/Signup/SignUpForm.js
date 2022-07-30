@@ -58,6 +58,9 @@ const SignUpForm = ({
             InputLabelProps={{
               style: { color: "#fff" },
             }}
+            InputProps={{
+              style: { color: "#fff" },
+            }}
           />
           <br />
           <WhiteTextField
@@ -73,6 +76,9 @@ const SignUpForm = ({
             label="Password"
             margin="normal"
             InputLabelProps={{
+              style: { color: "#fff" },
+            }}
+            InputProps={{
               style: { color: "#fff" },
             }}
           />
@@ -103,9 +109,12 @@ const SignUpForm = ({
             floatingLabelText="Confirm Password"
             value={user.pwconfirm}
             onChange={onChange}
-            label="confirm password"
+            label="Confirm Password"
             margin="normal"
             InputLabelProps={{
+              style: { color: "#fff" },
+            }}
+            InputProps={{
               style: { color: "#fff" },
             }}
             error={errors === ""}

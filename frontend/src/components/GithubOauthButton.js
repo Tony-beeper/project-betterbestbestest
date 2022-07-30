@@ -6,6 +6,7 @@ const GitHubOauthButton = ({ id, oauth }) => {
     <div>
       {!oauth ? (
         <IconButton
+          color="secondary"
           disabled={oauth}
           onClick={() => {
             const client_id = process.env.REACT_APP_CLIENT_ID;
@@ -20,7 +21,7 @@ const GitHubOauthButton = ({ id, oauth }) => {
           <GitHubIcon />
         </IconButton>
       ) : (
-        <IconButton color="primary">
+        <IconButton color="secondary">
           <GitHubIcon />
         </IconButton>
       )}

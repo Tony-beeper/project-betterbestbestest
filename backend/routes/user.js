@@ -35,6 +35,8 @@ router.post(
         return res
           .cookie("username", "", {
             path: "/",
+            // expires: Date.now() + 60 * 60 * 24,
+
             maxAge: 60 * 60 * 24 * 7,
           })
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -54,7 +56,7 @@ router.post(
           return res
             .cookie("username", "", {
               path: "/",
-
+              // expires: Date.now() + 60 * 60 * 24,
               maxAge: 60 * 60 * 24 * 7,
             })
             .status(StatusCodes.CONFLICT)
@@ -116,11 +118,16 @@ router.post(
               .send(Message.createErrorMessage("wrong username or password"));
 
           req.session.username = username;
-
+          // var date = new Date();
+          // date.setTime(date.getTime() + 1000 * 60 * 60 * 24 * 365 * 5);
+          // var expires = "; expires=" + date.toGMTString();
+          // console.log(new Date(new Date().getTime() + 86409000).toUTCString());
+          // // console.log(expires);
           return res
             .cookie("username", username, {
               path: "/",
               maxAge: 60 * 60 * 24 * 7,
+              // expires: new Date(new Date().getTime() + 86409000).toUTCString(),
             })
             .status(StatusCodes.SUCCESS)
             .send("Login Success");

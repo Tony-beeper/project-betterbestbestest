@@ -39,6 +39,9 @@ const LoginForm = ({ onSubmit, onChange, errors, user, type, onPwChange }) => {
               InputLabelProps={{
                 style: { color: "#fff" },
               }}
+              InputProps={{
+                style: { color: "#fff" },
+              }}
             />
             <br />
             <WhiteTextField
@@ -51,6 +54,9 @@ const LoginForm = ({ onSubmit, onChange, errors, user, type, onPwChange }) => {
               label="Password"
               margin="normal"
               InputLabelProps={{
+                style: { color: "#fff" },
+              }}
+              InputProps={{
                 style: { color: "#fff" },
               }}
             />

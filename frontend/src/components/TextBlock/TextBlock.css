@@ -2,3 +2,35 @@
   flex: 1;
   max-width: 50%;
 }
+
+#text-editor-container {
+  background-color: #0c1117;
+  max-height: 900px;
+}
+
+.text-block .ql-toolbar .ql-stroke {
+  fill: none;
+  stroke: #fff;
+}
+
+.text-block .ql-toolbar .ql-fill {
+  fill: #fff;
+  stroke: none;
+}
+
+.text-block .ql-toolbar .ql-picker {
+  color: #fff;
+}
+
+.text-block .ql-editor p {
+  color: #c9d1d9;
+}
+
+.text-block :global(.ql-snow *) {
+  /* background: white; */
+}
+
+/* 
+.ql-toolbar.ql-snow {
+  border: 1px solid #20c20e;
+} */

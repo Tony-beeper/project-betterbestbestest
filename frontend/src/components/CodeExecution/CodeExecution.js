@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import pistonAPI from "../../api/piston";
 import ErrorHandler from "../../utils/ErrorHandler";
+import RunButton from "../Buttons/RunButton";
+import WhiteTextTypography from "../StyledMuiComponents/WhiteTypography";
+// import RunButton from "../Buttons/RunButton"
+import "./CodeExecution.css";
 function CodeExecution({ quill }) {
   const [consoleOuput, setConsoleOutput] = useState("");
   const execute = () => {
@@ -25,9 +29,14 @@ function CodeExecution({ quill }) {
   };
   return (
     <div>
-      <button onClick={execute}>Run</button>
-      <h3>Console Output</h3>
-      <p>{consoleOuput}</p>
+      <div onClick={execute}>
+        <RunButton>Run</RunButton>
+      </div>
+
+      <WhiteTextTypography variant="h5">Console Output</WhiteTextTypography>
+      <div class="output">
+        <p>{consoleOuput}</p>
+      </div>
     </div>
   );
 }

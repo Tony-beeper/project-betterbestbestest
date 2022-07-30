@@ -7,7 +7,8 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 import { useState } from "react";
-
+import UploadButton from "./Buttons/UploadButton";
+import CodeBookButton from "./Buttons/CodeBookButton";
 function readFileContent(file) {
   const reader = new FileReader();
   return new Promise((resolve, reject) => {
@@ -53,9 +54,9 @@ function UploadFileForm({ quill, isCode, doc }) {
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <UploadButton variant="contained" onClick={handleClickOpen}>
         Upload file
-      </Button>
+      </UploadButton>
       <Dialog
         open={open}
         onClose={handleClose}

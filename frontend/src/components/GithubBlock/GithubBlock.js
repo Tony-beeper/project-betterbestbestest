@@ -98,7 +98,7 @@ const GithubBlock = ({ quill }) => {
 
   return (
     <div>
-      <Button variant="contained" color="primary" onClick={handleClickOpen}>
+      <Button variant="contained" color="secondary" onClick={handleClickOpen}>
         <GitHubIcon className={classes.iconStyle} />
         download
       </Button>
