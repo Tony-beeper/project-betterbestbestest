@@ -7,6 +7,8 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 import { useState } from "react";
+import constants from "../utils/Constants";
+import { toast } from "react-toastify";
 
 function readFileContent(file) {
   const reader = new FileReader();
@@ -30,15 +32,29 @@ function UploadFileForm({ quill, isCode, doc }) {
   };
 
   const handleUpload = (e) => {
-    setSelectedFile(e.target.files[0]);
-    console.log(selectedFile);
+    const currFile = e.target.files[0];
+    const extension = currFile.name.split(".").pop().toLowerCase();
+    if (extension === "py") {
+      setSelectedFile(e.target.files[0]);
+      console.log(selectedFile);
+    } else {
+      toast.error(
+        `${currFile.name} has an invalid file type. Please upload a .py file`
+      );
+    }
   };
 
   const handleSubmit = () => {
     readFileContent(selectedFile)
       .then((content) => {
-        console.log(content);
-        console.log(quill);
+        const currLen = quill.getLength();
+        const combinedLen = content.length + currLen;
+        if (combinedLen > constants.CHAR_LIMIT) {
+          toast.error(
+            `${combinedLen} exceeds max charater limit of ${constants.CHAR_LIMIT} chars. Uploaded file has been truncated`
+          );
+          content = content.substring(0, constants.CHAR_LIMIT - currLen);
+        }
         const delta = quill.insertText(quill.getLength(), content);
         doc.submitOp(delta, { source: quill });
         quill.formatLine(0, quill.getLength(), { "code-block": isCode });
@@ -47,8 +63,6 @@ function UploadFileForm({ quill, isCode, doc }) {
       .finally(() => {
         setOpen(false);
       });
-    // console.log(quill);
-    // quill.insertText(quill.getLength(), "content");
   };
 
   return (
@@ -63,16 +77,25 @@ function UploadFileForm({ quill, isCode, doc }) {
       >
         <DialogTitle id="form-dialog-title">Upload</DialogTitle>
         <DialogContent>
-          <DialogContentText>uploading a file here</DialogContentText>
+          <DialogContentText>Upload a .py file</DialogContentText>
           <form>
-            <input type="file" name="file" onChange={handleUpload} />
+            <input
+              type="file"
+              name="file"
+              onChange={handleUpload}
+              accept=".py"
+            />
           </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary">
+          <Button
+            onClick={handleSubmit}
+            color="primary"
+            disabled={!selectedFile}
+          >
             add
           </Button>
         </DialogActions>

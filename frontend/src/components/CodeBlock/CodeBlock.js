@@ -11,8 +11,8 @@ import { useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { ThemeContext } from "../../App";
 import CodeExecution from "../CodeExecution/CodeExecution";
+import constants from "../../utils/Constants";
 import GithubBlock from "../GithubBlock/GithubBlock";
-
 function CodeBlock(props) {
   let Nav = useNavigate();
   const doc = props.doc;
@@ -63,6 +63,7 @@ function CodeBlock(props) {
 
   const initQuill = () => {
     const quill = new Quill("#editor-container", {
+      formats: ["code-block"],
       modules: {
         syntax: {
           highlight: (text) =>
@@ -80,7 +81,16 @@ function CodeBlock(props) {
     quill.formatLine(0, quill.getLength(), { "code-block": true });
     quill.on("text-change", function (delta, oldDelta, source) {
       if (source !== "user") return;
-      doc.submitOp(delta, { source: quill });
+      const currLength = quill.getLength();
+      if (currLength > constants.CHAR_LIMIT) {
+        quill.setContents(oldDelta);
+        toast.error(
+          `${currLength} exceeds max charater limit of ${constants.CHAR_LIMIT}`
+        );
+      } else {
+        doc.submitOp(delta, { source: quill });
+      }
+
       quill.formatLine(0, quill.getLength(), { "code-block": true });
     });
     doc.on("op", function (op, source) {
