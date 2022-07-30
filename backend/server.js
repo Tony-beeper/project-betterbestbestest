@@ -21,6 +21,7 @@ const sharedbMongo = require("sharedb-mongo");
 
 const roomRoutes = require("./routes/room");
 const pistonRoutes = require("./routes/piston");
+const githubRoutes = require("./routes/github");
 
 const db = sharedbMongo(process.env.MONGO_CONN_STR);
 ShareDB.types.register(richText.type);
@@ -82,6 +83,7 @@ function startServer() {
   app.use("/api/user", userRoute);
   app.use("/api/rooms", isAuthenticated, roomRoutes);
   app.use("/api/piston", isAuthenticated, pistonRoutes);
+  app.use("/api/github", isAuthenticated, githubRoutes);
 
   // app.use(function (req, res, next) {
   //   if (!req.username) return res.status(401).json({ err: "access denied" });
