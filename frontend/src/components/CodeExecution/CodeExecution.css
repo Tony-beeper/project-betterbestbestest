@@ -1,11 +1,8 @@
 .output p {
   color: whitesmoke;
 }
+
 #console-output-container {
   background-color: #23241e;
   max-height: 30vh;
-}
-
-.ql-container {
-  overflow: scroll;
 }
