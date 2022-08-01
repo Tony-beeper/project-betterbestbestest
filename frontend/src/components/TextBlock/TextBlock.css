@@ -43,3 +43,10 @@
   border-color: #ccc;
   background-color: #0d1116;
 }
+
+.ql-editor li:not(.ql-direction-rtl)::before {
+  margin-left: -1.5em;
+  margin-right: 0.3em;
+  text-align: right;
+  color: white;
+}

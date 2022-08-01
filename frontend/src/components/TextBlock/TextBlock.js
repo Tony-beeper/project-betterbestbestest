@@ -44,6 +44,8 @@ function TextBlock(props) {
     let cursors = quill.getModule("cursors");
 
     quill.setContents(doc.data);
+    // quill.formatLine(0, quill.getLength(), { color: "white" });
+
     quill.on("text-change", function (delta, oldDelta, source) {
       if (source !== "user") return;
       const currLength = quill.getLength();
@@ -55,10 +57,17 @@ function TextBlock(props) {
       } else {
         doc.submitOp(delta, { source: quill });
       }
+
+      quill.format("color", "white", "user");
     });
     doc.on("op", function (op, source) {
       if (source === quill) return;
       quill.updateContents(op);
+      quill.format("color", "white", "user");
+    });
+
+    quill.on("editor-change", function (op, source) {
+      quill.format("color", "white", "user");
     });
 
     let presence = doc.connection.getDocPresence(props.collection, props.id);
