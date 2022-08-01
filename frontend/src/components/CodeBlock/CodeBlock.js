@@ -13,7 +13,7 @@ import { ThemeContext } from "../../App";
 import CodeExecution from "../CodeExecution/CodeExecution";
 import constants from "../../utils/Constants";
 import GithubBlock from "../GithubBlock/GithubBlock";
-import LanguageDropDown from "../../LanguageDropDown/LanguageDropDown";
+import LanguageDropDown from "../LanguageDropDown/LanguageDropDown";
 function CodeBlock(props) {
   let Nav = useNavigate();
   const doc = props.doc;

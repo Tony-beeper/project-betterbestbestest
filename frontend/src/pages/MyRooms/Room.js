@@ -4,7 +4,7 @@ import { Container, Grid, Button, Typography } from "@material-ui/core";
 import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
 import { useNavigate } from "react-router-dom";
 
-import NotebookCard from "../../components/NotebookCard";
+import NotebookCard from "../../components/NotebookCard/NotebookCard";
 import roomsAPI from "../../api/rooms";
 import errorHandler from "../../utils/ErrorHandler";
 import { ThemeContext } from "../../App";

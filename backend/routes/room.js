@@ -23,8 +23,10 @@ router.post(
     .withMessage({ err: "wrong or missing roomOwner" }),
   body("roomName")
     .notEmpty()
+    .withMessage({ err: "wrong or missing roomName" })
     .trim()
-    .withMessage({ err: "wrong or missing roomName" }),
+    .isLength({ max: 20 })
+    .withMessage({ err: "name too long" }),
   async (req, res) => {
     // console.log("jason");
     const err = validationResult(req);
