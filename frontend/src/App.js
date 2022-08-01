@@ -12,6 +12,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import { createTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/core";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import CreditsPage from "./pages/CreditsPage/CreditsPage";
 export const ThemeContext = React.createContext();
 
 const theme = createTheme({
@@ -46,6 +47,7 @@ function App() {
             <Route path="/room/:id" element={<NoteBook />} />
             <Route path="/signup/" element={<SignUp />} />
             <Route path="/login/" element={<Login />} />
+            <Route path="/credits" element={<CreditsPage />} />
             <Route exact path="/" element={<HomePage />} />
             <Route path="/*" element={<NotFoundPage />} />
           </Routes>
