@@ -1,6 +1,9 @@
+## Project Demo Link
+https://youtu.be/brnRWoJ8780
+
 # Proposal
 
-### Project title: Pair programming Tool
+### Project title: CodeBook
 
 ### Team Members
 
@@ -34,7 +37,7 @@
 - User can create/login to an account
 - User can create a pair programming room
 - User can join pair programming room with room number and join code
-- Each room can have 1-3 people
+- Each room can have 1-2 people
 - All room members can type in CodeBlock and TextBlock see the other user’s changes in real time
 - Users can upload .py files from their computer and insert into code or text blocks of notebook
 - Supports one language (python)
