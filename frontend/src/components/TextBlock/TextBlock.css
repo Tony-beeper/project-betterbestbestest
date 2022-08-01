@@ -5,7 +5,7 @@
 
 #text-editor-container {
   background-color: #0c1117;
-  max-height: 50vh;
+  height: 50vh;
 }
 
 .text-block .ql-toolbar .ql-stroke {
@@ -28,10 +28,6 @@
 
 .text-block .ql-editor p {
   color: #c9d1d9;
-}
-
-.text-block :global(.ql-snow *) {
-  /* background: white; */
 }
 
 /* 

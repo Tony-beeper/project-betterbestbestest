@@ -162,7 +162,12 @@ function CodeBlock(props) {
     <div className="code-block">
       {/* <div className="editorbar"> */}
       <div className="form-group">
-        <UploadFileForm quill={quill} doc={doc} isCode={true} />
+        <UploadFileForm
+          quill={quill}
+          doc={doc}
+          isCode={true}
+          fileExt={constants.CODE_BLOCK_FILE_EXT}
+        />
 
         {/* <WhiteTextTypography variant="h5">Python</WhiteTextTypography> */}
         {props.oauth && <GithubBlock quill={quill} />}
