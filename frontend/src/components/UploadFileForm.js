@@ -36,6 +36,13 @@ function UploadFileForm({ quill, isCode, doc, fileExt }) {
   const handleUpload = (e) => {
     const currFile = e.target.files[0];
     const extension = currFile.name.split(".").pop().toLowerCase();
+    if (currFile.size > constants.MAX_FILE_SIZE) {
+      toast.error(
+        `File cannot be uploaded. Uploaded file is ${currFile.size} bytes which exceeds the limit of ${constants.MAX_FILE_SIZE} bytes`
+      );
+      return;
+    }
+
     if (extension === fileExt) {
       setSelectedFile(e.target.files[0]);
       console.log(selectedFile);
