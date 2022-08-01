@@ -38,8 +38,9 @@ https://youtu.be/brnRWoJ8780
 - User can create a pair programming room
 - User can join pair programming room with room number and join code
 - Each room can have 1-2 people
-- All room members can type in CodeBlock and TextBlock see the other user’s changes in real time
-- Users can upload .py files from their computer and insert into code or text blocks of notebook
+- All room members can type in CodeBlock and TextBlock see the other user’s changes and cursors in real time
+- Users can upload .py files from their computer and insert into code block of notebook
+- Users can upload .txt files from their computer and insert into text block of notebook
 - Supports one language (python)
 
 ### List the additional features that would be completed by the final version
