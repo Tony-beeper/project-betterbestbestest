@@ -58,13 +58,14 @@ function TextBlock(props) {
         doc.submitOp(delta, { source: quill });
       }
 
-      quill.format("color", "white");
+      quill.format("color", "white", "user");
     });
     doc.on("op", function (op, source) {
       if (source === quill) return;
       quill.updateContents(op);
-      quill.format("color", "white");
+      quill.format("color", "white", "user");
     });
+    quill.format("color", "white", "user");
 
     let presence = doc.connection.getDocPresence(props.collection, props.id);
 
