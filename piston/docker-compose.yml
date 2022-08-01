@@ -1,0 +1,19 @@
+services:
+  api:
+    image: ghcr.io/engineer-man/piston
+    container_name: piston_api
+    restart: always
+    ports:
+      - 2000:2000
+    volumes:
+      - ../../piston/data/piston/packages:/piston/packages
+    tmpfs:
+      - /piston/jobs:exec,uid=1000,gid=1000,mode=711
+      - /tmp:exec
+  nginx:
+    image: nginx:latest
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
