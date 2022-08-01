@@ -10,8 +10,7 @@ import { useParams } from "react-router-dom";
 import roomsAPI from "../../api/rooms";
 import githubAPI from "../../api/github";
 import errorHandler from "../../utils/ErrorHandler";
-import UserNameList from "../../components/UserNameList/UserNameList";
-import GitHubOauthButton from "../../components/GithubOauthButton";
+import GitHubOauthButton from "../../components/GithubOauthButton/GithubOauthButton";
 import { toast } from "react-toastify";
 
 sharedb.types.register(richText.type);
