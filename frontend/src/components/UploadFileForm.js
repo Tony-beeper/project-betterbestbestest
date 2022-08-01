@@ -21,7 +21,7 @@ function readFileContent(file) {
   });
 }
 
-function UploadFileForm({ quill, isCode, doc }) {
+function UploadFileForm({ quill, isCode, doc, fileExt }) {
   const [open, setOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -36,12 +36,12 @@ function UploadFileForm({ quill, isCode, doc }) {
   const handleUpload = (e) => {
     const currFile = e.target.files[0];
     const extension = currFile.name.split(".").pop().toLowerCase();
-    if (extension === "py") {
+    if (extension === fileExt) {
       setSelectedFile(e.target.files[0]);
       console.log(selectedFile);
     } else {
       toast.error(
-        `${currFile.name} has an invalid file type. Please upload a .py file`
+        `${currFile.name} has an invalid file type. Please upload a .${fileExt} file`
       );
     }
   };
@@ -80,13 +80,13 @@ function UploadFileForm({ quill, isCode, doc }) {
       >
         <DialogTitle id="form-dialog-title">Upload</DialogTitle>
         <DialogContent>
-          <DialogContentText>Upload a .py file</DialogContentText>
+          <DialogContentText>{`Upload a ${fileExt} file`}</DialogContentText>
           <form>
             <input
               type="file"
               name="file"
               onChange={handleUpload}
-              accept=".py"
+              accept={"." + fileExt}
             />
           </form>
         </DialogContent>

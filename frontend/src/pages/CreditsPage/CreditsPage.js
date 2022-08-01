@@ -1,6 +1,4 @@
 import React from "react";
-import { Container, Link } from "@material-ui/core";
-import PageHeading from "../../components/Headings/PageHeading";
 import RoundedBoxContainer from "../../components/Containers/RoundedBoxContainer/RoundedBoxContainer";
 import PageContainer from "../../components/Containers/PageContainer/PageContainer";
 import CodebookLink from "../../components/CodebookLink/CodebookLink";
