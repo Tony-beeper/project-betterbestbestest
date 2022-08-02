@@ -109,7 +109,12 @@ function TextBlock(props) {
 
   return (
     <div className="text-block">
-      <UploadFileForm quill={quill} isCode={false} doc={doc} />
+      <UploadFileForm
+        quill={quill}
+        isCode={false}
+        doc={doc}
+        fileExt={constants.TEXT_BLOCK_FILE_EXT}
+      />
       <div id="text-editor-container"></div>
     </div>
   );

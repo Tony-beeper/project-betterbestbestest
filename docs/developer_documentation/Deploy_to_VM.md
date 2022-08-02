@@ -1,4 +1,4 @@
-# Generate ssh key
+# Generate ssh key on personal device
 
 1. generate ssh key with `ssh-keygen` and follow instructions
 2. `cd ~/.ssh` and find `id_rsa.pub`
@@ -8,19 +8,26 @@
 1. give `id_rsa.pub` to admin
 2. admin add public key `~/.ssh/authorized_keys`
 
-# Git
-
-1. `git fetch`
-2. `git pull` (if necessary)
-3. `git switch [branchname]` (if necessary)
-
 # ssh into vm
 
 1. `ssh root@[ip address]`
 
     - you might have to specify ssh key
 
-2. `cd /usr/src/app/project-better-best-bestest`
+# Generate ssh key on VM
+
+1. Generate ssh key for vm with `ssh-keygen` and follow instructions 
+2. `cd ~/.ssh` and find `id_rsa.pub`
+3. Copy public key to github delpoy keys
+
+   Settings > Deploy Keys > Add deploy Key
+![image](https://user-images.githubusercontent.com/22690560/182260258-cb6e74db-ff8b-4966-9dae-489e831caa4a.png)
+
+
+# Git
+1. `git fetch`
+2. `git pull` (if necessary)
+3. `git switch [branchname]` (if necessary)
 
 # Screen
 

@@ -4,6 +4,7 @@ import { Button } from "@material-ui/core";
 function RunButton(props) {
   return (
     <Button
+      {...props}
       primary={true}
       type="submit"
       variant="contained"

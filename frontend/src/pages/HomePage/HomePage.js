@@ -5,18 +5,12 @@ import engineers from "../../media/engineers.jpeg";
 import WhiteTextTypography from "../../components/StyledMuiComponents/WhiteTypography";
 import { Container, Grid, Button, Typography } from "@material-ui/core";
 import CodeBookIconWhite from "../../media/codebookiconwhite.png";
+import PageHeading from "../../components/Headings/PageHeading";
 
 const HomePage = () => {
   return (
     <Container maxWidth="lg">
-      <WhiteTextTypography
-        variant="h3"
-        align="center"
-        gutterBottom
-        style={{ marginTop: "1em" }}
-      >
-        CodeBook
-      </WhiteTextTypography>
+      <PageHeading>Codebook</PageHeading>
       <div className="homepage">
         <img src={CodeBookIconWhite} className="backgroundImage" alt="icon" />
       </div>
