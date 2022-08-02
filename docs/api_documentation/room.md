@@ -1,7 +1,7 @@
 
 # Room API
 
-### Create room
+### Create a room
 
 - URL: `POST /api/rooms/username`
   - content-type: `application/json`
@@ -36,7 +36,7 @@
   - body: object
     - err: (string) unable to create the room
 
-### Delete room
+### Delete a room
 
 - URL: `DELETE /api/rooms/:roomId/`
   - content-type: `application/json`
