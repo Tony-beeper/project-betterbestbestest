@@ -11,7 +11,7 @@ import {
   AccordionDetails,
   ThemeProvider,
 } from "@material-ui/core";
-import { makeStyles, createTheme } from "@material-ui/core/styles";
+import { createTheme } from "@material-ui/core/styles";
 import { ExpandMoreRounded } from "@material-ui/icons";
 
 import roomAPI from "../../api/rooms";
