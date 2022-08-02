@@ -10,8 +10,7 @@ import { useParams } from "react-router-dom";
 import roomsAPI from "../../api/rooms";
 import githubAPI from "../../api/github";
 import errorHandler from "../../utils/ErrorHandler";
-import UserNameList from "../../components/UserNameList/UserNameList";
-import GitHubOauthButton from "../../components/GithubOauthButton";
+import GitHubOauthButton from "../../components/GithubOauthButton/GithubOauthButton";
 import { toast } from "react-toastify";
 
 sharedb.types.register(richText.type);
@@ -24,7 +23,6 @@ function NoteBook() {
   const [data, setData] = useState(null);
   const [codeBlockDoc, setCodeBlockDoc] = useState(null);
   const [textBlockDoc, setTextBlockDoc] = useState(null);
-  const [usersInRoom, setUsersInRoom] = useState([]);
   const [oauth, setOauth] = useState(false);
 
   useEffect(() => {
@@ -68,21 +66,6 @@ function NoteBook() {
       });
   }, []);
 
-  useEffect(() => {}, [usersInRoom]);
-
-  const join = (joinInfo) => {
-    setUsersInRoom([...usersInRoom, joinInfo]);
-    // toast.info(`${joinInfo["join_name"]} joined the room`);
-  };
-
-  const leave = (leaveInfo) => {
-    const filteredUserInRoom = usersInRoom.filter((value, index) => {
-      return value["id"] !== leaveInfo.localPresenceId;
-    });
-    setUsersInRoom(filteredUserInRoom);
-    // toast.info(`${leaveInfo["join_name"]} leave the room`);
-  };
-
   return (
     <div className="notebook-container">
       <div className="notebook-body">
@@ -91,15 +74,6 @@ function NoteBook() {
             <h1>{data && data.name}</h1>
             <GitHubOauthButton id={id} oauth={oauth} />
           </div>
-          <UserNameList
-            users={[
-              ...new Set(
-                usersInRoom.map((joinInfo) => {
-                  return joinInfo["join_name"];
-                })
-              ),
-            ]}
-          />
         </div>
         <div className="notebook-content">
           {codeBlockDoc && (
@@ -107,8 +81,6 @@ function NoteBook() {
               doc={codeBlockDoc}
               collection={`${id}_code`}
               id={data.codeSharedbID}
-              join={join}
-              leave={leave}
               oauth={oauth}
             />
           )}

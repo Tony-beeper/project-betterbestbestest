@@ -6,7 +6,7 @@
 
 #editor-container {
   background-color: #23241e;
-  max-height: 50vh;
+  height: 50vh;
 }
 
 .form-group {
@@ -15,19 +15,9 @@
   justify-content: space-between;
 }
 
-.ql-snow * {
+.ql-snow {
   box-sizing: border-box;
-  /* box-shadow: #20c20e; */
-
-  /* border: 1px solid #20c20e; */
 }
-/* .ql-editor {
-  border: "none";
-} */
-
-/* .ql-editor {
-  border: 2px solid #20c20e;
-} */
 
 .editorbar {
   display: flex;

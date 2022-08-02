@@ -19,26 +19,6 @@ import errorHandler from "../../utils/ErrorHandler";
 import { ThemeContext } from "../../App";
 import AddRoomStyle from "./AddRoomStyle";
 import WhiteTextTypography from "../../components/StyledMuiComponents/WhiteTypography";
-// const useStyles = makeStyles({
-//   root: {
-//     display: "flex",
-//     flexDirection: "column",
-//     marginTop: 50,
-//   },
-//   background_blue: {
-//     marginTop: 10,
-//     background: "linear-gradient(to right,  #2980B9, #6DD5FA)",
-//     border: 0,
-//     color: "white",
-//     borderRadius: 3,
-//   },
-//   textField: {
-//     marginBottom: 10,
-//   },
-//   input: {
-//     color: "white",
-//   },
-// });
 
 const theme = createTheme({
   palette: {
@@ -138,14 +118,17 @@ const Room = () => {
                   className={classes.textField}
                   required
                   color="secondary"
+                  error={roomName.length > 20}
                   value={roomName}
                   fullWidth
                   onChange={handleRoomNameChange}
                   variant="standard"
-                  label="room name"
+                  label={
+                    roomName.length < 20 ? "room name" : "room name too long"
+                  }
                 />
                 <Button
-                  disabled={disable}
+                  disabled={disable || roomName.length > 20}
                   variant="contained"
                   color="primary"
                   type="submit"

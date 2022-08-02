@@ -73,7 +73,7 @@ const Bar = () => {
     Nav("/room");
   };
 
-  const handleMenuClick = async () => {
+  const navigateHome = async () => {
     Nav("/");
   };
 
@@ -89,13 +89,18 @@ const Bar = () => {
                 color="inherit"
                 aria-label="menu"
                 size="large"
+                onClick={navigateHome}
               >
                 <Icon classes={{ root: classes.iconRoot }}>
                   <img className={classes.imageIcon} src={CodeBookIconWhite} />
                 </Icon>
               </IconButton>
 
-              <Typography variant="h6" className={classes.title}>
+              <Typography
+                variant="h6"
+                className={classes.title}
+                onClick={navigateHome}
+              >
                 CodeBook
               </Typography>
 
@@ -119,13 +124,18 @@ const Bar = () => {
                 color="inherit"
                 aria-label="menu"
                 size="large"
+                onClick={navigateHome}
               >
                 <Icon classes={{ root: classes.iconRoot }}>
                   <img className={classes.imageIcon} src={CodeBookIconWhite} />
                 </Icon>
               </IconButton>
 
-              <Typography variant="h6" className={classes.title}>
+              <Typography
+                variant="h6"
+                className={classes.title}
+                onClick={navigateHome}
+              >
                 CodeBook
               </Typography>
               <Button color="inherit" href="login">
