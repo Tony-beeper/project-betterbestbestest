@@ -80,6 +80,10 @@ Generate the bearer token with code from user frontend github ouath, then encryp
   - content-type: `application/json`
   - body: object
     - err: file contains invalid character
+- response: 400
+  - content-type: `application/json`
+  - body: object
+    - err: can not find a token
 - response: 422
   - content-type: `application/json`
   - body: object
