@@ -4,7 +4,7 @@ import Quill from "quill";
 import QuillCursors from "quill-cursors";
 import "react-quill/dist/quill.snow.css";
 import "./CodeBlock.css";
-import UploadFileForm from "../UploadFileForm";
+import UploadFileForm from "../UploadFileForm/UploadFileForm";
 import tinycolor from "tinycolor2";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
@@ -21,7 +21,6 @@ function CodeBlock(props) {
   const [context, setContext] = useContext(ThemeContext);
   let colors = {};
 
-  // hljs.registerLanguage("python", python);
   Quill.register("modules/cursors", QuillCursors);
 
   useEffect(() => {
@@ -128,7 +127,6 @@ function CodeBlock(props) {
           fileExt={constants.CODE_BLOCK_FILE_EXT}
         />
 
-        {/* <WhiteTextTypography variant="h5">Python</WhiteTextTypography> */}
         {props.oauth && <GithubBlock quill={quill} />}
       </div>
       <LanguageDropDown />

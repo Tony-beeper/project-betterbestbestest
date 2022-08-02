@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 import { useState } from "react";
-import UploadButton from "./UploadButton";
+import UploadButton from "../Buttons/UploadButton";
 import constants from "../../utils/Constants";
 import { toast } from "react-toastify";
 

@@ -1,17 +1,15 @@
 import Quill from "quill";
 import QuillCursors from "quill-cursors";
 import "./TextBlock.css";
-import UploadFileForm from "../UploadFileForm";
+import UploadFileForm from "../UploadFileForm/UploadFileForm";
 import tinycolor from "tinycolor2";
 
 import { useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { ThemeContext } from "../../App";
 import constants from "../../utils/Constants";
-import { useNavigate } from "react-router-dom";
 
 function TextBlock(props) {
-  let Nav = useNavigate();
   const doc = props.doc;
   const [quill, setQuill] = useState(null);
   const [context, setContext] = useContext(ThemeContext);
@@ -22,7 +20,6 @@ function TextBlock(props) {
   useEffect(() => {
     let localPresence;
     doc.subscribe((error) => {
-      // console.log(doc);
       localPresence = initQuill();
     });
 
@@ -44,7 +41,6 @@ function TextBlock(props) {
     let cursors = quill.getModule("cursors");
 
     quill.setContents(doc.data);
-    // quill.formatLine(0, quill.getLength(), { color: "white" });
 
     quill.on("text-change", function (delta, oldDelta, source) {
       if (source !== "user") return;
@@ -86,16 +82,8 @@ function TextBlock(props) {
     console.log(presence);
 
     quill.on("selection-change", function (range, oldRange, source) {
-      // We only need to send updates if the user moves the cursor
-      // themselves. Cursor updates as a result of text changes will
-      // automatically be handled by the remote client.
       if (source !== "user") return;
-      // Ignore blurring, so that we can see lots of users in the
-      // same window. In real use, you may want to clear the cursor.
       if (!range) return;
-      // In this particular instance, we can send extra information
-      // on the presence object. This ability will vary depending on
-      // type.
       range.name = context.username;
 
       console.log(presence);
