@@ -6,7 +6,7 @@ const { createDoc, deleteDoc, test } = require("../models/sharedb");
 const { v4 } = require("uuid");
 const { ObjectId } = require("mongodb");
 const Message = require("../utils/defaultMessages");
-const MAX_MEMBERS = 2;
+const MAX_MEMBERS = 3;
 const MAX_ROOM_PER_USER = 1;
 const statusCode = require("../utils/StatusCodes");
 const StatusCodes = require("../utils/StatusCodes");
@@ -23,8 +23,10 @@ router.post(
     .withMessage({ err: "wrong or missing roomOwner" }),
   body("roomName")
     .notEmpty()
+    .withMessage({ err: "wrong or missing roomName" })
     .trim()
-    .withMessage({ err: "wrong or missing roomName" }),
+    .isLength({ max: 20 })
+    .withMessage({ err: "name too long" }),
   async (req, res) => {
     // console.log("jason");
     const err = validationResult(req);

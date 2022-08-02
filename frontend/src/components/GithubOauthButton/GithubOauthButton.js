@@ -1,18 +1,7 @@
 import { IconButton } from "@material-ui/core";
 import GitHubIcon from "@material-ui/icons/GitHub";
-import { createTheme } from "@material-ui/core/styles";
+import theme from "./GithubOauthButtonStyle";
 import { ThemeProvider } from "@material-ui/core";
-const theme = createTheme({
-  palette: {
-    primary: { main: "#696969" },
-    secondary: { main: "#238636" },
-    // success: { main: "blue" },
-    info: {
-      main: "#faff01",
-    },
-    // success: { main: "#faff01" },
-  },
-});
 
 const GitHubOauthButton = ({ id, oauth }) => {
   return (

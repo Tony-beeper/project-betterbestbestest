@@ -8,7 +8,6 @@ import {
 } from "@material-ui/core";
 import { useState } from "react";
 import UploadButton from "./Buttons/UploadButton";
-import CodeBookButton from "./Buttons/CodeBookButton";
 import constants from "../utils/Constants";
 import { toast } from "react-toastify";
 

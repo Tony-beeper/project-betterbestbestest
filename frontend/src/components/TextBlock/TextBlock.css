@@ -12,10 +12,6 @@
   fill: none;
   stroke: #fff;
 }
-/* .text-block .ql-toolbar .ql {
-  fill: none;
-  stroke: #fff;
-} */
 
 .text-block .ql-toolbar .ql-fill {
   fill: #c8d1d9;
@@ -26,9 +22,11 @@
   color: #c8d1d9;
 }
 
-.text-block .ql-editor p {
-  color: #c9d1d9;
+.ql-snow {
+  box-sizing: border-box;
+  color: white;
 }
+
 
 /* 
 .ql-toolbar.ql-snow {
