@@ -51,13 +51,13 @@ router.post(
     createDoc(`${_id}_comment`, commentId, function (err) {
       if (err)
         return res
-          .status(statusCode.BAD_REQUEST)
-          .send(Message.createErrorMessage(err));
+          .status(statusCode.INTERNAL_SERVER_ERROR)
+          .send(Message.createErrorMessage("unable to create the room"));
       createDoc(`${_id}_code`, codeId, async function (err) {
         if (err)
           return res
-            .status(statusCode.BAD_REQUEST)
-            .send(Message.createErrorMessage(err));
+            .status(statusCode.INTERNAL_SERVER_ERROR)
+            .send(Message.createErrorMessage("unable to create the room"));
         const newRoom = new Room({
           joinCode: generateString(6),
           owner: roomOwner,
@@ -67,7 +67,6 @@ router.post(
           roomNumber: generateId(9),
           name: roomName,
           date: new Date(),
-          // new Date().toISOString().split("T")[0]
           _id: _id,
         });
         const room = await newRoom.save();
@@ -100,27 +99,14 @@ router.delete(
         .status(statusCode.NOT_FOUND)
         .send(Message.createErrorMessage("room does not exist"));
     }
-    // if (room.roomOwner !== req.username)
-    //   return res
-    //     .status(403)
-    //     .json({ err: "you are not allowed to delete the room" });
     deleteDoc(`${room._id}_comment`, room.commentSharedbID, (err) => {
       console.log(err);
       deleteDoc(`${room._id}_code`, room.codeSharedbID, async (err) => {
-        if (err) return res.json({ err: "error when delete" });
+        console.log(err);
         await Room.deleteOne({ _id: ObjectId(roomId) });
         return res.json(room.toObject());
       });
     });
-
-    // deleteDoc(`${room.Owner}_comment`, room.comment_sharedbID, (err) => {
-    //   if (err) return res.status(500).json({ err: err });
-    //   deleteDoc(`${room.Owner}_code`, room.code_sharedbID, async (err) => {
-    //     if (err) return res.status(500).json({ err: err });
-    //     await Room.deleteOne({ _id: ObjectId(roomId) });
-    //     return res.json(room);
-    //   });
-    // });
   }
 );
 
@@ -131,7 +117,7 @@ router.get(
     .notEmpty()
     .trim()
     .escape()
-    .withMessage({ err: "missing or wrong username" }),
+    .withMessage({ err: "wrong or missing username" }),
   async (req, res) => {
     const err = validationResult(req);
     if (!err.isEmpty()) {
@@ -216,7 +202,7 @@ router.patch(
     if (room.members.includes(req.username)) {
       return res
         .status(statusCode.BAD_REQUEST)
-        .json(Message.createErrorMessage("You Join the Room Already"));
+        .json(Message.createErrorMessage("you join the room already"));
     }
     room.members.push(req.username);
     const update_room = await Room.findOneAndUpdate(
@@ -236,7 +222,7 @@ router.patch(
     .trim()
     .escape()
     .custom((roomId) => ObjectId.isValid(roomId))
-    .withMessage({ err: "Wrong or Missing RoomId" }),
+    .withMessage({ err: "wrong or missing RoomId" }),
   async (req, res) => {
     const err = validationResult(req);
     if (!err.isEmpty()) {
@@ -266,13 +252,5 @@ router.patch(
     return res.json(update_room.toObject());
   }
 );
-
-router.post("/test/", (req, res) => {
-  var name = req.body.name;
-  var id = req.body.id;
-  test(name, id, (err) => {
-    return res.json("ok");
-  });
-});
 
 module.exports = router;

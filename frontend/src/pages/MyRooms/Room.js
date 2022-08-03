@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import { Container, Grid, Button, Typography } from "@material-ui/core";
 import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
 import { useNavigate } from "react-router-dom";
@@ -8,18 +7,11 @@ import NotebookCard from "../../components/NotebookCard/NotebookCard";
 import roomsAPI from "../../api/rooms";
 import errorHandler from "../../utils/ErrorHandler";
 import { ThemeContext } from "../../App";
-
-const useStyles = makeStyles((theme) => ({
-  header: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-}));
+import RoomStyle from "./RoomStyle";
 
 const Room = () => {
   const navigate = useNavigate();
-  const classes = useStyles();
+  const classes = RoomStyle();
   let [context, setContext] = useContext(ThemeContext);
   let [username, setUsername] = useState(context);
   const [myRooms, setMyRooms] = useState([]);
@@ -34,7 +26,6 @@ const Room = () => {
     setUsername(context.username);
 
     roomsAPI
-      // .getRooms(username.username)
       .getRooms(username.username)
       .then((data) => {
         setMyRooms(data.myRooms);

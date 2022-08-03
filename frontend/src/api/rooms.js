@@ -2,12 +2,6 @@ import axios from "axios";
 
 const backendURL = process.env.REACT_APP_BACKEND_URL + "/api/rooms";
 const createRoom = async (username, roomName) => {
-  // const data = await axios.post(backendURL, {
-  //   username: username,
-  //   roomName: roomName,
-  //   withCredentials: true,
-  // });
-
   const res = await axios({
     method: "POST",
     url: backendURL,
@@ -30,10 +24,6 @@ const getRoom = async (roomId) => {
 };
 
 const getRooms = async (username) => {
-  // const data = await axios.get(`${backendURL}/all/${username}`, {
-  //   withCredentials: true,
-  // });
-
   const res = await axios({
     method: "GET",
     url: backendURL + "/all/" + username,
@@ -58,10 +48,6 @@ const joinRoom = async (roomNumber, joinCode) => {
 };
 
 const deleteRoom = async (roomId) => {
-  // const data = await axios.delete(`${backendURL}/${roomId}`, {
-  //   withCredentials: true,
-  // });
-
   const res = await axios({
     method: "DELETE",
     url: backendURL + "/" + roomId,
@@ -74,11 +60,6 @@ const deleteRoom = async (roomId) => {
 };
 
 const leaveRoom = async (roomId) => {
-  // const data = await axios.patch(`${backendURL}/leave/`, {
-  //   roomId: roomId,
-  //   withCredentials: true,
-  // });
-
   const res = await axios({
     method: "PATCH",
     url: backendURL + "/leave/",
