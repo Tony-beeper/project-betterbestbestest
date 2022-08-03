@@ -8,7 +8,6 @@ import {
   IconButton,
   Icon,
 } from "@material-ui/core";
-// import Icon from "@material-ui/core/Icon";
 
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";

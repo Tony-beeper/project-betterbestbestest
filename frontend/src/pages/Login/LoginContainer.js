@@ -22,6 +22,8 @@ const LoginContainer = () => {
   const [btnTxt, setBtnTxt] = useState("show");
   const [type, setType] = useState("password");
   const [score, setScore] = useState("0");
+  const [disable, setDisable] = useState(false);
+
   useEffect(() => {
     const cookieCheck = document.cookie.replace(
       /(?:(?:^|.*;\s*)username\s*\=\s*([^;]*).*$)|^.*$/,
@@ -73,6 +75,7 @@ const LoginContainer = () => {
 
   const submitLogin = (e) => {
     e.preventDefault();
+    setDisable(true);
     userAPI
       .login(user.username, user.password)
       .then((data) => {
@@ -85,7 +88,9 @@ const LoginContainer = () => {
       .catch(({ response }) => {
         errorHandler.handleLogin(response);
       })
-      .finally(() => {});
+      .finally(() => {
+        setDisable(false);
+      });
   };
 
   return (
@@ -100,6 +105,7 @@ const LoginContainer = () => {
           score={score}
           btnTxt={btnTxt}
           type={type}
+          disabled={disable}
         />
       </div>
     </MuiThemeProvider>
