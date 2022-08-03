@@ -50,8 +50,7 @@ function startServer() {
   // Create a web server to serve files and listen to WebSocket connections
   const app = express();
   const server = http.createServer(app);
-  // app.use(express.json());
-  // body parser
+
   const corConfig = { origin: true, credentials: true };
   app.use(
     cors({
@@ -79,17 +78,12 @@ function startServer() {
     console.log("HTTP request", req.username, req.method, req.url, req.body);
     next();
   });
+  // app routes
+
   app.use("/api/user", userRoute);
   app.use("/api/rooms", isAuthenticated, roomRoutes);
   app.use("/api/piston", isAuthenticated, pistonRoutes);
   app.use("/api/github", isAuthenticated, githubRoutes);
-
-  // app.use(function (req, res, next) {
-  //   if (!req.username) return res.status(401).json({ err: "access denied" });
-  //   next();
-  // });
-
-  // app routes
 
   // Connect any incoming WebSocket connection to ShareDB
   const wss = new WebSocket.Server({ server: server });
