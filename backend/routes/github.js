@@ -118,11 +118,7 @@ router.post(
     .withMessage({ err: "missing path" })
     .isLength({ max: 50 })
     .withMessage({ err: "file name too long" }),
-  body("message")
-    .notEmpty()
-    .trim()
-    .escape()
-    .withMessage({ err: "missing message" }),
+  body("message").notEmpty().trim().withMessage({ err: "missing message" }),
   body("content")
     .notEmpty()
     .withMessage({ err: "missing content" })
