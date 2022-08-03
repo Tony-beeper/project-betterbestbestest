@@ -2,7 +2,6 @@ import { toast } from "react-toastify";
 
 const handleError = (response) => {
   if (response && response.data) {
-    console.log(response);
     if (response.data.err) toast.error(response.data.err);
     else toast.error("No Error Message On handleError");
   } else {

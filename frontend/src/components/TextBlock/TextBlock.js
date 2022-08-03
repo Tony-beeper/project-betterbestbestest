@@ -66,12 +66,10 @@ function TextBlock(props) {
     let presence = doc.connection.getDocPresence(props.collection, props.id);
 
     presence.subscribe(function (error) {
-      console.log("subscribed");
       if (error) throw error;
     });
 
     presence.on("receive", function (id, range) {
-      console.log(range);
       colors[id] = colors[id] || tinycolor.random().toHexString();
       var name = (range && range.name) || "Anonymous";
       cursors.createCursor(id, name, colors[id]);
@@ -79,17 +77,14 @@ function TextBlock(props) {
     });
 
     let localPresence = presence.create();
-    console.log(presence);
 
     quill.on("selection-change", function (range, oldRange, source) {
       if (source !== "user") return;
       if (!range) return;
       range.name = context.username;
 
-      console.log(presence);
       localPresence.submit(range, function (error) {
         if (error) throw error;
-        console.log(range);
       });
     });
     return localPresence;

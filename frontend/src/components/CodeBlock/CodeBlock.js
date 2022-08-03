@@ -27,7 +27,6 @@ function CodeBlock(props) {
     let intervalId;
     let localPresence;
     doc.subscribe((err) => {
-      if (err) console.log(err);
       let res = initQuill();
       intervalId = res.interval;
       localPresence = res.localPresence;
@@ -35,9 +34,7 @@ function CodeBlock(props) {
 
     return () => {
       doc.unsubscribe();
-      localPresence.destroy(() => {
-        console.log(`cleared localpresense`);
-      });
+      localPresence.destroy(() => {});
     };
   }, []);
 
@@ -87,7 +84,6 @@ function CodeBlock(props) {
     let presence = doc.connection.getDocPresence(props.collection, props.id);
 
     presence.subscribe(function (error) {
-      console.log("subscribed");
       if (error) throw error;
     });
 

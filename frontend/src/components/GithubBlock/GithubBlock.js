@@ -81,7 +81,6 @@ const GithubBlock = ({ quill }) => {
         toast.success(`${data.file} created in ${repo}`);
       })
       .catch(({ response }) => {
-        console.log(response);
         errorHandler.handleError(response);
       })
       .finally(() => {

@@ -44,7 +44,6 @@ function UploadFileForm({ quill, isCode, doc, fileExt }) {
 
     if (extension === fileExt) {
       setSelectedFile(e.target.files[0]);
-      console.log(selectedFile);
     } else {
       toast.error(
         `${currFile.name} has an invalid file type. Please upload a .${fileExt} file`
@@ -67,7 +66,7 @@ function UploadFileForm({ quill, isCode, doc, fileExt }) {
         doc.submitOp(delta, { source: quill });
         quill.formatLine(0, quill.getLength(), { "code-block": isCode });
       })
-      .catch((error) => console.log(error))
+      .catch((error) => {})
       .finally(() => {
         setOpen(false);
       });
