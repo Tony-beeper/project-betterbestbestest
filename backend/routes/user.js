@@ -16,7 +16,6 @@ const saltRounds = 10;
 
 const usernameCookieOptions = {
   path: "/",
-  maxAge: 1000 * 60 * 60 * 24 * 7,
 };
 
 router.post(
