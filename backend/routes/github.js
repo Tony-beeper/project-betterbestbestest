@@ -9,7 +9,7 @@ const client_secrete = process.env.CLIENT_SECRETE;
 const oauth_url = process.env.OAUTH_URL;
 const token_key = process.env.TOKEN_KEY;
 const axios = require("axios").default;
-const statusCode = require("../utils/StatusCodes");
+const StatusCodes = require("../utils/StatusCodes");
 const Message = require("../utils/defaultMessages");
 const { Octokit } = require("octokit");
 const base64 = require("base-64");
@@ -21,7 +21,7 @@ const withToken = async (req, res, next) => {
   console.tokenData;
   if (!tokenData) {
     return res
-      .status(statusCode.BAD_REQUEST)
+      .status(StatusCodes.BAD_REQUEST)
       .send(Message.createErrorMessage("can not find a token"));
   }
   const token = CryptoJS.AES.decrypt(tokenData.token, token_key).toString(
@@ -42,7 +42,7 @@ router.post(
     const err = validationResult(req);
     if (!err.isEmpty()) {
       return res
-        .status(statusCode.BAD_REQUEST)
+        .status(StatusCodes.BAD_REQUEST)
         .json(Message.createErrorMessage(err.errors[0].msg.err));
     }
     axios({
@@ -55,7 +55,7 @@ router.post(
       .then(async (authoRes) => {
         if (!authoRes.data.includes("access_token")) {
           return res
-            .status(statusCode.INTERNAL_SERVER_ERROR)
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
             .send(Message.createErrorMessage("github authorize fail"));
         }
         // get the access token
@@ -78,7 +78,7 @@ router.post(
       .catch((err) => {
         console.log(err);
         return res
-          .status(statusCode.INTERNAL_SERVER_ERROR)
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .send(Message.createErrorMessage("github authorize fail"));
       });
   }
@@ -98,13 +98,13 @@ router.get("/repos", withToken, (req, res) => {
     .catch((err) => {
       console.log(err);
       return res
-        .status(statusCode.FORBIDDEN)
+        .status(StatusCodes.FORBIDDEN)
         .send(Message.createErrorMessage("access github failed"));
     });
 });
 
 router.post(
-  "",
+  "/repos/:owner/:repo/",
   withToken,
   param("owner")
     .notEmpty()
@@ -132,7 +132,7 @@ router.post(
     const err = validationResult(req);
     if (!err.isEmpty()) {
       return res
-        .status(statusCode.BAD_REQUEST)
+        .status(StatusCodes.BAD_REQUEST)
         .json(Message.createErrorMessage(err.errors[0].msg.err));
     }
     const octokit = new Octokit({
@@ -146,8 +146,12 @@ router.post(
       path = sanitize(req.body.path);
     } catch (error) {
       return res
-        .status(statusCode.BAD_REQUEST)
-        .json("file or file name contains invalid character");
+        .status(StatusCodes.BAD_REQUEST)
+        .json(
+          Message.createErrorMessage(
+            "file or file name contains invalid character"
+          )
+        );
     }
 
     octokit
@@ -169,7 +173,7 @@ router.post(
             .send(Message.createErrorMessage("file already exists"));
         }
         return res
-          .status(statusCode.FORBIDDEN)
+          .status(StatusCodes.FORBIDDEN)
           .send(Message.createErrorMessage("access github failed"));
       });
   }

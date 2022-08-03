@@ -6,6 +6,7 @@ const router = express.Router();
 const user = require("../models/user");
 const Message = require("../utils/defaultMessages.js");
 const { MongoClient } = require("mongodb");
+const sanitize = require("sanitize-filename");
 const dotenv = require("dotenv");
 dotenv.config();
 const client = new MongoClient(process.env.MONGO_CONN_STR);
@@ -34,6 +35,18 @@ router.post(
       return res
         .status(StatusCodes.UNAUTHORIZED)
         .send(Message.createErrorMessage(err.errors[0].msg.err));
+    }
+    try {
+      const username = sanitize(req.body.username);
+      if (username !== req.body.username) {
+        throw err;
+      }
+    } catch (error) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json(
+          Message.createErrorMessage("username contains invalid character")
+        );
     }
     bcrypt.hash(req.body.password, saltRounds, async function (err, hash) {
       if (err)

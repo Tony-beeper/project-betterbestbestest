@@ -8,7 +8,6 @@ const { ObjectId } = require("mongodb");
 const Message = require("../utils/defaultMessages");
 const MAX_MEMBERS = 3;
 const MAX_ROOM_PER_USER = 1;
-const statusCode = require("../utils/StatusCodes");
 const StatusCodes = require("../utils/StatusCodes");
 // router = "/api/room"
 const router = express.Router();
@@ -40,7 +39,7 @@ router.post(
     const rooms = await Room.find({ owner: roomOwner });
     if (rooms.length >= MAX_ROOM_PER_USER) {
       return res
-        .status(statusCode.BAD_REQUEST)
+        .status(StatusCodes.BAD_REQUEST)
         .send(
           Message.createErrorMessage("exceed number of rooms allowed per user")
         );
@@ -51,12 +50,12 @@ router.post(
     createDoc(`${_id}_comment`, commentId, function (err) {
       if (err)
         return res
-          .status(statusCode.INTERNAL_SERVER_ERROR)
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .send(Message.createErrorMessage("unable to create the room"));
       createDoc(`${_id}_code`, codeId, async function (err) {
         if (err)
           return res
-            .status(statusCode.INTERNAL_SERVER_ERROR)
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
             .send(Message.createErrorMessage("unable to create the room"));
         const newRoom = new Room({
           joinCode: generateString(6),
@@ -89,14 +88,14 @@ router.delete(
     const err = validationResult(req);
     if (!err.isEmpty()) {
       return res
-        .status(statusCode.BAD_REQUEST)
+        .status(StatusCodes.BAD_REQUEST)
         .send(Message.createErrorMessage(err.errors[0].msg.err));
     }
     const roomId = req.params.roomId;
     const room = await Room.findOne({ _id: ObjectId(roomId) });
     if (!room) {
       return res
-        .status(statusCode.NOT_FOUND)
+        .status(StatusCodes.NOT_FOUND)
         .send(Message.createErrorMessage("room does not exist"));
     }
     deleteDoc(`${room._id}_comment`, room.commentSharedbID, (err) => {
@@ -122,7 +121,7 @@ router.get(
     const err = validationResult(req);
     if (!err.isEmpty()) {
       return res
-        .status(statusCode.BAD_REQUEST)
+        .status(StatusCodes.BAD_REQUEST)
         .send(Message.createErrorMessage(err.errors[0].msg.err));
     }
 
@@ -151,14 +150,14 @@ router.get(
     const err = validationResult(req);
     if (!err.isEmpty()) {
       return res
-        .status(statusCode.BAD_REQUEST)
+        .status(StatusCodes.BAD_REQUEST)
         .send(Message.createErrorMessage(err.errors[0].msg.err));
     }
     const roomId = req.params.roomId;
     const room = await Room.findOne({ _id: ObjectId(roomId) });
     if (!room)
       return res
-        .status(statusCode.NOT_FOUND)
+        .status(StatusCodes.NOT_FOUND)
         .send(Message.createErrorMessage("Room Not Found"));
     return res.json(room.toObject());
   }
@@ -191,17 +190,17 @@ router.patch(
     const room = await Room.findOne({ roomNumber: roomNumber });
     if (!room || room.joinCode !== joinCode) {
       return res
-        .status(statusCode.BAD_REQUEST)
+        .status(StatusCodes.BAD_REQUEST)
         .send(Message.createErrorMessage("Wrong RoomId or Join Code"));
     }
     if (room.members.length >= MAX_MEMBERS) {
       return res
-        .status(statusCode.BAD_REQUEST)
+        .status(StatusCodes.BAD_REQUEST)
         .send(Message.createErrorMessage("Room Already Full"));
     }
     if (room.members.includes(req.username)) {
       return res
-        .status(statusCode.BAD_REQUEST)
+        .status(StatusCodes.BAD_REQUEST)
         .json(Message.createErrorMessage("you join the room already"));
     }
     room.members.push(req.username);
@@ -238,7 +237,7 @@ router.patch(
         .sned(Message.createErrorMessage("room does not exist"));
     if (!room.members.includes(req.username))
       return res
-        .status(statusCode.FORBIDDEN)
+        .status(StatusCodes.FORBIDDEN)
         .send(Message.createErrorMessage("you need to join first"));
     const index = room.members.indexOf(req.username);
     if (index !== -1) {
