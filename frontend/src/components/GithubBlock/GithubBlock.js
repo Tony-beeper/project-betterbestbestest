@@ -73,10 +73,6 @@ const GithubBlock = ({ quill }) => {
   const handleDownload = () => {
     setDisable(true);
     const params = repo.split("/");
-    // const path = `codeBook_${new Date().toJSON().slice(0, 10)}.py`.replace(
-    //   "-",
-    //   "_"
-    // );
     const path = sanitize(`${file}.py`);
     const content = quill.getText(0, quill.getLength());
     githubAPI
@@ -85,7 +81,6 @@ const GithubBlock = ({ quill }) => {
         toast.success(`${data.file} created in ${repo}`);
       })
       .catch(({ response }) => {
-        console.log(response);
         errorHandler.handleError(response);
       })
       .finally(() => {

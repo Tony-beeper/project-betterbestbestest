@@ -22,7 +22,7 @@ const withToken = async (req, res, next) => {
   if (!tokenData) {
     return res
       .status(statusCode.BAD_REQUEST)
-      .send(Message.createErrorMessage("no token"));
+      .send(Message.createErrorMessage("can not find a token"));
   }
   const token = CryptoJS.AES.decrypt(tokenData.token, token_key).toString(
     CryptoJS.enc.Utf8
@@ -98,13 +98,13 @@ router.get("/repos", withToken, (req, res) => {
     .catch((err) => {
       console.log(err);
       return res
-        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .status(statusCode.FORBIDDEN)
         .send(Message.createErrorMessage("access github failed"));
     });
 });
 
 router.post(
-  "/repos/:owner/:repo/",
+  "",
   withToken,
   param("owner")
     .notEmpty()

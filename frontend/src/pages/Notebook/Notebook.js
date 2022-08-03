@@ -51,7 +51,6 @@ function NoteBook() {
         });
     }
 
-    // hardcoded sharedb connection
     const testRoomId = id;
     roomsAPI
       .getRoom(testRoomId)
