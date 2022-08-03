@@ -1,20 +1,11 @@
 import React from "react";
 import FlatButton from "material-ui/FlatButton";
 import PasswordStr from "./PasswordStr";
-import "../LoginSignUpBox.css";
+import "./SignUpBox.css";
 import { Box, Container } from "@material-ui/core";
-import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import WhiteTextTypography from "../../components/StyledMuiComponents/WhiteTypography";
 import CodeBookButton from "../../components/Buttons/CodeBookButton";
 import WhiteTextField from "../../components/StyledMuiComponents/WhiteTextField";
-
-const theme = createTheme({
-  palette: {
-    secondary: {
-      main: "#e3f2fd",
-    },
-  },
-});
 
 const SignUpForm = ({
   onSubmit,
@@ -26,12 +17,12 @@ const SignUpForm = ({
   type,
   pwMask,
   onPwChange,
+  disabled,
 }) => {
   return (
     <Container maxWidth="lg">
       <div className="loginBox">
         <WhiteTextTypography variant="h4">Sign up</WhiteTextTypography>
-        {/* <ThemeProvider theme={theme}> */}
         {errors.message && <p style={{ color: "red" }}>{errors.message}</p>}
 
         <Box
@@ -121,7 +112,7 @@ const SignUpForm = ({
             helperText={errors === "" ? "" : errors.pwconfirm}
           />
           <br />
-          <CodeBookButton>Sign Up</CodeBookButton>
+          <CodeBookButton disableStatus={disabled}>Sign Up</CodeBookButton>
         </Box>
         <WhiteTextTypography className="elmt">
           Aleady have an account? <br />

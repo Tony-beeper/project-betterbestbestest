@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import SignUpForm from "./SignUpForm.js";
 import userAPI from "../../api/userAPI";
-import validateSignUpForm from "../FormValidate";
+import validateSignUpForm from "./FormValidate";
 import errorHandler from "../../utils/ErrorHandler";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
@@ -21,6 +21,7 @@ const SignUpContainer = () => {
   const [btnTxt, setBtnTxt] = useState("show");
   const [type, setType] = useState("password");
   const [score, setScore] = useState("0");
+  const [disable, setDisable] = useState(false);
 
   useEffect(() => {
     const cookieCheck = document.cookie.replace(
@@ -72,6 +73,8 @@ const SignUpContainer = () => {
   };
 
   const submitSignup = () => {
+    setDisable(true);
+
     userAPI
       .signup(user.username, user.password)
       .then((data) => {
@@ -82,6 +85,9 @@ const SignUpContainer = () => {
       })
       .catch(({ response }) => {
         errorHandler.handleSignUp(response);
+      })
+      .finally(() => {
+        setDisable(false);
       });
   };
 
@@ -119,6 +125,7 @@ const SignUpContainer = () => {
         btnTxt={btnTxt}
         type={type}
         pwMask={pwMask}
+        disabled={disable}
       />
     </div>
   );

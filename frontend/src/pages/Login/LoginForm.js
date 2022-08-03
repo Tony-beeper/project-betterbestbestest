@@ -1,6 +1,6 @@
 import React from "react";
 // import TextField from "material-ui/TextField";
-import "../LoginSignUpBox.css";
+import "./LoginBox.css";
 import { Box, Container, ThemeProvider } from "@material-ui/core";
 import CodeBookButton from "../../components/Buttons/CodeBookButton";
 import { createTheme } from "@material-ui/core/styles";
@@ -15,7 +15,15 @@ const theme = createTheme({
   },
 });
 
-const LoginForm = ({ onSubmit, onChange, errors, user, type, onPwChange }) => {
+const LoginForm = ({
+  onSubmit,
+  onChange,
+  errors,
+  user,
+  type,
+  onPwChange,
+  disabled,
+}) => {
   return (
     <Container maxWidth="lg">
       <div className="loginBox">
@@ -62,7 +70,7 @@ const LoginForm = ({ onSubmit, onChange, errors, user, type, onPwChange }) => {
             />
             <br />
 
-            <CodeBookButton>Sign in</CodeBookButton>
+            <CodeBookButton disableStatus={disabled}>Sign in</CodeBookButton>
           </Box>
         </ThemeProvider>
       </div>

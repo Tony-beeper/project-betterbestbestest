@@ -7,6 +7,7 @@ function CodeBookButton(props) {
       size="large"
       primary={true}
       type="submit"
+      disabled={props.disableStatus}
       variant="contained"
       label="submit"
       style={{

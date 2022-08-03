@@ -13,15 +13,11 @@ const styles = (theme) => ({
     border: "0.8px solid white",
   },
   button: {
-    // display: "block",
-    // marginTop: theme.spacing.unit * 2,
     color: "#ffffff",
   },
   formControl: {
-    // margin: theme.spacing.unit,
     minWidth: 120,
     color: "#ffffff",
-    // height: 100,
   },
   inputLabelRoot: {
     color: "white",
@@ -72,32 +68,7 @@ class ControlledOpenSelect extends React.Component {
           className={classes.formControl}
           variant="standard"
           color="secondary"
-        >
-          {/* <InputLabel
-            classes={{ root: classes.inputLabelRoot }}
-            htmlFor="demo-controlled-open-select"
-          >
-           
-            Language
-          </InputLabel> */}
-          {/* <Select
-            open={this.state.open}
-            onClose={this.handleClose}
-            onOpen={this.handleOpen}
-            // value={this.state.age}
-            value=""
-            onChange={this.handleChange}
-            inputProps={{
-              name: "age",
-              id: "demo-controlled-open-select",
-            }}
-            className={classes.underline}
-            color="primary"
-            variant="standard"
-          >
-            <MenuItem value={"Python"}>Python</MenuItem>
-          </Select> */}
-        </FormControl>
+        ></FormControl>
       </div>
     );
   }
