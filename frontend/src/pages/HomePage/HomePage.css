@@ -1,6 +1,9 @@
 .homepage {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
 }
 
 .penguinImage {
@@ -19,4 +22,8 @@
   display: flex;
   justify-content: center;
   font-size: larger;
+}
+
+.credits {
+  margin-top: 1em;
 }
