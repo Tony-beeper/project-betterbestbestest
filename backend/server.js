@@ -52,14 +52,16 @@ function startServer() {
   const server = http.createServer(app);
 
   const corConfig = { origin: true, credentials: true };
-  app.use(
-    cors({
-      origin: true,
-      credentials: true,
-      methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
-    })
-  );
-  app.options("*", cors(corConfig));
+  if (process.env.NODE_ENV === "dev") {
+    app.use(
+      cors({
+        origin: true,
+        credentials: true,
+        methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+      })
+    );
+    app.options("*", cors(corConfig));
+  }
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
