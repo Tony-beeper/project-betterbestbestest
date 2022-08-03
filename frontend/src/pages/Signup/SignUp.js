@@ -1,14 +1,13 @@
 import React from "react";
-import LoginContainer from "./Login/LoginContainer";
+import SignUpContainer from "./SignUpContainer";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import "./LoginSignUpPage.css";
 
-const Login = () => {
+const SignUp = () => {
   return (
     <MuiThemeProvider>
-      <LoginContainer />
+      <SignUpContainer />
     </MuiThemeProvider>
   );
 };
 
-export default Login;
+export default SignUp;

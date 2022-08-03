@@ -38,7 +38,6 @@ router.post(
     bcrypt.hash(req.body.password, saltRounds, async function (err, hash) {
       if (err)
         return res
-          .cookie("username", "", usernameCookieOptions)
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .send(Message.createErrorMessage("Bcrypt Error"));
       const username = req.body.username;
@@ -54,7 +53,6 @@ router.post(
         const result = await user.findOne({ username: username });
         if (result) {
           return res
-            .cookie("username", "", usernameCookieOptions)
             .status(StatusCodes.CONFLICT)
             .send(Message.createErrorMessage("Username Taken"));
         } else {
@@ -92,6 +90,7 @@ router.post(
         .status(StatusCodes.UNAUTHORIZED)
         .send(Message.createErrorMessage(err.errors[0].msg.err));
     }
+
     const username = req.body.username;
     const password = req.body.password;
 
@@ -125,7 +124,11 @@ router.post(
     } catch (err) {
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send(Message.createErrorMessage("Error saving user to database"));
+        .send(
+          Message.createErrorMessage(
+            "Error when accessing database. Error: " + err
+          )
+        );
     }
   }
 );

@@ -2,8 +2,8 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Bar from "./components/Navbar";
-import SignUp from "./pages/SignUp";
-import Login from "./pages/Login";
+import SignUp from "./pages/Signup/SignUp";
+import Login from "./pages/Login/Login";
 import React, { useState } from "react";
 import AddRoom from "./pages/AddRoom/AddRoom";
 import Room from "./pages/MyRooms/Room";
@@ -19,11 +19,9 @@ const theme = createTheme({
   palette: {
     primary: { main: "#21262d" },
     secondary: { main: "#238636" },
-    // success: { main: "blue" },
     info: {
       main: "#faff01",
     },
-    // success: { main: "#faff01" },
   },
 });
 
