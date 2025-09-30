@@ -1,5 +1,6 @@
-<img width="1535" height="749" alt="image" src="https://github.com/user-attachments/assets/74f8e87e-4305-4b20-8d1a-f18ade991392" />
-<img width="1536" height="760" alt="image" src="https://github.com/user-attachments/assets/3ab29df5-1a9e-49ad-818b-8713ba272f7c" />
+<img width="1536" height="818" alt="image" src="https://github.com/user-attachments/assets/b559d799-d289-4d04-8b2d-174e0d29a8c6" />
+<img width="1536" height="823" alt="image" src="https://github.com/user-attachments/assets/f64bafb5-7ddd-4139-84f2-5e54299a5b68" />
+
 
 ## Project Demo Link
 https://youtu.be/brnRWoJ8780
