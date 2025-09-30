@@ -1,3 +1,4 @@
+# Parallel programming with your friends
 <img width="1536" height="818" alt="image" src="https://github.com/user-attachments/assets/b559d799-d289-4d04-8b2d-174e0d29a8c6" />
 <img width="1536" height="823" alt="image" src="https://github.com/user-attachments/assets/f64bafb5-7ddd-4139-84f2-5e54299a5b68" />
 
